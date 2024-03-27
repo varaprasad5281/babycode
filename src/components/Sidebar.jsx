@@ -7,6 +7,7 @@ import MsgIcon from "../assets/svg/message-icon.svg";
 import LogoutIcon from "../assets/svg/signout-icon.svg";
 import BuyNowSection from "./BuyNowSection";
 import { useLocation } from "react-router-dom";
+import { UserAuth } from "../context/AuthContext";
 
 const navOptions = [
   {
@@ -38,6 +39,7 @@ const navOptions = [
 
 const Sidebar = () => {
   const { pathname } = useLocation();
+  const { logout } = UserAuth();
   return (
     <div className="hidden w-[25%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
       <div className="flex flex-col items-center w-full">
@@ -54,14 +56,23 @@ const Sidebar = () => {
               key={label}
             >
               <img src={icon} alt="" className="h-6 w-6 object-contain" />
-              <span className={`text-white text-md ${pathname === url && "font-medium"}`}>{label}</span>
+              <span
+                className={`text-white text-md ${
+                  pathname === url && "font-medium"
+                }`}
+              >
+                {label}
+              </span>
             </div>
           ))}
         </div>
       </div>
-      <div className="flex flex-col gap-4 items-center">
+      <div className="flex flex-col gap-4 items-center w-full">
         <BuyNowSection />
-        <div className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2">
+        <div
+          onClick={logout}
+          className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2"
+        >
           <img src={LogoutIcon} alt="" className="h-6 w-6 object-contain" />
           <span className="text-white text-md">Logout</span>
         </div>

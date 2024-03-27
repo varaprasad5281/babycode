@@ -21,7 +21,7 @@ const ShareApp = () => {
         <p className="text-gray-300 text-md text-wrap">
           Your one share can unlock a world of education for unprivileged.
         </p>
-        <button className="bg-white hover:bg-gray-300 transition-colors duration-300 rounded-full text-gray-700 py-2 px-10 md:px-5 mt-1 font-medium">
+        <button className="bg-white hover:bg-slate-200 transition-colors duration-300 rounded-full text-gray-700 py-2 px-10 md:px-5 mt-1">
           Share App
         </button>
       </div>

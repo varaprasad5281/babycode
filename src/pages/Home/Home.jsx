@@ -19,6 +19,7 @@ import BuyNowSection from "../../components/BuyNowSection";
 import ShareApp from "../../components/ShareApp";
 import Graph from "../../components/Graph";
 import { RxCaretDown, RxCaretUp } from "react-icons/rx";
+import { UserAuth } from "../../context/AuthContext";
 
 const gridItems = [
   {
@@ -57,12 +58,20 @@ const gridItems = [
 
 const Home = () => {
   const [showDropdown, setShowDropdown] = useState(false);
+  const user = JSON.parse(sessionStorage.getItem("user_details"));
+  const { logout } = UserAuth();
+
+  const handleClose = () => setShowDropdown(false);
   return (
     <div className="h-screen flex flex-col">
       <div className="flex flex-1 md:max-h-screen pb-10 md:pb-0">
+        {/* <div className="w-[25%] relative">
+        <div className="fixed left-0"> */}
         <Sidebar />
+        {/* </div>
+        </div> */}
         <div className="homepage relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
-          <div className="sticky left-0 top-0 hidden lg:flex justify-between py-3 w-full px-6 md:px-14 bg-white">
+          <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-between py-3 w-full px-6 md:px-14 bg-white">
             <h3 className="text-xl font-medium">Your Progress Summary</h3>
             <div className="flex items-center gap-6">
               <img
@@ -71,23 +80,34 @@ const Home = () => {
                 className="w-8 h-8 object-contain cursor-pointer"
               />
               <div
-                className="p-2 rounded-full flex items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
+                className="p-[.3rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
                 onClick={() => setShowDropdown((prev) => !prev)}
               >
                 <img
-                  src={ProfileIcon}
+                  src={user?.photoURL || ProfileIcon}
                   alt=""
-                  className="w-8 h-8 object-contain"
+                  className="w-8 h-8 object-contain rounded-full"
                 />
+                {user && (
+                  <span className="font-medium text-sm">
+                    {user?.displayName}
+                  </span>
+                )}
                 {showDropdown ? <RxCaretUp /> : <RxCaretDown />}
               </div>
             </div>
           </div>
           {showDropdown && (
             <div className="absolute right-16 top-16 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
-              <Link to="/">Shop</Link>
-              <Link to="/">Community</Link>
-              <Link to="/">Feedback</Link>
+              <span onClick={logout} className="cursor-pointer">
+                Logout
+              </span>
+              <Link to="/" onClick={handleClose}>
+                Community
+              </Link>
+              <Link to="/" onClick={handleClose}>
+                Feedback
+              </Link>
             </div>
           )}
           <div className="lg:hidden py-4 px-6 md:px-14">
@@ -167,7 +187,7 @@ const Home = () => {
                       Get the authentice IELTS exam experience with all four
                       modules covered!
                     </p>
-                    <button className="bg-[#1158DA] hover:bg-[#1157dac2] transition-colors duration-300 text-white p-2 rounded-full">
+                    <button className="bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white p-2 rounded-full">
                       Start
                     </button>
                   </div>
