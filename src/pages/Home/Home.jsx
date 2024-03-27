@@ -18,6 +18,7 @@ import WAIcon from "../../assets/images/whatsapp-icon.png";
 import BuyNowSection from "../../components/BuyNowSection";
 import ShareApp from "../../components/ShareApp";
 import Graph from "../../components/Graph";
+import { RxCaretDown, RxCaretUp } from "react-icons/rx";
 
 const gridItems = [
   {
@@ -58,9 +59,9 @@ const Home = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   return (
     <div className="h-screen flex flex-col">
-      <div className="flex flex-1 max-h-screen">
+      <div className="flex flex-1 md:max-h-screen pb-10 md:pb-0">
         <Sidebar />
-        <div className="homepage relative w-full flex flex-col bg-[#F7F7F7] max-h-screen overflow-y-scroll">
+        <div className="homepage relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
           <div className="sticky left-0 top-0 hidden lg:flex justify-between py-3 w-full px-6 md:px-14 bg-white">
             <h3 className="text-xl font-medium">Your Progress Summary</h3>
             <div className="flex items-center gap-6">
@@ -69,18 +70,21 @@ const Home = () => {
                 alt=""
                 className="w-8 h-8 object-contain cursor-pointer"
               />
-              <div className="">
+              <div
+                className="p-2 rounded-full flex items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
+                onClick={() => setShowDropdown((prev) => !prev)}
+              >
                 <img
                   src={ProfileIcon}
                   alt=""
-                  className="w-8 h-8 object-contain cursor-pointer"
-                  onClick={() => setShowDropdown((prev) => !prev)}
+                  className="w-8 h-8 object-contain"
                 />
+                {showDropdown ? <RxCaretUp /> : <RxCaretDown />}
               </div>
             </div>
           </div>
           {showDropdown && (
-            <div className="absolute right-16 top-14 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
+            <div className="absolute right-16 top-16 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
               <Link to="/">Shop</Link>
               <Link to="/">Community</Link>
               <Link to="/">Feedback</Link>
@@ -210,7 +214,6 @@ const Home = () => {
           </div>
         </div>
       </div>
-      {/* <BottomTabs /> */}
     </div>
   );
 };
