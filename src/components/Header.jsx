@@ -13,7 +13,7 @@ const Header = () => {
           Get 50% discount on BabyCode membership
         </span>
       </div> */}
-      <div className="lg:hidden bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 md:px-14 md:py-6">
+      <div className="lg:hidden sticky left-0 top-0 z-10 bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 md:px-14 md:py-6">
         <div className="flex justify-between items-center">
           <img
             src={ProfileIcon}

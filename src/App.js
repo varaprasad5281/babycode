@@ -6,10 +6,12 @@ import BottomTabs from "./components/BottomTabs";
 import Signin from "./pages/Signin/Signin";
 import { AuthContextProvider } from "./context/AuthContext";
 import { ProtectRoutes, PublicRoutes } from "./components/ProtectRoutes";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   return (
     <AuthContextProvider>
+      <Toaster position="top-center"/>
       <Routes>
         <Route
           path="/"

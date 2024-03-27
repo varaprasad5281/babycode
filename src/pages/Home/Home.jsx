@@ -98,7 +98,7 @@ const Home = () => {
             </div>
           </div>
           {showDropdown && (
-            <div className="absolute right-16 top-16 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
+            <div className="fixed right-16 top-16 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
               <span onClick={logout} className="cursor-pointer">
                 Logout
               </span>

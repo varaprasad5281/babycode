@@ -7,7 +7,15 @@ import {
 } from "firebase/auth";
 import { app, auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
-import { collection, addDoc, query, where, getDocs, getFirestore } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  getFirestore,
+} from "firebase/firestore";
+import { toast } from "react-hot-toast";
 
 const AuthContext = createContext();
 
@@ -28,13 +36,16 @@ export const AuthContextProvider = ({ children }) => {
           photoURL: response.user.photoURL,
           email: response.user.email,
         };
-        saveUserToFirestore(user)
+        const result = await saveUserToFirestore(user);
         sessionStorage.setItem("user_details", JSON.stringify(user));
+        if (!result.newUser) {
+          toast.success("Signin Successful");
+        }
         navigate("/");
       }
     } catch (err) {
       // console.log("ERROR SIGNIN ::\n", err);
-    }finally{
+    } finally {
       // disable loader
     }
   };
@@ -44,6 +55,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       await signOut(auth);
       sessionStorage.clear();
+      toast.success("Signout Successful");
       navigate("/signin");
     } catch (err) {
       console.log("ERROR LOGOUT ::\n", err);
@@ -68,7 +80,6 @@ export const UserAuth = () => useContext(AuthContext);
 
 // save the user to firestore
 const saveUserToFirestore = async (data) => {
-
   const firestore = getFirestore(app);
   const usersCollectionRef = collection(firestore, "users");
 
@@ -80,10 +91,14 @@ const saveUserToFirestore = async (data) => {
       // save user to firestore if not exists
       await addDoc(usersCollectionRef, data);
       console.log("user data saved to firestore");
+      toast.success("Signup Successful");
+      return { newUser: true };
     } catch (err) {
       console.error("error saving user data to firestore:", err);
+      return { newUser: false };
     }
   } else {
     console.log("email already exists in firestore");
+    return { newUser: false };
   }
 };
