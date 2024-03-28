@@ -52,7 +52,7 @@ const BottomTabs = () => {
   const dispatch = useDispatch();
 
   const handleOptionClick = (url) => {
-    userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+    // userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
   };
   return (
     <div className="grid lg:hidden grid-cols-5 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">

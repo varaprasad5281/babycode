@@ -47,7 +47,7 @@ const Sidebar = () => {
   const dispatch = useDispatch();
 
   const handleOptionClick = (url) => {
-    userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+    // userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
   };
   return (
     <div className="hidden w-[32%] xl:w-[22%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">

@@ -5,10 +5,13 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth } from "../utils/firebase";
+import { auth, generateToken } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import { changeLoginModalStatus, setUserLoggedIn } from "../utils/redux/storeSlice";
+import {
+  changeLoginModalStatus,
+  setUserLoggedIn,
+} from "../utils/redux/storeSlice";
 
 const AuthContext = createContext();
 
@@ -25,19 +28,22 @@ export const AuthContextProvider = ({ children }) => {
         console.log("SIGNIN SUCCESS ::\n", response.user);
         sessionStorage.setItem("token", response.user.accessToken);
         const user = {
+          uid: response.user.uid,
           displayName: response.user.displayName,
           photoURL: response.user.photoURL,
           email: response.user.email,
+          phoneNumber: response.user.phoneNumber,
         };
+        const token = await generateToken();
+        console.log(token);
         sessionStorage.setItem("user_details", JSON.stringify(user));
         toast.success("Signin Successful");
         dispatch(changeLoginModalStatus(false));
         dispatch(setUserLoggedIn(true));
       }
     } catch (err) {
+      toast.error(err.message);
       // console.log("ERROR SIGNIN ::\n", err);
-    } finally {
-      // disable loader
     }
   };
 
@@ -68,4 +74,3 @@ export const AuthContextProvider = ({ children }) => {
 };
 
 export const UserAuth = () => useContext(AuthContext);
-

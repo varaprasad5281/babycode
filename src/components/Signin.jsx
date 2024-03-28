@@ -20,12 +20,14 @@ const Signin = () => {
           src={BgImage1}
           className="w-[55%] object-cover hidden md:inline"
           alt=""
+          loading="lazy"
         />
         <div className="relative w-full md:w-[45%] flex justify-center items-center">
           <img
             src={BgImage2}
             className="w-full object-cover h-[80vh] absolute -z-10"
             alt=""
+            loading="lazy"
           />
           <div className="w-fit flex flex-col items-center gap-5 sm:gap-8 max-w-[90%] sm:max-w-[70%]">
             <div className="flex gap-1 justify-center items-center">

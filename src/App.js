@@ -8,8 +8,35 @@ import { Toaster } from "react-hot-toast";
 import ModalWrapper from "./components/ModalWrapper";
 import { Provider } from "react-redux";
 import { store } from "./utils/redux/store";
+import { useEffect } from "react";
+import { generateToken, messaging } from "./utils/firebase";
+import { onMessage } from "firebase/messaging";
+import { toast } from "react-hot-toast";
 
 function App() {
+
+  // request permission to send notifications
+  useEffect(() => {
+    const requestNotificationPermission = async () => {
+      const permission = await Notification.requestPermission();
+      if (permission === "granted") {
+        generateToken();
+      }
+      onMessage(messaging, (payload) => {
+        toast(payload.notification.body, {
+          icon: payload.notification?.image && (
+            <img
+              src={payload.notification.image}
+              className="w-10 h-10 object-contain"
+              alt="icon"
+            />
+          ),
+        });
+      });
+    };
+    requestNotificationPermission();
+  }, []);
+  
   return (
     <Provider store={store}>
       <AuthContextProvider>

@@ -135,6 +135,7 @@ const Home = () => {
                       className={`flex flex-col justify-self-start items-center pr-[1rem]
                   ${title === "Book IELTS Exam" && "order-last md:order-2"}
                   `}
+                      onClick={() => handleClick()}
                       key={title}
                     >
                       <img
