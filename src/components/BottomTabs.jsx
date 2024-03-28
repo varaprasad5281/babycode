@@ -8,7 +8,9 @@ import ShopIcon from "../assets/images/shop-dark.png";
 import ShopIconActive from "../assets/images/shop-active.png";
 import MsgIcon from "../assets/images/feedback-dark.png";
 import MsgIconActive from "../assets/images/feedback-active.png";
-import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const tabs = [
   {
@@ -44,21 +46,28 @@ const tabs = [
 ];
 
 const BottomTabs = () => {
-  const [option, setOption] = useState(0);
+  const { pathname } = useLocation();
+  const { userLoggedIn } = useSelector((state) => state.store);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleOptionClick = (url) => {
+    userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+  };
   return (
-    <div className="grid lg:hidden grid-cols-5 h-24 pt-2 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">
-      {tabs.map(({ label, icon, activeIcon }, index) => (
+    <div className="grid lg:hidden grid-cols-5 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">
+      {tabs.map(({ label, icon, activeIcon, url }, index) => (
         <div
-          className={`flex flex-col p-2 justify-between cursor-pointer items-center ${
-            option === index
+          className={`flex flex-col p-2 gap-2 justify-between cursor-pointer items-center ${
+            pathname === url
               ? "border-t-2 border-t-blue-500 text-blue-500"
               : " text-gray-800"
           }`}
           key={label}
-          onClick={() => setOption(index)}
+          onClick={() => handleOptionClick(url)}
         >
           <img
-            src={option === index ? activeIcon : icon}
+            src={pathname === url ? activeIcon : icon}
             alt=""
             className="h-6 w-6 object-contain text-blue-500"
           />

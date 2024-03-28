@@ -6,8 +6,10 @@ import ShopIcon from "../assets/svg/storefront-icon.svg";
 import MsgIcon from "../assets/svg/message-icon.svg";
 import LogoutIcon from "../assets/svg/signout-icon.svg";
 import BuyNowSection from "./BuyNowSection";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
+import { useSelector, useDispatch } from "react-redux";
+import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 
 const navOptions = [
   {
@@ -40,8 +42,15 @@ const navOptions = [
 const Sidebar = () => {
   const { pathname } = useLocation();
   const { logout } = UserAuth();
+  const { userLoggedIn } = useSelector((state) => state.store);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const handleOptionClick = (url) => {
+    userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+  };
   return (
-    <div className="hidden w-[32%] xl:w-[25%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
+    <div className="hidden w-[32%] xl:w-[22%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
       <div className="flex flex-col items-center w-full">
         <div className="flex gap-1 items-center">
           <img src={Logo} alt="" className="h-12 w-12 object-contain my-1" />
@@ -54,6 +63,7 @@ const Sidebar = () => {
                 pathname === url && "bg-primary-100"
               }`}
               key={label}
+              onClick={() => handleOptionClick(url)}
             >
               <img src={icon} alt="" className="h-6 w-6 object-contain" />
               <span
@@ -69,13 +79,15 @@ const Sidebar = () => {
       </div>
       <div className="flex flex-col gap-4 items-center w-full">
         <BuyNowSection />
-        <div
-          onClick={logout}
-          className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2"
-        >
-          <img src={LogoutIcon} alt="" className="h-6 w-6 object-contain" />
-          <span className="text-white text-md">Logout</span>
-        </div>
+        {userLoggedIn && (
+          <div
+            onClick={logout}
+            className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2"
+          >
+            <img src={LogoutIcon} alt="" className="h-6 w-6 object-contain" />
+            <span className="text-white text-md">Logout</span>
+          </div>
+        )}
       </div>
     </div>
   );

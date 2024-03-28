@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Sidebar from "../../components/Sidebar";
 import { Link } from "react-router-dom";
 import ProfileIcon from "../../assets/images/profile-icon.png";
@@ -13,13 +13,14 @@ import StudentNews from "../../assets/images/student-news.png";
 import YoutubeIcon from "../../assets/images/youtube-icon.png";
 import IGIcon from "../../assets/images/instagram-icon.png";
 import ListImg from "../../assets/images/list-image.png";
-import ArrowIcon from "../../assets/svg/arrow-circle-right-icon.svg";
+import ArrowIcon from "../../assets/svg/rounded-arrow-dark.svg";
 import WAIcon from "../../assets/images/whatsapp-icon.png";
 import BuyNowSection from "../../components/BuyNowSection";
 import ShareApp from "../../components/ShareApp";
 import Graph from "../../components/Graph";
-import { RxCaretDown, RxCaretUp } from "react-icons/rx";
-import { UserAuth } from "../../context/AuthContext";
+import { RxCaretDown } from "react-icons/rx";
+import { useSelector, useDispatch } from "react-redux";
+import { changeLoginModalStatus } from "../../utils/redux/storeSlice";
 
 const gridItems = [
   {
@@ -57,22 +58,19 @@ const gridItems = [
 ];
 
 const Home = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const user = JSON.parse(sessionStorage.getItem("user_details"));
-  const { logout } = UserAuth();
+  const dispatch = useDispatch();
+  const { userLoggedIn } = useSelector((state) => state.store);
 
-  const handleClose = () => setShowDropdown(false);
+  const handleClick = () => {
+    !userLoggedIn && dispatch(changeLoginModalStatus(true));
+  };
   return (
-    <div className="h-screen flex flex-col">
-      <div className="flex flex-1 md:max-h-screen pb-10 md:pb-0">
-        {/* <div className="w-[25%] relative">
-        <div className="fixed left-0"> */}
+    <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0">
+      <div className="flex flex-1 md:max-h-screen">
         <Sidebar />
-        {/* </div>
-        </div> */}
-        <div className="homepage relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
-          <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-between py-3 w-full px-6 md:px-14 bg-white">
-            <h3 className="text-xl font-medium">Your Progress Summary</h3>
+        <div className="homepage pb-2 md:pb-28 lg:pb-0 relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
+          <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-between items-center py-[0.4rem] w-full px-6 lg:px-[3rem] bg-white">
+            <h3 className="text-lg font-medium">Your Progress Summary</h3>
             <div className="flex items-center gap-6">
               <img
                 src={IGIcon}
@@ -80,37 +78,19 @@ const Home = () => {
                 className="w-8 h-8 object-contain cursor-pointer"
               />
               <div
-                className="p-[.3rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
-                onClick={() => setShowDropdown((prev) => !prev)}
+                onClick={handleClick}
+                className="p-[.2rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
               >
                 <img
-                  src={user?.photoURL || ProfileIcon}
+                  src={ProfileIcon}
                   alt=""
                   className="w-8 h-8 object-contain rounded-full"
                 />
-                {user && (
-                  <span className="font-medium text-sm">
-                    {user?.displayName}
-                  </span>
-                )}
-                {showDropdown ? <RxCaretUp /> : <RxCaretDown />}
+                <RxCaretDown />
               </div>
             </div>
           </div>
-          {showDropdown && (
-            <div className="fixed right-16 top-16 bg-white drop-shadow-xl p-2 rounded-lg flex flex-col gap-2 w-[12rem] h-fit z-10">
-              <span onClick={logout} className="cursor-pointer">
-                Logout
-              </span>
-              <Link to="/" onClick={handleClose}>
-                Community
-              </Link>
-              <Link to="/" onClick={handleClose}>
-                Feedback
-              </Link>
-            </div>
-          )}
-          <div className="lg:hidden py-4 px-6 md:px-14">
+          <div className="lg:hidden py-3 px-6 lg:px-[3rem]">
             <div className="bg-gradient-to-r from-[#8ea7d6] to-[#ffdc19] rounded-xl p-[1px] shadow-md">
               <div className="bg-white p-3 rounded-xl flex gap-3 items-center justify-between">
                 <span className="text-md font-medium">
@@ -123,37 +103,36 @@ const Home = () => {
             </div>
           </div>
 
-          <div className="px-6 md:px-10 py-1">
-            <div className="lg:my-3 gap-5">
+          <div className="px-6 lg:px-[3rem] py-3">
+            <div className="lg:my-3">
               <div className="flex flex-col gap-5">
-                {/* <h3 className="text-lg font-medium">Your Progress Summary</h3> */}
-                <div className="flex justify-between gap-3 h-[60vh] md:h-[304px]">
-                  <div className="w-full h-full md:w-[58%] lg:w-[63%] mb-4 md:mb-0 bg-white shadow-lg md:shadow-none rounded-xl p-4">
-                    <div className="bg-[#FEF9E5] font-medium p-2 rounded-lg mb-4">
-                      <span className="text-sky-500">Wow! </span>
-                      <span>You{"'"}re about to reach your targeted band</span>
-                    </div>
-                    {/* <Line datasetIdKey="id" data={data} options={options} /> */}
+                {/* <div className="flex justify-between gap-10 h-[60vh] md:h-[34vh]"> */}
+                <div className="grid grid-cols-1 md:grid-cols-10 xl:grid-cols-12 gap-10 xl:gap-14 grid-rows-1 h-[45vh] md:h-[32vh]">
+                  {/* <div className="w-full h-full md:w-[58%] lg:w-[60%] mb-4 md:mb-0 bg-white shadow-lg md:shadow-none rounded-xl p-4"> */}
+                  <div className="w-full h-full col-span-6 xl:col-span-8 mb-4 md:mb-0 bg-white shadow-lg md:shadow-none rounded-xl p-4">
                     <Graph />
                   </div>
-                  <div className="hidden h-full md:flex w-[38%] flex-1">
+                  <div className="hidden h-full md:flex flex-1 col-span-4 xl:col-span-4">
+                    {/* <div className="hidden h-full md:flex w-[38%] flex-1"> */}
                     <ShareApp />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="flex flex-col my-4 w-full items-start">
-              <h3 className="hidden md:inline-block text-xl font-medium">
+            <div className="flex flex-col mt-6 md:mt-3 mb-2 w-full items-start">
+              <h3 className="hidden md:inline-block text-lg -mb-1 font-medium">
                 Prepare with ease
               </h3>
-              <div className="w-full flex justify-between items-start mt-2">
-                <div className="w-full md:w-[68%] grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6">
+              <div className="w-full grid md:grid-cols-[65%_30%] gap-10 justify-between items-start mb-6 md:mb-0">
+                {/* <div className="w-full flex justify-between items-start"> */}
+                <div className="w-full grid grid-cols-3 sm:grid-cols-4 gap-[0.3rem]">
                   {/* <div className="w-full md:w-[68%] grid grid-cols-3 sm:grid-cols-4"> */}
                   {gridItems.map(({ icon, title }) => (
                     <Link
                       to="/"
-                      className={`flex flex-col justify-self-start items-center mx-2 mb-2 md:mb-3
+                      // className={`flex flex-col max-w-[10rem] justify-self-start items-center
+                      className={`flex flex-col justify-self-start items-center pr-[1rem]
                   ${title === "Book IELTS Exam" && "order-last md:order-2"}
                   `}
                       key={title}
@@ -161,23 +140,24 @@ const Home = () => {
                       <img
                         src={icon}
                         alt=""
-                        className="w-full aspect-square max-w-24 object-contain"
+                        className="w-full aspect-square object-contain"
                       />
-                      <span className="text-md md:text-sm font-medium text-center">
+                      <span className="text-md md:text-[0.9rem] font-medium text-center -mt-2">
                         {title}
                       </span>
                     </Link>
                   ))}
                 </div>
 
-                <div className="w-[27%] md:flex flex-col gap-5 hidden mt-3">
-                  <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md p-2 rounded-md">
+                {/* <div className="w-[27%] md:flex flex-col gap-5 hidden mt-3"> */}
+                <div className="w-full md:flex flex-col gap-5 hidden mt-3">
+                  <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md py-3 px-2 rounded-md">
                     <img
                       src={YoutubeIcon}
                       className="w-5 h-5 object-contain"
                       alt=""
                     />
-                    <span className="text-sm text-gray-600">
+                    <span className="text-[0.9rem] text-gray-600">
                       App Guide Video
                     </span>
                   </button>
@@ -187,7 +167,10 @@ const Home = () => {
                       Get the authentice IELTS exam experience with all four
                       modules covered!
                     </p>
-                    <button className="bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white p-2 rounded-full">
+                    <button
+                      onClick={handleClick}
+                      className="bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white p-2 rounded-full"
+                    >
                       Start
                     </button>
                   </div>
@@ -214,17 +197,21 @@ const Home = () => {
             </div>
 
             <div className="columns-2 gap-2 my-5 md:hidden">
-              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-4 rounded-md">
+              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md">
                 <img
                   src={YoutubeIcon}
                   className="w-5 h-5 object-contain"
                   alt=""
                 />
-                <span className="text-sm text-gray-600">App Guide Video</span>
+                <span className="text-md md:text-sm text-gray-600">
+                  App Guide Video
+                </span>
               </button>
-              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-4 rounded-md">
+              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md">
                 <img src={WAIcon} className="w-5 h-5 object-contain" alt="" />
-                <span className="text-sm text-gray-600">Help & Support</span>
+                <span className="text-md md:text-sm text-gray-600">
+                  Help & Support
+                </span>
               </button>
             </div>
 

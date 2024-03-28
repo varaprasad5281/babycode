@@ -1,24 +1,34 @@
 import ProfileIcon from "../assets/images/profile-icon.png";
 import IGIcon from "../assets/images/instagram-icon.png";
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 
 const options = ["IELTS", "PTE", "TOEFL"];
 
 const Header = () => {
   const [option, setOption] = useState(0);
+  const dispatch = useDispatch();
+  const { userLoggedIn } = useSelector((state) => state.store);
+
+  const handleClick = () => {
+    !userLoggedIn && dispatch(changeLoginModalStatus(true));
+  };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col fixed left-0 top-0 w-full z-20">
+      {/* <div className="flex flex-col sticky left-0 top-0 w-full z-20"> */}
       {/* <div className="hidden lg:flex py-2 bg-[#F6DDC9] justify-center">
         <span className="text-[#DF7146] text-sm">
           Get 50% discount on BabyCode membership
         </span>
       </div> */}
-      <div className="lg:hidden sticky left-0 top-0 z-10 bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 md:px-14 md:py-6">
+      <div className="lg:hidden z-10 bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 lg:px-14 md:py-6">
         <div className="flex justify-between items-center">
           <img
             src={ProfileIcon}
             className="w-9 h-9 object-contain cursor-pointer"
             alt=""
+            onClick={handleClick}
           />
           <span className="text-white font-medium text-xl">Home</span>
           <img

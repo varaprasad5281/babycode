@@ -17,7 +17,7 @@
   box-sizing: border-box;
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   background: #1157da5d;
   width: 6px;
 }
@@ -25,12 +25,16 @@
 ::-webkit-scrollbar-thumb {
   background: #002569;
   border-radius: 6px;
-}
+} */
 
-@media screen and (max-width: 768px) {
+/* @media screen and (max-width: 768px) {
   ::-webkit-scrollbar {
     display: none;
   }
+} */
+
+::-webkit-scrollbar {
+  display: none;
 }
 
 .homepage::-webkit-scrollbar {
