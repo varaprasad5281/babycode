@@ -40,7 +40,7 @@ const Signin = () => {
             </div>
             <button
               onClick={googleSignIn}
-              className="flex gap-3 font-medium items-center px-10 py-3 text-primary-500 bg-white border border-primary-500 rounded-full transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md"
+              className="flex gap-3 font-medium items-center px-3 lg:px-10 py-3 text-primary-500 bg-white border border-primary-500 rounded-full transition-all duration-300 hover:bg-primary-500 hover:text-white shadow-md"
             >
               <img src={GoogleIcon} className="w-5 h-5 object-contain" alt="" />
               <span>Sign in with Google</span>

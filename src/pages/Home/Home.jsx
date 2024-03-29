@@ -73,6 +73,7 @@ const Home = () => {
             <h3 className="text-lg font-medium">Your Progress Summary</h3>
             <div className="flex items-center gap-6">
               <img
+                onClick={handleClick}
                 src={IGIcon}
                 alt=""
                 className="w-8 h-8 object-contain cursor-pointer"
@@ -96,7 +97,10 @@ const Home = () => {
                 <span className="text-md font-medium">
                   How many students we helped?
                 </span>
-                <button className="bg-[#FFEFE1] text-[#F49043] py-2 px-4 rounded-xl">
+                <button
+                  onClick={handleClick}
+                  className="bg-[#FFEFE1] text-[#F49043] py-2 px-4 rounded-xl"
+                >
                   Check
                 </button>
               </div>
@@ -152,7 +156,10 @@ const Home = () => {
 
                 {/* <div className="w-[27%] md:flex flex-col gap-5 hidden mt-3"> */}
                 <div className="w-full md:flex flex-col gap-5 hidden mt-3">
-                  <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md py-3 px-2 rounded-md">
+                  <button
+                    onClick={handleClick}
+                    className="w-full flex items-center justify-center gap-2 bg-white shadow-md py-3 px-2 rounded-md"
+                  >
                     <img
                       src={YoutubeIcon}
                       className="w-5 h-5 object-contain"
@@ -190,7 +197,12 @@ const Home = () => {
                   </p>
                 </div>
               </div>
-              <img src={ArrowIcon} className="h-8 w-8 object-contain" alt="" />
+              <img
+                onClick={handleClick}
+                src={ArrowIcon}
+                className="h-8 w-8 object-contain"
+                alt=""
+              />
             </div>
 
             <div className="w-full md:hidden">
@@ -198,7 +210,10 @@ const Home = () => {
             </div>
 
             <div className="columns-2 gap-2 my-5 md:hidden">
-              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md">
+              <button
+                onClick={handleClick}
+                className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md"
+              >
                 <img
                   src={YoutubeIcon}
                   className="w-5 h-5 object-contain"
@@ -208,7 +223,10 @@ const Home = () => {
                   App Guide Video
                 </span>
               </button>
-              <button className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md">
+              <button
+                onClick={handleClick}
+                className="w-full flex items-center justify-center gap-2 bg-white shadow-md px-2 py-3 rounded-md"
+              >
                 <img src={WAIcon} className="w-5 h-5 object-contain" alt="" />
                 <span className="text-md md:text-sm text-gray-600">
                   Help & Support

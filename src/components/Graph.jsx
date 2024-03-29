@@ -45,11 +45,11 @@ const Graph = () => {
   return (
     <div className="h-full flex flex-col">
       <h3 className="text-xl mb-4 font-medium md:hidden">Your Progress Summary</h3>
-      <div className="text-sm hidden md:inline-block bg-[#FEF9E5] font-medium p-2 rounded-lg mb-4 w-[95%]">
+      <div className="text-md hidden md:inline-block bg-[#FEF9E5] font-medium p-2 rounded-lg mb-4 w-[95%]">
         <span className="text-sky-500">Wow! </span>
         <span>You{"'"}re about to reach your targeted band</span>
       </div>
-      <div className="w-[90%] h-full">
+      <div className="w-full md:w-[90%] h-full">
       <Chart
         options={{
           data,
@@ -58,7 +58,7 @@ const Graph = () => {
         }}
       />
       </div>
-      <div className="text-sm inline-block md:hidden bg-[#FEF9E5] font-medium p-2 rounded-lg mt-4">
+      <div className="text-md inline-block md:hidden bg-[#FEF9E5] font-medium p-2 rounded-lg mt-4">
         <span className="text-sky-500">Wow! </span>
         <span>You{"'"}re about to reach your targeted band</span>
       </div>

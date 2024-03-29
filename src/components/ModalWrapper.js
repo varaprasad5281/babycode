@@ -1,14 +1,10 @@
 import React from "react";
 import Modal from "./Modal";
 import { useSelector } from "react-redux";
-
-import { UserAuth } from "../context/AuthContext";
 import Signin from "./Signin";
 
 const ModalWrapper = ({ children }) => {
-  //   const { isAuthenticated } = useContext(AuthContext);
-  //   const isAuthenticated = sessionStorage.getItem("token");
-  const { userLoggedIn, showLoginModal } = useSelector((state) => state.store);
+  const { showLoginModal } = useSelector((state) => state.store);
 
   return (
     <div className="relative">

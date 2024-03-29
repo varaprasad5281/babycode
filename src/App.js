@@ -9,18 +9,17 @@ import ModalWrapper from "./components/ModalWrapper";
 import { Provider } from "react-redux";
 import { store } from "./utils/redux/store";
 import { useEffect } from "react";
-import { generateToken, messaging } from "./utils/firebase";
+import { generateNotificationToken, messaging } from "./utils/firebase";
 import { onMessage } from "firebase/messaging";
 import { toast } from "react-hot-toast";
 
 function App() {
-
   // request permission to send notifications
   useEffect(() => {
     const requestNotificationPermission = async () => {
       const permission = await Notification.requestPermission();
       if (permission === "granted") {
-        generateToken();
+        generateNotificationToken();
       }
       onMessage(messaging, (payload) => {
         toast(payload.notification.body, {
@@ -36,12 +35,12 @@ function App() {
     };
     requestNotificationPermission();
   }, []);
-  
+
   return (
     <Provider store={store}>
       <AuthContextProvider>
+        <Toaster position="top-center" />
         <ModalWrapper>
-          <Toaster position="top-center" />
           <Routes>
             <Route
               path="/"

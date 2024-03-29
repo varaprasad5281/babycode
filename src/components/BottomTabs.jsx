@@ -8,9 +8,10 @@ import ShopIcon from "../assets/images/shop-dark.png";
 import ShopIconActive from "../assets/images/shop-active.png";
 import MsgIcon from "../assets/images/feedback-dark.png";
 import MsgIconActive from "../assets/images/feedback-active.png";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 import { useNavigate, useLocation } from "react-router-dom";
+import { checkAuth } from "../utils/helpers";
 
 const tabs = [
   {
@@ -47,12 +48,17 @@ const tabs = [
 
 const BottomTabs = () => {
   const { pathname } = useLocation();
-  const { userLoggedIn } = useSelector((state) => state.store);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleOptionClick = (url) => {
-    // userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+    if (checkAuth()) {
+      navigate(url);
+    } else {
+      if (url !== pathname) {
+        dispatch(changeLoginModalStatus(true));
+      }
+    }
   };
   return (
     <div className="grid lg:hidden grid-cols-5 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">
@@ -60,8 +66,8 @@ const BottomTabs = () => {
         <div
           className={`flex flex-col p-2 gap-2 justify-between cursor-pointer items-center ${
             pathname === url
-              ? "border-t-2 border-t-blue-500 text-blue-500"
-              : " text-gray-800"
+              ? "border-t-2 border-t-blue-700 text-blue-700"
+              : " text-[#4D4D4D]"
           }`}
           key={label}
           onClick={() => handleOptionClick(url)}
@@ -69,7 +75,7 @@ const BottomTabs = () => {
           <img
             src={pathname === url ? activeIcon : icon}
             alt=""
-            className="h-6 w-6 object-contain text-blue-500"
+            className="h-6 w-6 object-contain"
           />
           <span className="text-md">{label}</span>
         </div>

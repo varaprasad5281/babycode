@@ -2,6 +2,7 @@ import CheckIcon from "../assets/svg/check-circle-icon.svg";
 import ArrowIcon from "../assets/svg/arrow-circle-right-icon.svg";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { checkAuth } from "../utils/helpers";
 
 const content = [
   "Unlimited Speaking Test Access",
@@ -12,10 +13,11 @@ const content = [
 
 const BuyNowSection = () => {
   const dispatch = useDispatch();
-  const { userLoggedIn } = useSelector((state) => state.store);
 
   const handleClick = () => {
-    !userLoggedIn && dispatch(changeLoginModalStatus(true));
+    if (!checkAuth()) {
+      dispatch(changeLoginModalStatus(true));
+    }
   };
   return (
     <div className="bg-[#E5EFFF] md:m-3 m-0 pb-8 md:pb-0 rounded-xl w-full md:w-[90%] relative">

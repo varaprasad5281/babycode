@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   showLoginModal: false,
-  userLoggedIn: !!sessionStorage.getItem("token"),
+  userLoggedIn: !!localStorage.getItem("userData"),
 };
 
 const storeSlice = createSlice({

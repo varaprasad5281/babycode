@@ -10,6 +10,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { checkAuth } from "../utils/helpers";
 
 const navOptions = [
   {
@@ -47,7 +48,13 @@ const Sidebar = () => {
   const dispatch = useDispatch();
 
   const handleOptionClick = (url) => {
-    // userLoggedIn ? navigate(url) : dispatch(changeLoginModalStatus(true));
+    if (checkAuth()) {
+      navigate(url);
+    } else {
+      if (url !== pathname) {
+        dispatch(changeLoginModalStatus(true));
+      }
+    }
   };
   return (
     <div className="hidden w-[32%] xl:w-[22%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">

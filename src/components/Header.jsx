@@ -1,18 +1,20 @@
 import ProfileIcon from "../assets/images/profile-icon.png";
 import IGIcon from "../assets/images/instagram-icon.png";
 import { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { checkAuth } from "../utils/helpers";
 
 const options = ["IELTS", "PTE", "TOEFL"];
 
 const Header = () => {
   const [option, setOption] = useState(0);
   const dispatch = useDispatch();
-  const { userLoggedIn } = useSelector((state) => state.store);
 
   const handleClick = () => {
-    !userLoggedIn && dispatch(changeLoginModalStatus(true));
+    if (!checkAuth()) {
+      dispatch(changeLoginModalStatus(true));
+    }
   };
   return (
     <div className="flex flex-col fixed left-0 top-0 w-full z-20">
@@ -32,6 +34,7 @@ const Header = () => {
           />
           <span className="text-white font-medium text-xl">Home</span>
           <img
+          onClick={handleClick}
             src={IGIcon}
             className="w-9 h-9 object-contain cursor-pointer"
             alt="instagram icon"
