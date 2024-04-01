@@ -30,19 +30,19 @@ const tabs = [
     label: "Stories",
     icon: StoriesIcon,
     activeIcon: StoriesIconActive,
-    url: "#",
+    url: "/stories",
   },
   {
     label: "Shop",
     icon: ShopIcon,
     activeIcon: ShopIconActive,
-    url: "#",
+    url: "/shop",
   },
   {
     label: "Feedback",
     icon: MsgIcon,
     activeIcon: MsgIconActive,
-    url: "#",
+    url: "/feedback",
   },
 ];
 

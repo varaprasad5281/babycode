@@ -4,3 +4,8 @@ import { api, Apis } from "./constant";
 export const login = (data) => {
   return api.post(Apis.login, data);
 };
+
+// get app info
+export const getAppInformation = (data) => {
+  return api.post(Apis.appInfo, data);
+};

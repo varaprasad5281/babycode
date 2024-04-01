@@ -11,6 +11,7 @@ import { UserAuth } from "../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 import { checkAuth } from "../utils/helpers";
+import { Outlet } from "react-router-dom";
 
 const navOptions = [
   {
@@ -26,17 +27,17 @@ const navOptions = [
   {
     label: "Stories",
     icon: StoriesIcon,
-    url: "#",
+    url: "/stories",
   },
   {
     label: "Shop",
     icon: ShopIcon,
-    url: "#",
+    url: "/shop",
   },
   {
     label: "Feedback",
     icon: MsgIcon,
-    url: "#",
+    url: "/feedback",
   },
 ];
 
@@ -57,44 +58,57 @@ const Sidebar = () => {
     }
   };
   return (
-    <div className="hidden w-[32%] xl:w-[22%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
-      <div className="flex flex-col items-center w-full">
-        <div className="flex gap-1 items-center">
-          <img src={Logo} alt="" className="h-12 w-12 object-contain my-1" />
-          <span className="text-xl text-white">BabyCode</span>
-        </div>
-        <div className="flex w-full items-center flex-col gap-2 my-3 xl:my-6">
-          {navOptions.map(({ label, icon, url }) => (
-            <div
-              className={`flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2 ${
-                pathname === url && "bg-primary-100"
-              }`}
-              key={label}
-              onClick={() => handleOptionClick(url)}
-            >
-              <img src={icon} alt="" className="h-6 w-6 object-contain" />
-              <span
-                className={`text-white text-md ${
-                  pathname === url && "font-medium"
-                }`}
-              >
-                {label}
-              </span>
+    <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0">
+      <div className="flex flex-1 md:max-h-screen">
+        <div className="hidden w-[32%] max-w-[32%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
+          <div className="flex flex-col items-center w-full">
+            <div className="flex gap-1 items-center">
+              <img
+                src={Logo}
+                alt=""
+                className="h-12 w-12 object-contain my-1"
+              />
+              <span className="text-xl text-white">BabyCode</span>
             </div>
-          ))}
-        </div>
-      </div>
-      <div className="flex flex-col gap-4 items-center w-full">
-        <BuyNowSection />
-        {userLoggedIn && (
-          <div
-            onClick={logout}
-            className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2"
-          >
-            <img src={LogoutIcon} alt="" className="h-6 w-6 object-contain" />
-            <span className="text-white text-md">Logout</span>
+            <div className="flex w-full items-center flex-col gap-2 my-3 xl:my-6">
+              {navOptions.map(({ label, icon, url }) => (
+                <div
+                  className={`flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2 ${
+                    pathname === url && "bg-primary-100"
+                  }`}
+                  key={label}
+                  onClick={() => handleOptionClick(url)}
+                >
+                  <img src={icon} alt="" className="h-6 w-6 object-contain" />
+                  <span
+                    className={`text-white text-md ${
+                      pathname === url && "font-medium"
+                    }`}
+                  >
+                    {label}
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
-        )}
+          <div className="flex flex-col gap-4 items-center w-full">
+            <BuyNowSection />
+            {userLoggedIn && (
+              <div
+                onClick={logout}
+                className="flex w-[80%] gap-2 items-center rounded-md hover:bg-primary-100 cursor-pointer p-2"
+              >
+                <img
+                  src={LogoutIcon}
+                  alt=""
+                  className="h-6 w-6 object-contain"
+                />
+                <span className="text-white text-md">Logout</span>
+              </div>
+            )}
+          </div>
+        </div>
+        <Outlet />
       </div>
     </div>
   );

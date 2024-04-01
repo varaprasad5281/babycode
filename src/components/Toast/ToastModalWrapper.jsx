@@ -33,7 +33,7 @@ export default function ToastModalWrapper({ children }) {
   return (
     <div
       ref={overlay}
-      className="fixed z-50 left-0 right-0 top-0 bottom-0 mx-auto bg-black/20 h-screen w-screen inset-0 -mt-[16px] -ml-[16px]"
+      className="fixed z-50 left-0 right-0 top-0 bottom-0 mx-auto bg-black/40 h-screen w-screen inset-0 -mt-[16px] -ml-[16px]"
       onClick={onClick}
     >
       <div

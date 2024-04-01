@@ -14,7 +14,7 @@ import {
 } from "../utils/redux/storeSlice";
 import { login } from "../api/apiCall";
 import {
-  createJwtToken,
+  createJwt,
   generateRandomString,
   getTimestamp,
 } from "../utils/helpers";
@@ -34,7 +34,6 @@ export const AuthContextProvider = ({ children }) => {
     provider.setCustomParameters({ prompt: "select_account" });
     try {
       const response = await signInWithPopup(auth, provider);
-
       if (response.user) {
         let uniqueDeviceId = localStorage.getItem("unique_deviceId") || "";
 
@@ -65,17 +64,15 @@ export const AuthContextProvider = ({ children }) => {
           time: timestamp,
         };
 
-        const token = createJwtToken(user);
-        console.table(user);
+        const encryptedData = createJwt(user);
         const formData = new FormData();
-        formData.append("encrptData", token);
+        formData.append("encrptData", encryptedData);
 
         const result = await login(formData);
-        console.log(result);
         if (!result.data.failure) {
           if (result.data.accountMessage !== "") {
             dispatch(changeLoginModalStatus(false));
-            showAlert(result.data.accountMessage);
+            showAlert(result.data.accountMessage,uniqueDeviceId,result.data.data);
           } else {
             localStorage.setItem("userData", JSON.stringify(result.data.data));
             if (!localStorage.getItem("unique_deviceId")) {

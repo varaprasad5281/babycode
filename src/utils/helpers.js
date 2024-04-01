@@ -33,7 +33,7 @@ export const generateRandomString = () => {
 };
 
 //create jwt token
-export const createJwtToken = (body) => {
+export const createJwt = (body) => {
   const AccessToken = {
     jwtTokenKey: "120k%#n)^(don(omv4fg_-$8v+mm!(sy%#(h(=v%f+ywykd0(^",
     jwtTokenHeader: { alg: "HS256", typ: "JWT" },

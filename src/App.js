@@ -12,6 +12,20 @@ import { useEffect } from "react";
 import { generateNotificationToken, messaging } from "./utils/firebase";
 import { onMessage } from "firebase/messaging";
 import { toast } from "react-hot-toast";
+import Sidebar from "./components/Sidebar";
+import Stories from "./pages/Stories/Stories";
+import { PrivateRoute } from "./components/ProtectRoutes";
+import Shop from "./pages/Shop/Shop";
+import Feedback from "./pages/Feedback/Feedback";
+import Speaking from "./pages/Speaking/Speaking";
+import Listening from "./pages/Listening/Listening";
+import Reading from "./pages/Reading/Reading";
+import Writing from "./pages/Writing/Writing";
+import Vocabulary from "./pages/Vocabulary/Vocabulary";
+import Classes from "./pages/Classes/Classes";
+import StudentNews from "./pages/StudentNews/StudentNews";
+import BookIeltsExam from "./pages/BookIeltsExam/BookIeltsExam";
+import PracticeMockTest from "./pages/PracticeMockTest/PracticeMockTest";
 
 function App() {
   // request permission to send notifications
@@ -38,18 +52,140 @@ function App() {
 
   return (
     <Provider store={store}>
-      <Toaster position="top-center" />
       <AuthContextProvider>
+        <Toaster position="top-center" />
         <ModalWrapper>
           <Routes>
+            <Route path="/" element={<Sidebar />}>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <Header />
+                    <Home />
+                    <BottomTabs />
+                  </>
+                }
+              />
+            </Route>
             <Route
-              path="/"
+              path="/stories"
               element={
-                <>
-                  <Header />
-                  <Home />
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Stories />
                   <BottomTabs />
-                </>
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/shop"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Shop />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/feedback"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Feedback />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/speaking"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Speaking />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/listening"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Listening />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/reading"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Reading />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/writing"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Writing />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/vocabulary"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Vocabulary />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/classes"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <Classes />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/student-news"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <StudentNews />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/book-ielts-exam"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <BookIeltsExam />
+                  <BottomTabs />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/practice-mock-test"
+              element={
+                <PrivateRoute>
+                  {/* <Header /> */}
+                  <PracticeMockTest />
+                  <BottomTabs />
+                </PrivateRoute>
               }
             />
           </Routes>
