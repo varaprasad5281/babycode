@@ -18,25 +18,25 @@ const navOptions = [
     icon: HomeIcon,
     url: "/",
   },
-  {
-    label: "Community",
-    icon: CommunityIcon,
-    url: "/community",
-  },
+  // {
+  //   label: "Community",
+  //   icon: CommunityIcon,
+  //   url: "#",
+  // },
   {
     label: "Stories",
     icon: StoriesIcon,
-    url: "/stories",
+    url: "#",
   },
   {
     label: "Shop",
     icon: ShopIcon,
-    url: "/shop",
+    url: "#",
   },
   {
     label: "Feedback",
     icon: MsgIcon,
-    url: "/feedback",
+    url: "#",
   },
 ];
 

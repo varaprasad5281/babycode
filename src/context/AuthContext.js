@@ -18,12 +18,15 @@ import {
   generateRandomString,
   getTimestamp,
 } from "../utils/helpers";
+import { useNavigate } from "react-router-dom";
+import showAlert from "../components/Toast/CustomToast";
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [user, setUser] = useState({});
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // google signin
   const googleSignIn = async () => {
@@ -64,27 +67,38 @@ export const AuthContextProvider = ({ children }) => {
 
         const token = createJwtToken(user);
         console.table(user);
-
         const formData = new FormData();
         formData.append("encrptData", token);
 
-        const { data } = await login(formData);
-        if (!data.failure) {
-          localStorage.setItem("userData", JSON.stringify(data.data));
-          if (!localStorage.getItem("unique_deviceId")) {
-            localStorage.setItem("unique_deviceId", uniqueDeviceId);
+        const result = await login(formData);
+        console.log(result);
+        if (!result.data.failure) {
+          if (result.data.accountMessage !== "") {
+            dispatch(changeLoginModalStatus(false));
+            showAlert(result.data.accountMessage);
+          } else {
+            localStorage.setItem("userData", JSON.stringify(result.data.data));
+            if (!localStorage.getItem("unique_deviceId")) {
+              localStorage.setItem("unique_deviceId", uniqueDeviceId);
+            }
+            toast.success("Signin Successful");
+            dispatch(changeLoginModalStatus(false));
+            dispatch(setUserLoggedIn(true));
           }
-          toast.success("Signin Successful");
-          dispatch(changeLoginModalStatus(false));
-          dispatch(setUserLoggedIn(true));
         } else {
-          toast.error("Login failed");
+          if (result.data.logout) {
+            errorLogout();
+          } else if (result.data.tokenInvalid) {
+            toast.error(result.data.errorMessage);
+          } else {
+            toast.error(result.data.errorMessage);
+          }
         }
       } else {
         toast.error("Something went wrong");
       }
     } catch (err) {
-      console.log({ err });
+      console.error("Error occurred during login:", err);
       toast.error(err.message);
     }
   };
@@ -94,10 +108,23 @@ export const AuthContextProvider = ({ children }) => {
     try {
       await signOut(auth);
       localStorage.removeItem("userData");
-      toast.success("Signout Successful");
+      toast.success("Signout successful");
       dispatch(setUserLoggedIn(false));
+      navigate("/");
     } catch (err) {
-      console.log("ERROR LOGOUT ::\n", err);
+      // console.log("ERROR LOGOUT ::\n", err);
+    }
+  };
+
+  // error logout
+  const errorLogout = async () => {
+    try {
+      await signOut(auth);
+      toast.error("Signed out");
+      localStorage.removeItem("userData");
+      navigate("/");
+    } catch (err) {
+      // console.log("ERROR LOGOUT ::\n", err);
     }
   };
 
@@ -109,7 +136,7 @@ export const AuthContextProvider = ({ children }) => {
   }, []);
 
   return (
-    <AuthContext.Provider value={{ googleSignIn, logout, user }}>
+    <AuthContext.Provider value={{ googleSignIn, logout, user, errorLogout }}>
       {children}
     </AuthContext.Provider>
   );

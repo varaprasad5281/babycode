@@ -38,8 +38,8 @@ function App() {
 
   return (
     <Provider store={store}>
+      <Toaster position="top-center" />
       <AuthContextProvider>
-        <Toaster position="top-center" />
         <ModalWrapper>
           <Routes>
             <Route

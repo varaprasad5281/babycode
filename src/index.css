@@ -17,6 +17,20 @@
   box-sizing: border-box;
 }
 
+.go4109123758{
+  z-index: 999;
+}
+
+@layer utilities{
+  .primary-btn{
+    @apply bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white p-2 rounded-full
+  }
+  .secondary-btn{
+    @apply bg-white hover:bg-primary-100 hover:text-white transition-colors duration-300 text-primary-500 border border-primary-500 p-2 px-4 rounded-full
+  }
+  
+}
+
 /* ::-webkit-scrollbar {
   background: #1157da5d;
   width: 6px;

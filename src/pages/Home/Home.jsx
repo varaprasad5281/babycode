@@ -177,7 +177,7 @@ const Home = () => {
                     </p>
                     <button
                       onClick={handleClick}
-                      className="bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white p-2 rounded-full"
+                      className="primary-btn"
                     >
                       Start
                     </button>

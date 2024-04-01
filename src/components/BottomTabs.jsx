@@ -20,29 +20,29 @@ const tabs = [
     activeIcon: HomeIconActive,
     url: "/",
   },
-  {
-    label: "Community",
-    icon: CommunityIcon,
-    activeIcon: CommunityIconActive,
-    url: "/community",
-  },
+  // {
+  //   label: "Community",
+  //   icon: CommunityIcon,
+  //   activeIcon: CommunityIconActive,
+  //   url: "#",
+  // },
   {
     label: "Stories",
     icon: StoriesIcon,
     activeIcon: StoriesIconActive,
-    url: "/stories",
+    url: "#",
   },
   {
     label: "Shop",
     icon: ShopIcon,
     activeIcon: ShopIconActive,
-    url: "/shop",
+    url: "#",
   },
   {
     label: "Feedback",
     icon: MsgIcon,
     activeIcon: MsgIconActive,
-    url: "/feedback",
+    url: "#",
   },
 ];
 
@@ -61,7 +61,7 @@ const BottomTabs = () => {
     }
   };
   return (
-    <div className="grid lg:hidden grid-cols-5 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">
+    <div className="grid lg:hidden grid-cols-4 pb-3 px-3 gap-4 fixed bottom-0 left-0 w-full bg-white">
       {tabs.map(({ label, icon, activeIcon, url }, index) => (
         <div
           className={`flex flex-col p-2 gap-2 justify-between cursor-pointer items-center ${
