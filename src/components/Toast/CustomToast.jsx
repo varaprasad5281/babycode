@@ -2,24 +2,28 @@ import React from "react";
 import ToastModalWrapper from "./ToastModalWrapper";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { useContext } from "react";
 import { UserAuth } from "../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import {
   changeLoginModalStatus,
   setUserLoggedIn,
 } from "../../utils/redux/storeSlice";
+import { signOut } from "firebase/auth";
+import { useNavigate } from "react-router-dom";
+import { auth } from "../../utils/firebase";
 
-
-const CustomToast = ({ message, uniqueDeviceId, userData}) => {
-  const { errorLogout, googleSignIn } = UserAuth();
+const CustomToast = ({ message, uniqueDeviceId, userData }) => {
+  const { googleSignIn } = UserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const onConfirm = () => {
+  const onConfirm = async () => {
     toast.dismiss();
-    errorLogout();
+    await signOut(auth);
+    localStorage.removeItem("userData");
+    navigate("/");
     dispatch(changeLoginModalStatus(true));
-    googleSignIn()
+    googleSignIn();
   };
 
   const onProceedWithNewEmail = () => {
@@ -30,7 +34,7 @@ const CustomToast = ({ message, uniqueDeviceId, userData}) => {
     dispatch(changeLoginModalStatus(false));
     dispatch(setUserLoggedIn(true));
     toast.dismiss();
-    toast.success("Signin Successful");
+    setTimeout(() => toast.success("Signin Successful"), 800);
   };
   return (
     <ToastModalWrapper>

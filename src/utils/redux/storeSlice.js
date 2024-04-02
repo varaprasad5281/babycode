@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showLoginModal: false,
   userLoggedIn: !!localStorage.getItem("userData"),
+  isLoading: false,
 };
 
 const storeSlice = createSlice({
@@ -15,8 +16,12 @@ const storeSlice = createSlice({
     setUserLoggedIn: (state, action) => {
       state.userLoggedIn = action.payload;
     },
+    setLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
 });
 
-export const { changeLoginModalStatus, setUserLoggedIn } = storeSlice.actions;
+export const { changeLoginModalStatus, setUserLoggedIn, setLoading } =
+  storeSlice.actions;
 export default storeSlice.reducer;

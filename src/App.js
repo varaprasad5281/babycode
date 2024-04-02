@@ -1,33 +1,36 @@
-import "./App.css";
+import { lazy, Suspense, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header";
-import Home from "./pages/Home/Home";
-import BottomTabs from "./components/BottomTabs";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import ModalWrapper from "./components/ModalWrapper";
-import { Provider } from "react-redux";
-import { store } from "./utils/redux/store";
-import { useEffect } from "react";
 import { generateNotificationToken, messaging } from "./utils/firebase";
 import { onMessage } from "firebase/messaging";
 import { toast } from "react-hot-toast";
-import Sidebar from "./components/Sidebar";
-import Stories from "./pages/Stories/Stories";
 import { PrivateRoute } from "./components/ProtectRoutes";
-import Shop from "./pages/Shop/Shop";
-import Feedback from "./pages/Feedback/Feedback";
-import Speaking from "./pages/Speaking/Speaking";
-import Listening from "./pages/Listening/Listening";
-import Reading from "./pages/Reading/Reading";
-import Writing from "./pages/Writing/Writing";
-import Vocabulary from "./pages/Vocabulary/Vocabulary";
-import Classes from "./pages/Classes/Classes";
-import StudentNews from "./pages/StudentNews/StudentNews";
-import BookIeltsExam from "./pages/BookIeltsExam/BookIeltsExam";
-import PracticeMockTest from "./pages/PracticeMockTest/PracticeMockTest";
+import { useSelector } from "react-redux";
+import LoadingSpinner from "./components/LoadingSpinner";
+
+const Header = lazy(() => import("./components/Header"));
+const Home = lazy(() => import("./pages/Home/Home"));
+const BottomTabs = lazy(() => import("./components/BottomTabs"));
+const Sidebar = lazy(() => import("./components/Sidebar"));
+const Stories = lazy(() => import("./pages/Stories/Stories"));
+const Shop = lazy(() => import("./pages/Shop/Shop"));
+const Feedback = lazy(() => import("./pages/Feedback/Feedback"));
+const Speaking = lazy(() => import("./pages/Speaking/Speaking"));
+const Listening = lazy(() => import("./pages/Listening/Listening"));
+const Reading = lazy(() => import("./pages/Reading/Reading"));
+const Writing = lazy(() => import("./pages/Writing/Writing"));
+const Vocabulary = lazy(() => import("./pages/Vocabulary/Vocabulary"));
+const Classes = lazy(() => import("./pages/Classes/Classes"));
+const StudentNews = lazy(() => import("./pages/StudentNews/StudentNews"));
+const BookIeltsExam = lazy(() => import("./pages/BookIeltsExam/BookIeltsExam"));
+const PracticeMockTest = lazy(() =>
+  import("./pages/PracticeMockTest/PracticeMockTest")
+);
 
 function App() {
+  const { isLoading } = useSelector((state) => state.store);
   // request permission to send notifications
   useEffect(() => {
     const requestNotificationPermission = async () => {
@@ -51,10 +54,11 @@ function App() {
   }, []);
 
   return (
-    <Provider store={store}>
+    <Suspense fallback={<LoadingSpinner />}>
       <AuthContextProvider>
         <Toaster position="top-center" />
         <ModalWrapper>
+          {isLoading && <LoadingSpinner />}
           <Routes>
             <Route path="/" element={<Sidebar />}>
               <Route
@@ -112,7 +116,7 @@ function App() {
               path="/listening"
               element={
                 <PrivateRoute>
-                  {/* <Header /> */}
+                  <Header />
                   <Listening />
                   <BottomTabs />
                 </PrivateRoute>
@@ -191,7 +195,7 @@ function App() {
           </Routes>
         </ModalWrapper>
       </AuthContextProvider>
-    </Provider>
+    </Suspense>
   );
 }
 

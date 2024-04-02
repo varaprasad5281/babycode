@@ -1,6 +1,4 @@
-import React, { useEffect } from "react";
-import Sidebar from "../../components/Sidebar";
-import { Link } from "react-router-dom";
+import React, { lazy, useEffect, useState } from "react";
 import ProfileIcon from "../../assets/images/profile-icon.png";
 import Speaking from "../../assets/images/speaking.png";
 import Listening from "../../assets/images/listening.png";
@@ -15,15 +13,15 @@ import IGIcon from "../../assets/images/instagram-icon.png";
 import ListImg from "../../assets/images/list-image.png";
 import ArrowIcon from "../../assets/svg/rounded-arrow-dark.svg";
 import WAIcon from "../../assets/images/whatsapp-icon.png";
-import BuyNowSection from "../../components/BuyNowSection";
-import ShareApp from "../../components/ShareApp";
-import Graph from "../../components/Graph";
 import { RxCaretDown } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
-import { changeLoginModalStatus } from "../../utils/redux/storeSlice";
+import { changeLoginModalStatus, setLoading } from "../../utils/redux/storeSlice";
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { getAppInformation } from "../../api/apiCall";
+const BuyNowSection = lazy(() => import("../../components/BuyNowSection"));
+const ShareApp = lazy(() => import("../../components/ShareApp"));
+const Graph = lazy(() => import("../../components/Graph"));
 
 const gridItems = [
   {
@@ -72,6 +70,8 @@ const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userLoggedIn } = useSelector((state) => state.store);
+  let user = JSON.parse(localStorage.getItem("userData"));
+  const [userData, setUserData] = useState(user || {});
 
   const handleClick = () => {
     !userLoggedIn && dispatch(changeLoginModalStatus(true));
@@ -84,10 +84,11 @@ const Home = () => {
     return dispatch(changeLoginModalStatus(true));
   };
 
+  // get app information
   const getAppInfo = async () => {
-    const userData = JSON.parse(localStorage.getItem("userData"));
-    if (checkAuth()) {
+    if (userData) {
       try {
+        dispatch(setLoading(true))
         const data = {
           uid: userData.uid,
           platform: userData.platform,
@@ -102,8 +103,18 @@ const Home = () => {
         formData.append("encrptData", encryptedData);
         const response = await getAppInformation(formData);
         console.log({ response });
+        if (!response.data.failure) {
+          setUserData(response.data.userInformation);
+          localStorage.setItem(
+            "userData",
+            JSON.stringify(response.data.userInformation)
+          );
+          localStorage.setItem("paymentInformation", JSON.stringify(response.data.data));
+        }
       } catch (err) {
         console.log(err);
+      }finally{
+        dispatch(setLoading(false))
       }
     } else {
       console.log("No user");
@@ -111,7 +122,6 @@ const Home = () => {
   };
 
   useEffect(() => {
-    getAppInfo();
     // Function to fetch data initially and on tab visibility change
     const fetchOnTabVisibilityChange = () => {
       if (!document.hidden) {
@@ -132,11 +142,8 @@ const Home = () => {
         fetchOnTabVisibilityChange
       );
     };
-  }, [userLoggedIn]);
+  }, []);
   return (
-    // <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0">
-    //   <div className="flex flex-1 md:max-h-screen">
-    //     <Sidebar />
     <div className="homepage pb-2 md:pb-28 lg:pb-0 relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-between items-center py-[0.4rem] w-full px-6 lg:px-[3rem] bg-white">
         <h3 className="text-lg font-medium">Your Progress Summary</h3>
@@ -179,14 +186,11 @@ const Home = () => {
       <div className="px-6 lg:px-[3rem] py-3">
         <div className="lg:my-3">
           <div className="flex flex-col gap-5">
-            {/* <div className="flex justify-between gap-10 h-[60vh] md:h-[34vh]"> */}
             <div className="grid grid-cols-1 md:grid-cols-10 xl:grid-cols-12 gap-10 xl:gap-14 grid-rows-1 h-[45vh] md:h-[32vh]">
-              {/* <div className="w-full h-full md:w-[58%] lg:w-[60%] mb-4 md:mb-0 bg-white shadow-lg md:shadow-none rounded-xl p-4"> */}
               <div className="w-full h-full col-span-6 xl:col-span-8 mb-4 md:mb-0 bg-white shadow-lg md:shadow-none rounded-xl p-4">
                 <Graph />
               </div>
               <div className="hidden h-full md:flex flex-1 col-span-4 xl:col-span-4">
-                {/* <div className="hidden h-full md:flex w-[38%] flex-1"> */}
                 <ShareApp />
               </div>
             </div>
@@ -198,12 +202,9 @@ const Home = () => {
             Prepare with ease
           </h3>
           <div className="w-full grid md:grid-cols-[65%_30%] gap-10 justify-between items-start mb-6 md:mb-0">
-            {/* <div className="w-full flex justify-between items-start"> */}
             <div className="w-full grid grid-cols-3 sm:grid-cols-4 gap-[0.3rem]">
-              {/* <div className="w-full md:w-[68%] grid grid-cols-3 sm:grid-cols-4"> */}
               {gridItems.map(({ icon, title, url }) => (
                 <button
-                  // className={`flex flex-col max-w-[10rem] justify-self-start items-center
                   className={`flex flex-col justify-self-start items-center pr-[1rem]
                   ${title === "Book IELTS Exam" && "order-last md:order-2"}
                   `}
@@ -222,7 +223,6 @@ const Home = () => {
               ))}
             </div>
 
-            {/* <div className="w-[27%] md:flex flex-col gap-5 hidden mt-3"> */}
             <div className="w-full md:flex flex-col gap-5 hidden mt-3">
               <button
                 onClick={handleClick}
@@ -303,8 +303,6 @@ const Home = () => {
         </div>
       </div>
     </div>
-    //   </div>
-    // </div>
   );
 };
 

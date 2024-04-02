@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 import {
   changeLoginModalStatus,
+  setLoading,
   setUserLoggedIn,
 } from "../utils/redux/storeSlice";
 import { login } from "../api/apiCall";
@@ -67,12 +68,17 @@ export const AuthContextProvider = ({ children }) => {
         const encryptedData = createJwt(user);
         const formData = new FormData();
         formData.append("encrptData", encryptedData);
-
+        dispatch(setLoading(true));
         const result = await login(formData);
         if (!result.data.failure) {
+          dispatch(setLoading(false));
           if (result.data.accountMessage !== "") {
             dispatch(changeLoginModalStatus(false));
-            showAlert(result.data.accountMessage,uniqueDeviceId,result.data.data);
+            showAlert(
+              result.data.accountMessage,
+              uniqueDeviceId,
+              result.data.data
+            );
           } else {
             localStorage.setItem("userData", JSON.stringify(result.data.data));
             if (!localStorage.getItem("unique_deviceId")) {
@@ -83,6 +89,7 @@ export const AuthContextProvider = ({ children }) => {
             dispatch(setUserLoggedIn(true));
           }
         } else {
+          dispatch(setLoading(false))
           if (result.data.logout) {
             errorLogout();
           } else if (result.data.tokenInvalid) {
