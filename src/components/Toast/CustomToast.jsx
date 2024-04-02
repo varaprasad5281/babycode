@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import {
   changeLoginModalStatus,
   setUserLoggedIn,
-} from "../../utils/redux/storeSlice";
+} from "../../utils/redux/otherSlice";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../utils/firebase";

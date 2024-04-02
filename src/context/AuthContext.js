@@ -12,7 +12,7 @@ import {
   changeLoginModalStatus,
   setLoading,
   setUserLoggedIn,
-} from "../utils/redux/storeSlice";
+} from "../utils/redux/otherSlice";
 import { login } from "../api/apiCall";
 import {
   createJwt,

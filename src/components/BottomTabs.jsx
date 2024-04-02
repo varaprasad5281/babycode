@@ -9,7 +9,7 @@ import ShopIconActive from "../assets/images/shop-active.png";
 import MsgIcon from "../assets/images/feedback-dark.png";
 import MsgIconActive from "../assets/images/feedback-active.png";
 import { useDispatch } from "react-redux";
-import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { changeLoginModalStatus } from "../utils/redux/otherSlice";
 import { useNavigate, useLocation } from "react-router-dom";
 import { checkAuth } from "../utils/helpers";
 

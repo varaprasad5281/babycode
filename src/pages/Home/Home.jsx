@@ -15,7 +15,7 @@ import ArrowIcon from "../../assets/svg/rounded-arrow-dark.svg";
 import WAIcon from "../../assets/images/whatsapp-icon.png";
 import { RxCaretDown } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
-import { changeLoginModalStatus, setLoading } from "../../utils/redux/storeSlice";
+import { changeLoginModalStatus, setLoading } from "../../utils/redux/otherSlice";
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { getAppInformation } from "../../api/apiCall";
@@ -69,7 +69,7 @@ const gridItems = [
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userLoggedIn } = useSelector((state) => state.store);
+  const { userLoggedIn } = useSelector((state) => state.other);
   let user = JSON.parse(localStorage.getItem("userData"));
   const [userData, setUserData] = useState(user || {});
 

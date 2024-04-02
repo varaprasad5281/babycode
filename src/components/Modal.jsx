@@ -1,6 +1,6 @@
 import { useCallback, useRef, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { changeLoginModalStatus } from "../utils/redux/otherSlice";
 
 export default function Modal({ children }) {
   const overlay = useRef(null);
@@ -40,7 +40,7 @@ export default function Modal({ children }) {
     >
       <div
         ref={wrapper}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95%] md:w-10/12 h-[80vh] p-6 flex items-center justify-center"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100%] md:w-10/12 h-[80vh] max-h-[90vh] p-3 flex items-center justify-center"
       >
         {children}
       </div>

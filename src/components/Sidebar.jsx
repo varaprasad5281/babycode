@@ -9,7 +9,7 @@ import BuyNowSection from "../pages/Home/components/BuyNowSection";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
-import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import { changeLoginModalStatus } from "../utils/redux/otherSlice";
 import { checkAuth } from "../utils/helpers";
 import { Outlet } from "react-router-dom";
 
@@ -44,7 +44,7 @@ const navOptions = [
 const Sidebar = () => {
   const { pathname } = useLocation();
   const { logout } = UserAuth();
-  const { userLoggedIn } = useSelector((state) => state.store);
+  const { userLoggedIn } = useSelector((state) => state.other);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -58,7 +58,11 @@ const Sidebar = () => {
     }
   };
   return (
-    <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0">
+    <div
+      className={`${
+        pathname === "/" && "pt-[8.2rem] md:pt-[9.6rem] lg:pt-0"
+      } h-screen flex flex-col`}
+    >
       {/* <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0"> */}
       <div className="flex flex-1 md:max-h-screen">
         <div className="hidden w-[32%] max-w-[32%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">

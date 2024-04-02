@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import { AuthContextProvider } from "./context/AuthContext";
 import { Toaster } from "react-hot-toast";
 import ModalWrapper from "./components/ModalWrapper";
@@ -29,8 +29,16 @@ const PracticeMockTest = lazy(() =>
   import("./pages/PracticeMockTest/PracticeMockTest")
 );
 
+export const ScrollToTop = () => {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+  return null;
+};
+
 function App() {
-  const { isLoading } = useSelector((state) => state.store);
+  const { isLoading } = useSelector((state) => state.other);
   // request permission to send notifications
   useEffect(() => {
     const requestNotificationPermission = async () => {
@@ -56,6 +64,7 @@ function App() {
   return (
     <Suspense fallback={<LoadingSpinner />}>
       <AuthContextProvider>
+        <ScrollToTop />
         <Toaster position="top-center" />
         <ModalWrapper>
           {isLoading && <LoadingSpinner />}
@@ -77,7 +86,6 @@ function App() {
                   <PrivateRoute>
                     <Header />
                     <Listening />
-                    <BottomTabs />
                   </PrivateRoute>
                 }
               />
