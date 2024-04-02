@@ -59,10 +59,15 @@ const Sidebar = () => {
   };
   return (
     <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0">
+      {/* <div className="h-screen flex flex-col pt-[8.2rem] md:pt-[9.6rem] lg:pt-0"> */}
       <div className="flex flex-1 md:max-h-screen">
         <div className="hidden w-[32%] max-w-[32%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
           <div className="flex flex-col items-center w-full">
-            <div className="flex gap-1 items-center">
+            <div
+              className={`flex gap-1 items-center ${
+                pathname !== "/" && "pt-[2rem]"
+              }`}
+            >
               <img
                 src={Logo}
                 alt=""

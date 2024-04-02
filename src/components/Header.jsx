@@ -4,12 +4,14 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/storeSlice";
 import { checkAuth } from "../utils/helpers";
+import { useLocation } from "react-router-dom";
 
 const options = ["IELTS", "PTE", "TOEFL"];
 
 const Header = () => {
   const [option, setOption] = useState(0);
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
 
   const handleClick = () => {
     if (!checkAuth()) {
@@ -18,12 +20,13 @@ const Header = () => {
   };
   return (
     <div className="flex flex-col fixed left-0 top-0 w-full z-20">
-      {/* <div className="flex flex-col sticky left-0 top-0 w-full z-20"> */}
-      {/* <div className="hidden lg:flex py-2 bg-[#F6DDC9] justify-center">
-        <span className="text-[#DF7146] text-sm">
-          Get 50% discount on BabyCode membership
-        </span>
-      </div> */}
+      {pathname !== "/" && (
+        <div className="hidden lg:flex py-2 bg-[#F6DDC9] justify-center">
+          <span className="text-[#DF7146] text-sm">
+            Get 50% discount on BabyCode membership
+          </span>
+        </div>
+      )}
       <div className="lg:hidden z-10 bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 lg:px-14 md:py-6">
         <div className="flex justify-between items-center">
           <img
@@ -34,7 +37,7 @@ const Header = () => {
           />
           <span className="text-white font-medium text-xl">Home</span>
           <img
-          onClick={handleClick}
+            onClick={handleClick}
             src={IGIcon}
             className="w-9 h-9 object-contain cursor-pointer"
             alt="instagram icon"

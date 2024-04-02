@@ -71,6 +71,16 @@ function App() {
                   </>
                 }
               />
+              <Route
+                path="/listening"
+                element={
+                  <PrivateRoute>
+                    <Header />
+                    <Listening />
+                    <BottomTabs />
+                  </PrivateRoute>
+                }
+              />
             </Route>
             <Route
               path="/stories"
@@ -112,16 +122,7 @@ function App() {
                 </PrivateRoute>
               }
             />
-            <Route
-              path="/listening"
-              element={
-                <PrivateRoute>
-                  <Header />
-                  <Listening />
-                  <BottomTabs />
-                </PrivateRoute>
-              }
-            />
+
             <Route
               path="/reading"
               element={
