@@ -1,8 +1,8 @@
-import CheckIcon from "../assets/svg/check-circle-icon.svg";
-import ArrowIcon from "../assets/svg/arrow-circle-right-icon.svg";
-import { changeLoginModalStatus } from "../utils/redux/storeSlice";
+import CheckIcon from "../../../assets/svg/check-circle-icon.svg";
+import ArrowIcon from "../../../assets/svg/arrow-circle-right-icon.svg";
+import { changeLoginModalStatus } from "../../../utils/redux/storeSlice";
 import { useDispatch } from "react-redux";
-import { checkAuth } from "../utils/helpers";
+import { checkAuth } from "../../../utils/helpers";
 
 const content = [
   "Unlimited Speaking Test Access",

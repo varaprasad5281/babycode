@@ -19,9 +19,9 @@ import { changeLoginModalStatus, setLoading } from "../../utils/redux/storeSlice
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { getAppInformation } from "../../api/apiCall";
-const BuyNowSection = lazy(() => import("../../components/BuyNowSection"));
-const ShareApp = lazy(() => import("../../components/ShareApp"));
-const Graph = lazy(() => import("../../components/Graph"));
+const BuyNowSection = lazy(() => import("./components/BuyNowSection"));
+const ShareApp = lazy(() => import("./components/ShareApp"));
+const Graph = lazy(() => import("./components/Graph"));
 
 const gridItems = [
   {

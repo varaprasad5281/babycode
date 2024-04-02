@@ -1,8 +1,8 @@
-import LgImg from "../assets/images/boy-image.png";
-import SmImg from "../assets/images/sm-screen-boy.png";
+import LgImg from "../../../assets/images/boy-image.png";
+import SmImg from "../../../assets/images/sm-screen-boy.png";
 import { useDispatch } from "react-redux";
-import { changeLoginModalStatus } from "../utils/redux/storeSlice";
-import { checkAuth } from "../utils/helpers";
+import { changeLoginModalStatus } from "../../../utils/redux/storeSlice";
+import { checkAuth } from "../../../utils/helpers";
 
 const ShareApp = () => {
   const dispatch = useDispatch();

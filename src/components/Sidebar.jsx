@@ -5,7 +5,7 @@ import StoriesIcon from "../assets/svg/stories-icon.svg";
 import ShopIcon from "../assets/svg/storefront-icon.svg";
 import MsgIcon from "../assets/svg/message-icon.svg";
 import LogoutIcon from "../assets/svg/signout-icon.svg";
-import BuyNowSection from "./BuyNowSection";
+import BuyNowSection from "../pages/Home/components/BuyNowSection";
 import { useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
