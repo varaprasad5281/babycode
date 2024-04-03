@@ -1,0 +1,21 @@
+.category-button {
+  @apply py-2 pb-1 text-defaultGray border-b border-transparent;
+}
+
+.button-group {
+  @apply flex gap-4;
+}
+.active-button {
+  @apply border-b  border-primary-500 text-primary-500;
+}
+
+.IELTS-Button-group {
+  @apply flex gap-2 bg-white w-fit border p-1  rounded-full border-gray-200;
+}
+.Ielts-btn {
+  @apply p-2 px-3 text-defaultGray;
+}
+
+.active-Ielts-btn {
+  @apply bg-[#135ade] text-white rounded-full;
+}

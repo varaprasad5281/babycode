@@ -91,6 +91,16 @@ function App() {
                     <Listening />
                   </PrivateRoute>
                 }
+              />{" "}
+              <Route
+                path="/reading"
+                element={
+                  <PrivateRoute>
+                    {/* <Header /> */}
+                    <Reading />
+                    <BottomTabs />
+                  </PrivateRoute>
+                }
               />
               <Route
                 path="/vocabulary"
