@@ -42,7 +42,8 @@ export const generateNotificationToken = async () => {
       //   "BPo2xJz0mG5DT7xO0Ny-ZxBUNUpjHJLMq61OWFcn147IKPnfTSFxy1yJ8DPapG0HWVESp8EQzy4m8iC2BskdQZU",
     });
     if (token) {
-      console.table({ notificationToken: token });
+      localStorage.setItem("fcmToken", token);
+      // console.table({ notificationToken: token });
       return token;
     }
   } catch (err) {

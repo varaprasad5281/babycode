@@ -4,7 +4,6 @@ const initialState = {
   showLoginModal: false,
   showListeningModal: false,
   listeningModalContent: "",
-  userLoggedIn: !!localStorage.getItem("userData"),
   isLoading: false,
 };
 
@@ -21,13 +20,10 @@ const otherSlice = createSlice({
     setListeningModalContent: (state, action) => {
       state.listeningModalContent = action.payload;
     },
-    setUserLoggedIn: (state, action) => {
-      state.userLoggedIn = action.payload;
-    },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
-    resetState: (state) => {
+    resetOtherState: (state) => {
       state = initialState;
     },
   },
@@ -35,10 +31,9 @@ const otherSlice = createSlice({
 
 export const {
   changeLoginModalStatus,
-  setUserLoggedIn,
   setLoading,
   changeListeningModalStatus,
   setListeningModalContent,
-  resetState
+  resetOtherState,
 } = otherSlice.actions;
 export default otherSlice.reducer;

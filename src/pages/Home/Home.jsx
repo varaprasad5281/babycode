@@ -1,10 +1,10 @@
-import React, { lazy, useEffect, useState } from "react";
+import React, { lazy, useEffect, useRef, useState } from "react";
 import ProfileIcon from "../../assets/images/profile-icon.png";
 import Speaking from "../../assets/images/speaking.png";
 import Listening from "../../assets/images/listening.png";
 import Reading from "../../assets/images/reading.png";
 import Writing from "../../assets/images/writing.png";
-import Vocalbulary from "../../assets/images/vocabulary.png";
+import vocabulary from "../../assets/images/vocabulary.png";
 import Classes from "../../assets/images/classes.png";
 import BookIelts from "../../assets/images/book-ielts.png";
 import StudentNews from "../../assets/images/student-news.png";
@@ -15,10 +15,15 @@ import ArrowIcon from "../../assets/svg/rounded-arrow-dark.svg";
 import WAIcon from "../../assets/images/whatsapp-icon.png";
 import { RxCaretDown } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
-import { changeLoginModalStatus, setLoading } from "../../utils/redux/otherSlice";
+import {
+  changeLoginModalStatus,
+  setLoading,
+} from "../../utils/redux/otherSlice";
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import { getAppInformation } from "../../api/apiCall";
+import { toast } from "react-hot-toast";
+import { UserAuth } from "../../context/AuthContext";
 const BuyNowSection = lazy(() => import("./components/BuyNowSection"));
 const ShareApp = lazy(() => import("./components/ShareApp"));
 const Graph = lazy(() => import("./components/Graph"));
@@ -45,9 +50,9 @@ const gridItems = [
     url: "/writing",
   },
   {
-    icon: Vocalbulary,
-    title: "Vocalbulary",
-    url: "/vocalbulary",
+    icon: vocabulary,
+    title: "vocabulary",
+    url: "/vocabulary",
   },
   {
     icon: Classes,
@@ -69,9 +74,12 @@ const gridItems = [
 const Home = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userLoggedIn } = useSelector((state) => state.other);
+  const { errorLogout } = UserAuth();
+  const { userLoggedIn } = useSelector((state) => state.user);
   let user = JSON.parse(localStorage.getItem("userData"));
-  const [userData, setUserData] = useState(user || {});
+  let fcmToken = localStorage.getItem("fcmToken") || "";
+  const effectRan = useRef(false);
+  const [effectExecuted, setEffectExecuted] = useState(false);
 
   const handleClick = () => {
     !userLoggedIn && dispatch(changeLoginModalStatus(true));
@@ -86,14 +94,14 @@ const Home = () => {
 
   // get app information
   const getAppInfo = async () => {
-    if (userData) {
+    if (checkAuth()) {
       try {
-        dispatch(setLoading(true))
+        dispatch(setLoading(true));
         const data = {
-          uid: userData.uid,
-          platform: userData.platform,
-          uniqueDeviceId: userData.uniqueDeviceId,
-          fcmToken: userData.fcmToken,
+          uid: user.uid,
+          platform: user.platform,
+          uniqueDeviceId: user.uniqueDeviceId,
+          fcmToken,
           currentLocationLatitude: "",
           currentLocationLongitude: "",
         };
@@ -101,48 +109,69 @@ const Home = () => {
         const encryptedData = createJwt(data);
         const formData = new FormData();
         formData.append("encrptData", encryptedData);
+
         const response = await getAppInformation(formData);
-        console.log({ response });
+
         if (!response.data.failure) {
-          setUserData(response.data.userInformation);
           localStorage.setItem(
             "userData",
             JSON.stringify(response.data.userInformation)
           );
-          localStorage.setItem("paymentInformation", JSON.stringify(response.data.data));
+          localStorage.setItem(
+            "paymentInformation",
+            JSON.stringify(response.data.data)
+          );
+        } else {
+          if (response.data.logout) {
+            errorLogout(response.data.errorMessage);
+          } else if (response.data.tokenInvalid) {
+            toast.error(response.data.errorMessage);
+          } else {
+            toast.error(response.data.errorMessage);
+          }
         }
       } catch (err) {
-        console.log(err);
-      }finally{
-        dispatch(setLoading(false))
+        toast.error(err.message);
+        // console.log(err);
+      } finally {
+        dispatch(setLoading(false));
       }
     } else {
-      console.log("No user");
+      toast.error("Please login first");
+      // console.log("No user");
     }
   };
 
   useEffect(() => {
-    // Function to fetch data initially and on tab visibility change
+    if (userLoggedIn && !effectExecuted) {
+      if (!effectRan.current) {
+        getAppInfo();
+        effectRan.current = true;
+      }
+      setEffectExecuted(true);
+    } else if (!userLoggedIn) {
+      // Reset flags when the user logs out
+      effectRan.current = false;
+      setEffectExecuted(false);
+    }
+  }, [userLoggedIn, effectExecuted]);
+
+  useEffect(() => {
     const fetchOnTabVisibilityChange = () => {
-      if (!document.hidden) {
-        getAppInfo(); // Fetch data when tab becomes visible
+      if (!document.hidden && effectRan.current && effectExecuted) {
+        getAppInfo();
       }
     };
 
-    // Initial data fetch
-    getAppInfo();
-
-    // Event listener for visibility change
     document.addEventListener("visibilitychange", fetchOnTabVisibilityChange);
 
-    // Clean up the event listener on component unmount
     return () => {
       document.removeEventListener(
         "visibilitychange",
         fetchOnTabVisibilityChange
       );
     };
-  }, []);
+  }, [effectExecuted]);
   return (
     <div className="homepage pb-2 md:pb-28 lg:pb-0 relative w-full flex flex-col bg-[#F7F7F7] md:max-h-screen overflow-y-scroll">
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-between items-center py-[0.4rem] w-full px-6 lg:px-[3rem] bg-white">
@@ -154,17 +183,15 @@ const Home = () => {
             alt=""
             className="w-8 h-8 object-contain cursor-pointer"
           />
-          <div
-            onClick={handleClick}
-            className="p-[.2rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"
-          >
+          {/* <div className="p-[.2rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"> */}
             <img
+              onClick={handleClick}
               src={ProfileIcon}
               alt=""
               className="w-8 h-8 object-contain rounded-full"
             />
-            <RxCaretDown />
-          </div>
+            {/* <RxCaretDown />
+          </div> */}
         </div>
       </div>
       <div className="lg:hidden py-3 px-6 lg:px-[3rem]">

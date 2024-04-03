@@ -5,22 +5,15 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { auth, generateNotificationToken } from "../utils/firebase";
+import { auth } from "../utils/firebase";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import {
-  changeLoginModalStatus,
-  setLoading,
-  setUserLoggedIn,
-} from "../utils/redux/otherSlice";
+import { changeLoginModalStatus, setLoading } from "../utils/redux/otherSlice";
 import { login } from "../api/apiCall";
-import {
-  createJwt,
-  generateRandomString,
-  getTimestamp,
-} from "../utils/helpers";
+import { createJwt, generateRandomString } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
 import showAlert from "../components/Toast/CustomToast";
+import { setUserDetails, setUserLoggedIn } from "../utils/redux/userSlice";
 
 const AuthContext = createContext();
 
@@ -36,15 +29,15 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const response = await signInWithPopup(auth, provider);
       if (response.user) {
-        let uniqueDeviceId = localStorage.getItem("unique_deviceId") || "";
+        dispatch(setLoading(true));
+        let uniqueDeviceId = localStorage.getItem("uniqueDeviceId") || "";
 
         if (!uniqueDeviceId) {
           const randomId = generateRandomString();
           uniqueDeviceId = "tempDeviceId_" + response.user.uid + randomId;
         }
 
-        let timestamp = getTimestamp();
-        const fcmToken = await generateNotificationToken();
+        const fcmToken = localStorage.getItem("fcmToken") || "";
 
         let couponCode = "";
         if (response.user.email === "") {
@@ -62,13 +55,13 @@ export const AuthContextProvider = ({ children }) => {
           email: response.user.email,
           uniqueDeviceId,
           fcmToken,
-          time: timestamp,
         };
+
+        console.table(user);
 
         const encryptedData = createJwt(user);
         const formData = new FormData();
         formData.append("encrptData", encryptedData);
-        dispatch(setLoading(true));
         const result = await login(formData);
         if (!result.data.failure) {
           dispatch(setLoading(false));
@@ -80,16 +73,18 @@ export const AuthContextProvider = ({ children }) => {
               result.data.data
             );
           } else {
+            dispatch(setUserLoggedIn(true));
+            dispatch(setUserDetails(result.data.data));
             localStorage.setItem("userData", JSON.stringify(result.data.data));
-            if (!localStorage.getItem("unique_deviceId")) {
-              localStorage.setItem("unique_deviceId", uniqueDeviceId);
+            if (!localStorage.getItem("uniqueDeviceId")) {
+              localStorage.setItem("uniqueDeviceId", uniqueDeviceId);
             }
             toast.success("Signin Successful");
+            navigate("/");
             dispatch(changeLoginModalStatus(false));
-            dispatch(setUserLoggedIn(true));
           }
         } else {
-          dispatch(setLoading(false))
+          dispatch(setLoading(false));
           if (result.data.logout) {
             errorLogout();
           } else if (result.data.tokenInvalid) {
@@ -112,8 +107,10 @@ export const AuthContextProvider = ({ children }) => {
     try {
       await signOut(auth);
       localStorage.removeItem("userData");
+      localStorage.removeItem("paymentInformation");
       toast.success("Signout successful");
       dispatch(setUserLoggedIn(false));
+      dispatch(setUserDetails({}));
       navigate("/");
     } catch (err) {
       // console.log("ERROR LOGOUT ::\n", err);
@@ -121,11 +118,18 @@ export const AuthContextProvider = ({ children }) => {
   };
 
   // error logout
-  const errorLogout = async () => {
+  const errorLogout = async (errMsg) => {
     try {
       await signOut(auth);
-      toast.error("Signed out");
+      if (!errMsg) {
+        toast.error("Signed out");
+      }else{
+        toast.error(errMsg);
+      }
       localStorage.removeItem("userData");
+      localStorage.removeItem("paymentInformation");
+      dispatch(setUserLoggedIn(false));
+      dispatch(setUserDetails({}));
       navigate("/");
     } catch (err) {
       // console.log("ERROR LOGOUT ::\n", err);

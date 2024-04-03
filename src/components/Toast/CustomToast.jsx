@@ -6,11 +6,11 @@ import { UserAuth } from "../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import {
   changeLoginModalStatus,
-  setUserLoggedIn,
 } from "../../utils/redux/otherSlice";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../utils/firebase";
+import { setUserLoggedIn } from "../../utils/redux/userSlice";
 
 const CustomToast = ({ message, uniqueDeviceId, userData }) => {
   const { googleSignIn } = UserAuth();
@@ -21,15 +21,17 @@ const CustomToast = ({ message, uniqueDeviceId, userData }) => {
     toast.dismiss();
     await signOut(auth);
     localStorage.removeItem("userData");
+    localStorage.removeItem('paymentInformation')
     navigate("/");
     dispatch(changeLoginModalStatus(true));
+    dispatch(setUserLoggedIn(false));
     googleSignIn();
   };
 
   const onProceedWithNewEmail = () => {
     localStorage.setItem("userData", JSON.stringify(userData));
-    if (!localStorage.getItem("unique_deviceId")) {
-      localStorage.setItem("unique_deviceId", uniqueDeviceId);
+    if (!localStorage.getItem("uniqueDeviceId")) {
+      localStorage.setItem("uniqueDeviceId", uniqueDeviceId);
     }
     dispatch(changeLoginModalStatus(false));
     dispatch(setUserLoggedIn(true));

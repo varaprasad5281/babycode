@@ -18,6 +18,7 @@ module.exports = {
       },
       boxShadow: {
         top: "0 -6px 6px -4px rgba(0, 0, 0, 0.2)",
+        left: "-5px 0px 35px rgba(0, 0, 0, 0.4)",
       },
     },
   },

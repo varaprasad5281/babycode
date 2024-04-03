@@ -20,13 +20,6 @@ const Header = () => {
   };
   return (
     <div className="flex flex-col fixed left-0 top-0 w-full z-20">
-      {pathname !== "/" && (
-        <div className="hidden lg:flex py-2 bg-[#F6DDC9] justify-center">
-          <span className="text-[#DF7146] text-sm">
-            Get 50% discount on BabyCode membership
-          </span>
-        </div>
-      )}
       {pathname === "/" && (
         <div className="lg:hidden z-10 bg-gradient-to-b from-[#1158DA] to-[#002569] py-3 px-6 lg:px-14 md:py-6">
           <div className="flex justify-between items-center">

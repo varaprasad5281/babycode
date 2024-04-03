@@ -9,3 +9,8 @@ export const login = (data) => {
 export const getAppInformation = (data) => {
   return api.post(Apis.appInfo, data);
 };
+
+// get listening practice data
+export const getListeningPractiseData = (data) => {
+  return api.post(Apis.listeningPracticeData, data);
+}

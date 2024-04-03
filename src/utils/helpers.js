@@ -12,9 +12,9 @@ export const getTimestamp = () => {
 
   // Get the timestamp in milliseconds since the Unix epoch (January 1, 1970)
   const timestamp = currentDate.getTime();
-  
+
   const timestampInSeconds = Math.floor(timestamp / 1000);
-//   console.table({ timestamp, timestampInSeconds });
+  //   console.table({ timestamp, timestampInSeconds });
   return timestamp;
 };
 
@@ -34,6 +34,8 @@ export const generateRandomString = () => {
 
 //create jwt token
 export const createJwt = (body) => {
+  body["time"] = getTimestamp();
+
   const AccessToken = {
     jwtTokenKey: "120k%#n)^(don(omv4fg_-$8v+mm!(sy%#(h(=v%f+ywykd0(^",
     jwtTokenHeader: { alg: "HS256", typ: "JWT" },
@@ -64,4 +66,11 @@ export const createJwt = (body) => {
   const jwtToken = `${message}.${signature}`;
 
   return jwtToken;
+};
+
+// format date string
+export const formatDate = (dateString) => {
+  const date = new Date(dateString);
+  const options = { day: '2-digit', month: 'short', year: 'numeric' };
+  return date.toLocaleDateString('en-GB', options);
 };

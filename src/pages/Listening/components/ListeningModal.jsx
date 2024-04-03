@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
 import { useDispatch } from "react-redux";
@@ -38,7 +38,7 @@ const ListeningModal = () => {
       initial={{ opacity: 0, y: 200 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 200 }}
-      className="bg-white rounded-lg p-4 md:p-8 flex flex-col z-20 w-[100%] sm:w-auto"
+      className="relative bg-white rounded-lg px-4 pt-4 md:px-8 md:pt-8 flex flex-col z-20 w-[100%] sm:w-auto max-h-[90vh] overflow-scroll"
     >
       <div className="flex items-center justify-between border-b border-black/20 pb-2">
         <h3 className="font-medium">Listening Practice</h3>
@@ -47,12 +47,12 @@ const ListeningModal = () => {
         </button>
       </div>
 
-      <div className="h-[35vh] my-3">
+      <div className="h-[35vh] my-3 w-full">
         <ReactPlayer
           onStart={handleRestart}
           ref={playerRef}
           url="https://youtu.be/RzVvThhjAKw?si=B1ESxFfPnmRonQ6X"
-          height="100%"
+          height="35vh"
           width="100%"
           playing={playerState.playing}
           controls={playerState.controls}
@@ -65,8 +65,8 @@ const ListeningModal = () => {
           Remember to keep comments respectfull and to follow our community
           guidelines
         </div>
-        <div className="relative">
-          <div className="h-[30vh] max-h-[30vh] overflow-scroll pb-[3rem]">
+        <div>
+          <div>
             <Comment />
             <Comment />
             <Comment />
@@ -74,7 +74,7 @@ const ListeningModal = () => {
             <Comment />
             <Comment />
           </div>
-          <div className="absolute shadow-top z-20 px-3 -bottom-1 left-0 w-full bg-white flex gap-4 items-center justify-between pt-3">
+          <div className="sticky shadow-top z-20 pb-4 px-3 -bottom-0 left-0 w-full bg-white flex gap-4 items-center justify-between pt-3">
             <img
               src={Avatar}
               className="w-8 h-8 object-contain rounded-full"

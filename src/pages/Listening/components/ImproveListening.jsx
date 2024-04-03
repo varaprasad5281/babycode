@@ -4,22 +4,26 @@ import NewsIcon from "../../../assets/svg/Newspaper.svg";
 import BooksIcon from "../../../assets/svg/Book.svg";
 import { PiCaretRightBold, PiCaretDownBold } from "react-icons/pi";
 
-const ImproveListening = () => {
+const ImproveListening = ({ materials }) => {
   return (
-    <div className="flex flex-col w-full sm:gap-1 sm:px-6 lg:px-[3rem]">
-      <h3 className="text-lg font-medium sm:hidden mb-2 mx-6">
-        Improve Listening with these Audios{" "}
-      </h3>
-      <News />
-      <Books />
-      <Reel />
-    </div>
+    <>
+      {materials.length > 0 && (
+        <div className="flex flex-col w-full sm:gap-1 sm:px-6 lg:px-[3rem]">
+          <h3 className="text-lg font-medium sm:hidden mb-2 mx-6">
+            Improve Listening with these Audios{" "}
+          </h3>
+          <News data={materials[0]} />
+          <Books data={materials[1]} />
+          <Reel data={materials[2]} />
+        </div>
+      )}
+    </>
   );
 };
 
 export default ImproveListening;
 
-const News = () => {
+const News = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-full flex flex-col gap-3">
@@ -36,12 +40,10 @@ const News = () => {
             />
             <span className="text-[#0E946E] text-sm font-medium">News</span>
           </div>
-          <p className="text-md font-medium">Listen to English News</p>
+          <p className="text-md font-medium">{data.Title}</p>
         </div>
         <div className="flex justify-between gap-3 items-start">
-          <span className="text-[#AAAAAA] text-sm">
-            Listen English news and get familiar with English accent
-          </span>
+          <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <PiCaretDownBold /> : <PiCaretRightBold />}
           </button>
@@ -61,7 +63,7 @@ const News = () => {
   );
 };
 
-const Books = () => {
+const Books = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-full flex flex-col gap-3">
@@ -78,12 +80,10 @@ const Books = () => {
             />
             <span className="text-[#01B5D6] text-sm font-medium">Books</span>
           </div>
-          <p className="text-md font-medium">Listen to English News</p>
+          <p className="text-md font-medium">{data.Title}</p>
         </div>
         <div className="flex justify-between gap-3 items-start">
-          <span className="text-[#AAAAAA] text-sm">
-            Listen English news and get familiar with English accent
-          </span>
+          <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <PiCaretDownBold /> : <PiCaretRightBold />}
           </button>
@@ -103,7 +103,7 @@ const Books = () => {
   );
 };
 
-const Reel = () => {
+const Reel = ({ data }) => {
   const [isOpen, setIsOpen] = useState(false);
   return (
     <div className="w-full flex flex-col gap-3">
@@ -120,12 +120,10 @@ const Reel = () => {
             />
             <span className="text-[#FF3B5D] text-sm font-medium">News</span>
           </div>
-          <p className="text-md font-medium">Listen to English News</p>
+          <p className="text-md font-medium">{data.Title}</p>
         </div>
         <div className="flex justify-between gap-3 items-start">
-          <span className="text-[#AAAAAA] text-sm">
-            Listen English news and get familiar with English accent
-          </span>
+          <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="" onClick={() => setIsOpen(!isOpen)}>
             {isOpen ? <PiCaretDownBold /> : <PiCaretRightBold />}
           </button>

@@ -44,7 +44,7 @@ const navOptions = [
 const Sidebar = () => {
   const { pathname } = useLocation();
   const { logout } = UserAuth();
-  const { userLoggedIn } = useSelector((state) => state.other);
+  const { userLoggedIn } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -68,9 +68,7 @@ const Sidebar = () => {
         <div className="hidden w-[32%] max-w-[32%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
           <div className="flex flex-col items-center w-full">
             <div
-              className={`flex gap-1 items-center ${
-                pathname !== "/" && "pt-[2rem]"
-              }`}
+              className={`flex gap-1 items-center`}
             >
               <img
                 src={Logo}
