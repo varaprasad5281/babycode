@@ -88,6 +88,16 @@ function App() {
                     <Listening />
                   </PrivateRoute>
                 }
+              />{" "}
+              <Route
+                path="/reading"
+                element={
+                  <PrivateRoute>
+                    {/* <Header /> */}
+                    <Reading />
+                    <BottomTabs />
+                  </PrivateRoute>
+                }
               />
             </Route>
             <Route
@@ -131,16 +141,16 @@ function App() {
               }
             />
 
-            <Route
+            {/* <Route
               path="/reading"
               element={
                 <PrivateRoute>
-                  {/* <Header /> */}
+                   <Header /> 
                   <Reading />
                   <BottomTabs />
                 </PrivateRoute>
               }
-            />
+            /> */}
             <Route
               path="/writing"
               element={
