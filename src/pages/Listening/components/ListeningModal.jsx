@@ -1,8 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { IoMdClose } from "react-icons/io";
-import { useDispatch } from "react-redux";
-import { changeListeningModalStatus } from "../../../utils/redux/otherSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  changeListeningModalStatus,
+  setListeningVideoDetails,
+} from "../../../utils/redux/otherSlice";
 import Avatar from "../../../assets/svg/avatar.svg";
 import {
   MdThumbUp,
@@ -13,17 +16,28 @@ import {
 import { LiaCommentSolid } from "react-icons/lia";
 import { FiSend } from "react-icons/fi";
 import ReactPlayer from "react-player/lazy";
+import { toast } from "react-hot-toast";
+import { ImSpinner9 } from "react-icons/im";
+import { createJwt, formatDate } from "../../../utils/helpers";
+import { getListeningComments } from "../../../api/apiCall";
+import { UserAuth } from "../../../context/AuthContext";
 
 const ListeningModal = () => {
   const dispatch = useDispatch();
+  const { listeningVideoDetails } = useSelector((state) => state.other);
+  const { errorLogout } = UserAuth();
+  const [isLoading, setIsLoading] = useState(true);
   const playerRef = useRef(null);
   const [playerState, setPlayerState] = useState({
     playing: true,
     controls: true,
   });
+  const [comments, setComments] = useState([]);
+  const effectRan = useRef(true);
 
   const closeModal = () => {
     dispatch(changeListeningModalStatus(false));
+    dispatch(setListeningVideoDetails({}));
   };
 
   const handleRestart = () => {
@@ -33,71 +47,131 @@ const ListeningModal = () => {
       ...playerState,
     });
   };
+
+  const getComments = async () => {
+    const userData = JSON.parse(localStorage.getItem("userData"));
+    console.log(listeningVideoDetails);
+    try {
+      const data = {
+        uid: userData.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueTestNumber: listeningVideoDetails.uniqueTestNumber,
+        testFile: listeningVideoDetails.testFile,
+      };
+
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+
+      const response = await getListeningComments(formData);
+      if (!response.data.failure) {
+        console.log(response.data.data.commentList);
+        setComments(response.data.data.commentList);
+      } else {
+        dispatch(changeListeningModalStatus(false));
+        dispatch(setListeningVideoDetails({}));
+        if (response.data.logout) {
+          errorLogout(response.data.errorMessage);
+        } else if (response.data.tokenInvalid) {
+          toast.error(response.data.errorMessage);
+        } else {
+          toast.error(response.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (effectRan.current) {
+      getComments();
+      effectRan.current = false;
+    }
+  }, [listeningVideoDetails]);
   return (
     <motion.div
       initial={{ opacity: 0, y: 200 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 200 }}
-      className="relative bg-white rounded-lg px-4 pt-4 md:px-8 md:pt-8 flex flex-col z-20 w-[100%] sm:w-auto max-h-[90vh] overflow-scroll"
+      className="relative bg-white rounded-lg flex flex-col z-20 w-[100%] md:w-[45vw] max-h-[90vh] overflow-scroll mx-auto items-center"
     >
-      <div className="flex items-center justify-between border-b border-black/20 pb-2">
+      <div className="flex sticky top-0 pt-4 md:pt-8 px-4 md:px-8 bg-white w-full items-center justify-between border-b border-black/20 pb-2">
         <h3 className="font-medium">Listening Practice</h3>
         <button onClick={closeModal} className="text-2xl">
           <IoMdClose />
         </button>
       </div>
 
-      <div className="h-[35vh] my-3 w-full">
-        <ReactPlayer
-          onStart={handleRestart}
-          ref={playerRef}
-          url="https://youtu.be/RzVvThhjAKw?si=B1ESxFfPnmRonQ6X"
-          height="35vh"
-          width="100%"
-          playing={playerState.playing}
-          controls={playerState.controls}
-        />
-      </div>
+      {isLoading ? (
+        <div className="h-[90vh] md:h-[80vh] px-4 md:px-8 my-3 w-[100%] md:w-[45vw] flex justify-center items-center">
+          <ImSpinner9 className="text-4xl md:text-6xl text-primary-100 animate-spin" />
+        </div>
+      ) : (
+        <>
+          <div className="h-[35vh] my-3 w-full px-4 md:px-8">
+            <ReactPlayer
+              onStart={handleRestart}
+              ref={playerRef}
+              // url={`https://youtu.be/RzVvThhjAKw?feature=shared`}
+              url={`https://www.youtube.com/watch?v=${listeningVideoDetails?.testFile}`}
+              height="35vh"
+              width="100%"
+              playing={playerState.playing}
+              controls={playerState.controls}
+            />
+          </div>
 
-      <div className="flex flex-col gap-2">
-        <h4 className="font-medium">Comments</h4>
-        <div className="bg-[#F2F2F2] p-2 text-sm">
-          Remember to keep comments respectfull and to follow our community
-          guidelines
-        </div>
-        <div>
-          <div>
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
-            <Comment />
+          <div className="flex flex-col gap-2 px-4 md:px-8">
+            <h4 className="font-medium">Comments</h4>
+            <div className="bg-[#F2F2F2] p-2 text-sm">
+              Remember to keep comments respectfull and to follow our community
+              guidelines
+            </div>
+            <div>
+              <div>
+                {comments.length > 0 &&
+                  comments.map((comment, idx) => (
+                    <Comment comment={comment} key={comment.id} />
+                  ))}
+              </div>
+              <div className="sticky shadow-top z-20 pb-4 px-3 -bottom-0 left-0 w-full bg-white flex gap-4 items-center justify-between pt-3">
+                <img
+                  src={Avatar}
+                  className="w-8 h-8 object-contain rounded-full"
+                  alt=""
+                />
+                <input
+                  type="text"
+                  placeholder="Add a comment"
+                  className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
+                />
+                <button className="text-2xl text-primary-500">
+                  <FiSend />
+                </button>
+              </div>
+            </div>
           </div>
-          <div className="sticky shadow-top z-20 pb-4 px-3 -bottom-0 left-0 w-full bg-white flex gap-4 items-center justify-between pt-3">
-            <img
-              src={Avatar}
-              className="w-8 h-8 object-contain rounded-full"
-              alt=""
-            />
-            <input
-              type="text"
-              placeholder="Add a comment"
-              className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
-            />
-            <button className="text-2xl text-primary-500">
-              <FiSend />
-            </button>
-          </div>
-        </div>
-      </div>
+        </>
+      )}
     </motion.div>
   );
 };
 
 export default ListeningModal;
 
-const Comment = () => {
+const Comment = ({ comment }) => {
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const [isLiked, setIsLiked] = useState(
+    comment.whoLikeTheComment?.includes(userData.uid)
+  );
+  const [isDisliked, setIsDisliked] = useState(
+    comment.whoDislikeTheComment?.includes(userData.uid)
+  );
   return (
     <div className="flex flex-col p-2 border-b border-black/20 text-sm">
       <div className="flex gap-2 items-center">
@@ -106,24 +180,43 @@ const Comment = () => {
           className="w-6 h-6 object-contain rounded-full"
           alt=""
         />
-        <span className="text-defaultGray">@username - 11/06/2023</span>
+        <span className="text-defaultGray">
+          @{comment.userName} - {formatDate(comment.created_at)}
+        </span>
       </div>
       <div className="px-10">
-        <p className="">Lorem ipsum dolor sit amet</p>
-        <div className="flex gap-2 my-4">
-          <button>
-            <MdOutlineThumbUp className="text-xl" />
-          </button>
-          <button>
-            <MdOutlineThumbDown className="text-xl" />
-          </button>
+        <p className="">{comment.comment}</p>
+        <div className="flex gap-4 my-4">
+          <div className="flex gap-1">
+            {isLiked ? (
+              <button>
+                <MdThumbUp className="text-xl" />
+              </button>
+            ) : (
+              <button>
+                <MdOutlineThumbUp className="text-xl" />
+              </button>
+            )}
+            {comment.commentLike > 0 && <span>{comment.commentLike}</span>}
+          </div>
+          {isDisliked ? (
+            <button>
+              <MdThumbDown className="text-xl" />
+            </button>
+          ) : (
+            <button>
+              <MdOutlineThumbDown className="text-xl" />
+            </button>
+          )}
           <button>
             <LiaCommentSolid className="text-xl" />
           </button>
         </div>
-        <div className="cursor-pointer text-primary-500">
-          <span>12 replies</span>
-        </div>
+        {comment.commentReply > 0 && (
+          <div className="cursor-pointer text-primary-500">
+            <span>{comment.commentReply} replies</span>
+          </div>
+        )}
       </div>
     </div>
   );

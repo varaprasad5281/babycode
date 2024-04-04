@@ -12,7 +12,7 @@ import { changeLoginModalStatus, setLoading } from "../utils/redux/otherSlice";
 import { login } from "../api/apiCall";
 import { createJwt, generateRandomString } from "../utils/helpers";
 import { useNavigate } from "react-router-dom";
-import showAlert from "../components/Toast/CustomToast";
+import showSelectEmailAlert from "../pages/Home/components/SelectEmailToast";
 import { setUserDetails, setUserLoggedIn } from "../utils/redux/userSlice";
 
 const AuthContext = createContext();
@@ -67,7 +67,7 @@ export const AuthContextProvider = ({ children }) => {
           dispatch(setLoading(false));
           if (result.data.accountMessage !== "") {
             dispatch(changeLoginModalStatus(false));
-            showAlert(
+            showSelectEmailAlert(
               result.data.accountMessage,
               uniqueDeviceId,
               result.data.data

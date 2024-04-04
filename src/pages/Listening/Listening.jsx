@@ -9,7 +9,7 @@ import { getListeningPractiseData } from "../../api/apiCall";
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { toast } from "react-hot-toast";
 import { setLoading } from "../../utils/redux/otherSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { UserAuth } from "../../context/AuthContext";
 
 const components = [
@@ -28,48 +28,48 @@ const Listening = () => {
   const [attendedTests, setAttendedTests] = useState([]);
   const effectRan = useRef(true);
 
-  useEffect(() => {
-    // get listening tests
-    const getData = async () => {
-      if (checkAuth()) {
-        try {
-          dispatch(setLoading(true));
-          const data = {
-            uid: user.uid,
-            platform: "web",
-            uniqueDeviceId,
-          };
+  // get listening tests
+  const getData = async () => {
+    if (checkAuth()) {
+      try {
+        dispatch(setLoading(true));
+        const data = {
+          uid: user.uid,
+          platform: "web",
+          uniqueDeviceId,
+        };
 
-          const encryptedData = createJwt(data);
-          const formData = new FormData();
-          formData.append("encrptData", encryptedData);
+        const encryptedData = createJwt(data);
+        const formData = new FormData();
+        formData.append("encrptData", encryptedData);
 
-          const response = await getListeningPractiseData(formData);
-          if (!response.data.failure) {
-            const listeningTestList = response.data.data?.listeningTestList;
-            const materialsList = response.data.data?.materials;
-            const attendedList = response.data.data?.userAttendedTest;
-            setTestList(listeningTestList);
-            setMaterials(materialsList);
-            setAttendedTests(attendedList);
+        const response = await getListeningPractiseData(formData);
+        if (!response.data.failure) {
+          const listeningTestList = response.data.data?.listeningTestList;
+          const materialsList = response.data.data?.materials;
+          const attendedList = response.data.data?.userAttendedTest;
+          setTestList(listeningTestList);
+          setMaterials(materialsList);
+          setAttendedTests(attendedList);
+        } else {
+          if (response.data.logout) {
+            errorLogout(response.data.errorMessage);
+          } else if (response.data.tokenInvalid) {
+            toast.error(response.data.errorMessage);
           } else {
-            if (response.data.logout) {
-              errorLogout(response.data.errorMessage);
-            } else if (response.data.tokenInvalid) {
-              toast.error(response.data.errorMessage);
-            } else {
-              toast.error(response.data.errorMessage);
-            }
+            toast.error(response.data.errorMessage);
           }
-        } catch (err) {
-          // console.log(err)
-          toast.error(err.message);
-        } finally {
-          dispatch(setLoading(false));
         }
+      } catch (err) {
+        // console.log(err)
+        toast.error(err.message);
+      } finally {
+        dispatch(setLoading(false));
       }
-    };
+    }
+  };
 
+  useEffect(() => {
     if (effectRan.current) {
       getData();
       effectRan.current = false;

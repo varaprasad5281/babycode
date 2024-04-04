@@ -15,4 +15,6 @@ export const Apis = {
   login: "/Login/",
   appInfo: "/AppInfo/",
   listeningPracticeData: "/getListeningPractiseData/",
+  startListeningTest: "/startListeningTest/",
+  listeningComments: "/fetchListeningTestComment/",
 };

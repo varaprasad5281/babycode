@@ -22,9 +22,12 @@ const Vocabulary = () => {
   const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState(0);
   const [showOffcanvas, setShowOffcanvas] = useState(false);
+  const [selectedContent, setSelectedContent] = useState("");
 
   return (
-    <div className="w-full lg:max-h-screen bg-background overflow-scroll pb-5 relative">
+    <div
+      className="w-full lg:max-h-screen bg-background overflow-scroll pb-5 relative"
+    >
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-end items-center py-[0.4rem] w-full bg-white">
         <div className="items-center gap-6 px-[3rem]">
           <div className="p-[.2rem] rounded-full cursor-pointer">
@@ -108,6 +111,8 @@ const Vocabulary = () => {
                 key={idx}
                 setShowOffcanvas={setShowOffcanvas}
                 showOffcanvas={showOffcanvas}
+                selectedContent={selectedContent}
+                setSelectedContent={setSelectedContent}
               />
             ))}
           </div>
@@ -123,15 +128,23 @@ const Vocabulary = () => {
 
 export default Vocabulary;
 
-const ListItem = ({ idx, showOffcanvas, setShowOffcanvas }) => {
+const ListItem = ({
+  idx,
+  showOffcanvas,
+  setShowOffcanvas,
+  selectedContent,
+  setSelectedContent,
+}) => {
   const handleOffcanvasShow = () => {
-    if (showOffcanvas) {
+    if (showOffcanvas && idx !== selectedContent) {
       setShowOffcanvas(false);
       setTimeout(() => {
+        setSelectedContent(idx);
         setShowOffcanvas(true);
       }, 300);
       return;
     }
+    setSelectedContent(idx);
     setShowOffcanvas(true);
   };
   return (

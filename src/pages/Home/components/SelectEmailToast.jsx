@@ -1,18 +1,18 @@
 import React from "react";
-import ToastModalWrapper from "./ToastModalWrapper";
+import ToastModalWrapper from "../../../components/Toast/ToastModalWrapper";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
-import { UserAuth } from "../../context/AuthContext";
+import { UserAuth } from "../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import {
   changeLoginModalStatus,
-} from "../../utils/redux/otherSlice";
+} from "../../../utils/redux/otherSlice";
 import { signOut } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
-import { auth } from "../../utils/firebase";
-import { setUserLoggedIn } from "../../utils/redux/userSlice";
+import { auth } from "../../../utils/firebase";
+import { setUserLoggedIn } from "../../../utils/redux/userSlice";
 
-const CustomToast = ({ message, uniqueDeviceId, userData }) => {
+const SelectEmailToast = ({ message, uniqueDeviceId, userData }) => {
   const { googleSignIn } = UserAuth();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -63,9 +63,9 @@ const CustomToast = ({ message, uniqueDeviceId, userData }) => {
   );
 };
 
-const showAlert = (message, uniqueDeviceId, userData) => {
+const showSelectEmailAlert = (message, uniqueDeviceId, userData) => {
   toast.custom(
-    <CustomToast
+    <SelectEmailToast
       message={message}
       uniqueDeviceId={uniqueDeviceId}
       userData={userData}
@@ -74,4 +74,4 @@ const showAlert = (message, uniqueDeviceId, userData) => {
   );
 };
 
-export default showAlert;
+export default showSelectEmailAlert;

@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showLoginModal: false,
   showListeningModal: false,
-  listeningModalContent: "",
+  listeningVideoDetails: {},
   isLoading: false,
 };
 
@@ -17,8 +17,8 @@ const otherSlice = createSlice({
     changeListeningModalStatus: (state, action) => {
       state.showListeningModal = action.payload;
     },
-    setListeningModalContent: (state, action) => {
-      state.listeningModalContent = action.payload;
+    setListeningVideoDetails: (state, action) => {
+      state.listeningVideoDetails = action.payload;
     },
     setLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -33,7 +33,7 @@ export const {
   changeLoginModalStatus,
   setLoading,
   changeListeningModalStatus,
-  setListeningModalContent,
   resetOtherState,
+  setListeningVideoDetails,
 } = otherSlice.actions;
 export default otherSlice.reducer;
