@@ -7,7 +7,7 @@ import {
 } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
-import { motion } from "framer-motion";
+import OffcanvasData from "./components/OffcanvasData";
 
 const options = [
   { label: "Vocabulary" },
@@ -16,9 +16,7 @@ const options = [
   { label: "Collocations" },
 ];
 
-const contents = [
-  1, 2, 3, 4, 
-];
+const contents = [1, 2, 3, 4];
 
 const Vocabulary = () => {
   const navigate = useNavigate();
@@ -58,11 +56,27 @@ const Vocabulary = () => {
         </div>
 
         <div className="flex flex-col gap-3 mt-6 pt-11 lg:pt-0">
+          <div className="lg:hidden px-6 lg:px-[3rem]">
+            <div className="flex items-center gap-4 w-full overflow-scroll">
+              {options.map((option, idx) => (
+                <button
+                  className={`${
+                    selectedOption === idx
+                      ? "bg-primary-500 text-white border-primary-500"
+                      : "border-defaultGray text-defaultGray bg-transparent"
+                  } rounded-full px-4 py-2 border min-w-[9rem]`}
+                  onClick={() => setSelectedOption(idx)}
+                >
+                  {option.label}
+                </button>
+              ))}
+            </div>
+          </div>
           <h4 className="text-lg font-medium px-6 lg:px-[3rem]">
             Improve your vocabulary by learning new words everyday!
           </h4>
-          <div className="mt-3 w-full flex justify-between gap-3 items-center px-6 lg:px-[3rem]">
-            <div className="flex gap-5">
+          <div className="mt-1 lg:mt-3 w-full flex justify-between gap-3 items-center px-6 lg:px-[3rem]">
+            <div className="hidden lg:flex gap-5">
               {options.map((option, idx) => (
                 <div
                   className={`${
@@ -77,7 +91,7 @@ const Vocabulary = () => {
                 </div>
               ))}
             </div>
-            <div className="bg-white w-full max-w-xs border border-gray-300 py-1 px-2 rounded-full flex items-center gap-2">
+            <div className="bg-white w-full lg:max-w-xs border border-gray-300 py-1 px-2 rounded-full flex items-center gap-2">
               <IoIosSearch className="text-3xl text-defaultGray" />
               <input
                 type="text"
@@ -87,45 +101,45 @@ const Vocabulary = () => {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2 mt-3 px-6 lg:px-[3rem]">
+          <div className="flex flex-col gap-2 mt-3 sm:px-6 lg:px-[3rem]">
             {contents.map((content, idx) => (
               <ListItem
                 idx={idx}
                 key={idx}
-                showOffcanvasData={() => setShowOffcanvas(true)}
+                setShowOffcanvas={setShowOffcanvas}
+                showOffcanvas={showOffcanvas}
               />
             ))}
           </div>
         </div>
       </div>
-      <motion.div
-        animate={showOffcanvas ? { x: 0 } : { x: "calc(100vw + 50%)" }}
-        initial={{ x: "calc(100vw + 50%)" }}
-        exit={{ x: "calc(100vw + 50%)" }}
-        transition={{ type: "tween", duration: 0.3 }}
-        className="w-[30vw] h-[100vh] bg-white fixed right-0 top-0 z-10 shadow-left"
-      >
-        <div
-          onClick={() => setShowOffcanvas(false)}
-          className="cursor-pointer w-full px-4 py-2 border-b border-black/20 flex items-center gap-3"
-        >
-          <PiCaretLeftBold className="text-xl" />
-          <h5 className="text-lg font-medium">You are what you eat</h5>
-        </div>
-      </motion.div>
+      <OffcanvasData
+        showOffcanvas={showOffcanvas}
+        setShowOffcanvas={setShowOffcanvas}
+      />
     </div>
   );
 };
 
 export default Vocabulary;
 
-const ListItem = ({ idx, showOffcanvasData }) => {
+const ListItem = ({ idx, showOffcanvas, setShowOffcanvas }) => {
+  const handleOffcanvasShow = () => {
+    if (showOffcanvas) {
+      setShowOffcanvas(false);
+      setTimeout(() => {
+        setShowOffcanvas(true);
+      }, 300);
+      return;
+    }
+    setShowOffcanvas(true);
+  };
   return (
     <div
-      onClick={() => showOffcanvasData()}
+      onClick={handleOffcanvasShow}
       className={`${
         idx % 2 === 0 ? "bg-white" : "bg-transparent"
-      } bg-white cursor-pointer flex flex-col sm:flex-row sm:items-center justify-between px-5 py-3 shadow-sm`}
+      } bg-white cursor-pointer flex flex-row sm:items-center justify-between px-5 py-3 shadow-sm`}
     >
       <div className="flex flex-col gap-1">
         <p className="text-md font-medium">You are what you eat</p>
