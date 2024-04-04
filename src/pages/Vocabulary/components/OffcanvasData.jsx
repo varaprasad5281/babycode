@@ -16,7 +16,7 @@ const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
     >
       <div
         onClick={() => setShowOffcanvas(false)}
-        className="cursor-pointer text-xl lg:text-lg w-full px-6 py-3 border-b border-black/20 flex items-center gap-3"
+        className="sticky top-0 bg-white cursor-pointer text-xl lg:text-lg w-full px-6 py-3 border-b border-black/20 flex items-center gap-3"
       >
         <PiCaretLeftBold />
         <h5 className="lg:font-medium">You are what you eat</h5>
@@ -52,7 +52,7 @@ const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
           sold.
         </p>
       </div>
-      <div className="px-6 mt-8 flex flex-col gap-3 min-h-[40vh]">
+      <div className="px-6 mt-8 flex flex-col gap-3 min-h-[30vh]">
         <div className="bg-[#1BCA991C] p-1 w-fit">
           <h5 className="text-[#1BCA99]">Examples</h5>
         </div>
@@ -80,7 +80,7 @@ const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
           </div>
         </div>
       </div>
-      <div className="px-6 flex items-center gap-2 justify-end">
+      <div className="px-6 pb-5 flex items-center gap-2 justify-end">
         <button className="p-2 rounded-full bg-[#EF44441C] text-[#EF4444] hover:bg-[#EF4444] hover:text-white transition-colors duration-200">
           🙃 I don’t know
         </button>
