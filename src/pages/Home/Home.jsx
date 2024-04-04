@@ -51,7 +51,7 @@ const gridItems = [
   },
   {
     icon: vocabulary,
-    title: "vocabulary",
+    title: "Vocabulary",
     url: "/vocabulary",
   },
   {

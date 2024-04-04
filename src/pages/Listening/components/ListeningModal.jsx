@@ -27,7 +27,7 @@ const ListeningModal = () => {
   };
 
   const handleRestart = () => {
-    playerRef.current.seekTo(0);
+    playerRef.current?.seekTo(0);
     setPlayerState({
       playing: true,
       ...playerState,
