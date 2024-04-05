@@ -13,14 +13,24 @@ export const getAppInformation = (data) => {
 // get listening practice data
 export const getListeningPractiseData = (data) => {
   return api.post(Apis.listeningPracticeData, data);
-}
+};
 
 // start listening test
 export const startListeningTest = (data) => {
   return api.post(Apis.startListeningTest, data);
-}
+};
 
 // get listening test comments
-export const getListeningComments =(data)=>{
-  return api.post(Apis.listeningComments,data)
+export const getListeningComments = (data) => {
+  return api.post(Apis.listeningComments, data);
+};
+
+// get vocabulary data
+export const getVocabularyData = (data) => {
+  return api.post(Apis.vocabularyData, data);
+};
+
+// get vocabulary category data
+export const getVocabularyCategoryData = (data)=>{
+  return api.post(Apis.vocabularyData, data);
 }

@@ -9,7 +9,6 @@ import { toast } from "react-hot-toast";
 import { PrivateRoute } from "./components/ProtectRoutes";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner";
-import { createJwt } from "./utils/helpers";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -96,9 +95,7 @@ function App() {
                 path="/reading"
                 element={
                   <PrivateRoute>
-                    {/* <Header /> */}
                     <Reading />
-                    <BottomTabs />
                   </PrivateRoute>
                 }
               />

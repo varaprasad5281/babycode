@@ -17,4 +17,5 @@ export const Apis = {
   listeningPracticeData: "/getListeningPractiseData/",
   startListeningTest: "/startListeningTest/",
   listeningComments: "/fetchListeningTestComment/",
+  vocabularyData: "/IeltsResource/",
 };

@@ -3,9 +3,27 @@ import { motion } from "framer-motion";
 import { GoBookmarkFill } from "react-icons/go";
 import { CiBookmark } from "react-icons/ci";
 import { PiCaretLeftBold } from "react-icons/pi";
+import { HiSpeakerWave } from "react-icons/hi2";
+import { toast } from "react-hot-toast";
 
-const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
+const OffcanvasData = ({
+  showOffcanvas,
+  setShowOffcanvas,
+  selectedContent,
+}) => {
   const [saved, setSaved] = useState(false);
+  const usageArray =
+    selectedContent.resourceUsage?.split("\n").filter(Boolean) || [];
+
+  // function to handle speak
+  const handleSpeak = () => {
+    if ("speechSynthesis" in window) {
+      const speech = new SpeechSynthesisUtterance(selectedContent.resourceName);
+      window.speechSynthesis.speak(speech);
+    } else {
+      toast("Speech synthesis is not supported in your browser.");
+    }
+  };
 
   return (
     <motion.div
@@ -40,74 +58,58 @@ const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
           className="sticky top-0 bg-white cursor-pointer text-xl lg:text-lg w-full px-6 py-3 border-b border-black/20 flex items-center gap-3"
         >
           <PiCaretLeftBold />
-          <h5 className="lg:font-medium">You are what you eat</h5>
+          <h5 className="lg:font-medium">{selectedContent.resourceName}</h5>
         </div>
-        <div className="px-6 py-2 w-full flex justify-between mt-3">
+        <div className="px-6 py-2 w-full flex justify-between items-center mt-3">
           <div className="flex flex-col gap-1">
-            <p className="text-lg font-semibold">Dairy</p>
-            <span className="text-[#aaaaaa]">दुग्धालय</span>
+            <p className="text-xl font-semibold">
+              {selectedContent.resourceName}
+            </p>
+            <span className="text-[#aaaaaa]">
+              {selectedContent.resourceHindiDefination}
+            </span>
           </div>
-          {saved ? (
-            <button
-              onClick={() => setSaved(false)}
-              className="p-2 text-2xl w-10 h-10 flex justify-center items-center bg-white text-primary-500 shadow-lg rounded-full"
-            >
-              <GoBookmarkFill />
+          <div className="flex items-center gap-3">
+            {saved ? (
+              <button
+                onClick={() => setSaved(false)}
+                className="p-2 text-2xl w-10 h-10 flex justify-center items-center bg-white text-primary-500 shadow-lg rounded-full"
+              >
+                <GoBookmarkFill />
+              </button>
+            ) : (
+              <button
+                onClick={() => setSaved(true)}
+                className="p-2 text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"
+              >
+                <CiBookmark />
+              </button>
+            )}
+            <button className="text-3xl text-primary-500" onClick={handleSpeak}>
+              <HiSpeakerWave />
             </button>
-          ) : (
-            <button
-              onClick={() => setSaved(true)}
-              className="p-2 text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"
-            >
-              <CiBookmark />
-            </button>
-          )}
-        </div>
-        <div className="px-6 my-6 flex flex-col gap-3">
-          <div className="bg-[#FABB141C] p-1 w-fit">
-            <h5 className="text-[#F48E3F]">Definition</h5>
           </div>
-          <p>
-            A dairy is a place where milk is stored and where butter, cheese and
-            other dairy products are made, or a place where those products are
-            sold.
-          </p>
         </div>
+        {selectedContent.resourceDefination && (
+          <div className="px-6 my-6 flex flex-col gap-3">
+            <div className="bg-[#FABB141C] p-1 w-fit">
+              <h5 className="text-[#F48E3F]">Definition</h5>
+            </div>
+            <p>{selectedContent.resourceDefination}</p>
+          </div>
+        )}
         <div className="px-6 mt-8 flex flex-col gap-3 min-h-[30vh]">
           <div className="bg-[#1BCA991C] p-1 w-fit">
             <h5 className="text-[#1BCA99]">Examples</h5>
           </div>
           <ul className="flex flex-col gap-1">
-            <li className="flex gap-2">
-              <p>1.</p>
-              <p>
-                <p>The house was next door to a dairy farm.</p>
-              </p>
-            </li>
-            <li className="flex gap-2">
-              <p>2.</p>
-              <p>
-                <p>
-                  We know dairy foods increases concentration of estrogen in the
-                  blood.
-                </p>
-              </p>
-            </li>
-            <li className="flex gap-2">
-              <p>3.</p>
-              <p>
-                <p>The house was next door to a dairy farm.</p>
-              </p>
-            </li>
+            {usageArray?.length > 0 &&
+              usageArray.map((item, idx) => (
+                <li className="flex gap-2" key={idx}>
+                  <p>{item}</p>
+                </li>
+              ))}
           </ul>
-        </div>
-        <div className="px-6 pb-5 grid grid-cols-2 sm:flex items-center gap-2 justify-end">
-          <button className="py-2 px-2 sm:px-3 rounded-full bg-[#EF44441C] text-[#EF4444] hover:bg-[#EF4444] hover:text-white transition-colors duration-200">
-            🙃 I don’t know
-          </button>
-          <button className="py-2 px-2 sm:px-3 rounded-full bg-[#1BCA9929] text-[#008A64] hover:bg-[#008A64] hover:text-white transition-colors duration-200">
-            😀 I already knew it
-          </button>
         </div>
       </motion.div>
     </motion.div>

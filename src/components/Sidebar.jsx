@@ -64,12 +64,12 @@ const Sidebar = () => {
       } h-screen flex flex-col`}
     >
       <div className="flex flex-1 md:max-h-screen">
-        <div className="hidden w-[32%] max-w-[32%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
+        <div className="hidden w-[28%] max-w-[28%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
           <div className="flex flex-col items-center w-full">
             <div className={`flex gap-1 items-center`}>
               <img
                 src={Logo}
-                alt=""
+                alt="logo"
                 className="h-12 w-12 object-contain my-1"
               />
               <span className="text-xl text-white">BabyCode</span>

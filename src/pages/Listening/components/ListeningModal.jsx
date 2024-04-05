@@ -127,9 +127,17 @@ const ListeningModal = () => {
           </div>
 
           <div className="flex flex-col gap-2 px-4 md:px-8">
-            <h4 className="font-medium">Comments</h4>
+            <div className="border-b-2 border-black/20 pb-2 flex justify-between items-center">
+              <h3 className="font-medium text-lg">
+                Listening Practice Test | Ep: {listeningVideoDetails?.id}
+              </h3>
+              <button className="bg-primary-500 text-white hover:bg-primary-100 transition-colors duration-300 py-2 px-3 rounded-full text-sm">Check Band</button>
+            </div>
+            <h4 className="font-medium">
+              Comments {comments.length > 0 && `(${comments.length})`}
+            </h4>
             <div className="bg-[#F2F2F2] p-2 text-sm">
-              Remember to keep comments respectfull and to follow our community
+              Remember to keep comments respectful and to follow our community
               guidelines
             </div>
             <div>
