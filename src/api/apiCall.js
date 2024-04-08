@@ -41,11 +41,36 @@ export const vocabularySearch = (data) => {
 };
 
 // like user comment
-export const likeUserComment = (data) => {
-  return api.post(Apis.likeUserComment, data);
+export const likeListeningUserComment = (data) => {
+  return api.post(Apis.likeListeningUserComment, data);
 };
 
 // dislike user comment
-export const dislikeUserComment = (data) => {
-  return api.post(Apis.dislikeUserComment, data);
+export const dislikeListeningUserComment = (data) => {
+  return api.post(Apis.dislikeListeningUserComment, data);
 };
+
+// get listening comment replies
+export const getListeningUserCommentReplies = (data) => {
+  return api.post(Apis.listeningCommentRepliesList, data);
+};
+
+// like user comment reply in listening test
+export const likeCommentReplyInListeningTest = (data) => {
+  return api.post(Apis.likeCommentReplyInListeningTest, data);
+};
+
+// dislike user comment reply in listening test
+export const dislikeCommentReplyInListeningTest = (data) => {
+  return api.post(Apis.dislikeCommentReplyInListeningTest, data);
+};
+
+// add comment in listening test
+export const addCommentInListeningTest = (data) => {
+  return api.post(Apis.addCommentInListeningTest, data);
+}
+
+// add comment reply in listening test
+export const addCommentReplyInListeningTest = (data) => {
+  return api.post(Apis.addCommentReplyInListeningTest, data);
+}

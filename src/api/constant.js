@@ -19,6 +19,11 @@ export const Apis = {
   listeningComments: "/fetchListeningTestComment/",
   vocabularyData: "/IeltsResource/",
   searchVocabulary: "/IeltsResourceSearch/",
-  likeUserComment: "/likeCommentInListeningTest/",
-  dislikeUserComment: "/dislikeCommentInListeningTest/",
+  likeListeningUserComment: "/likeCommentInListeningTest/",
+  dislikeListeningUserComment: "/dislikeCommentInListeningTest/",
+  listeningCommentRepliesList: "/fetchListeningTestCommentReplyies/",
+  likeCommentReplyInListeningTest: "/likeCommentReplyInListeningTest/",
+  dislikeCommentReplyInListeningTest: "/dislikeCommentReplyInListeningTest/",
+  addCommentInListeningTest: "/addCommentInListeningTest/",
+  addCommentReplyInListeningTest: "/addCommentReplyInListeningTest/",
 };
