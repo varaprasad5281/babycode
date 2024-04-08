@@ -19,4 +19,6 @@ export const Apis = {
   listeningComments: "/fetchListeningTestComment/",
   vocabularyData: "/IeltsResource/",
   searchVocabulary: "/IeltsResourceSearch/",
+  likeUserComment: "/likeCommentInListeningTest/",
+  dislikeUserComment: "/dislikeCommentInListeningTest/",
 };

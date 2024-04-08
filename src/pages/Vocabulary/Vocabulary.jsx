@@ -100,48 +100,44 @@ const Vocabulary = () => {
   const searchVocabulary = useDebouncedCallback(
     // function
     async (e) => {
-      if (checkAuth()) {
-        try {
-          const data = {
-            uid: user.uid,
-            platform: "web",
-            uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
-            resourceName: e.target.value,
-          };
+      try {
+        const data = {
+          uid: user.uid,
+          platform: "web",
+          uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
+          resourceName: e.target.value,
+        };
 
-          const encryptedData = createJwt(data);
-          const formData = new FormData();
-          formData.append("encrptData", encryptedData);
-          const response = await vocabularySearch(formData);
-          console.log(response);
-          if (!response.data.failure) {
-            if (response.data.data.dataFromDb) {
-              setVocabularies([]);
-              setOtherResources(response.data.data.resourceList);
-              setShowOffcanvas(false);
-            } else {
-              dispatch(
-                setVocabularyOffcanvasContent({
-                  resourceName: e.target.value,
-                  resourceMeaning: response.data.data.resourceMeaning,
-                })
-              );
-              setShowOffcanvas(true);
-            }
+        const encryptedData = createJwt(data);
+        const formData = new FormData();
+        formData.append("encrptData", encryptedData);
+        const response = await vocabularySearch(formData);
+        console.log(response);
+        if (!response.data.failure) {
+          if (response.data.data.dataFromDb) {
+            setVocabularies([]);
+            setOtherResources(response.data.data.resourceList);
+            setShowOffcanvas(false);
           } else {
-            if (response.data.logout) {
-              errorLogout(response.data.errorMessage);
-            } else if (response.data.tokenInvalid) {
-              toast.error(response.data.errorMessage);
-            } else {
-              toast.error(response.data.errorMessage);
-            }
+            dispatch(
+              setVocabularyOffcanvasContent({
+                resourceName: e.target.value,
+                resourceMeaning: response.data.data.resourceMeaning,
+              })
+            );
+            setShowOffcanvas(true);
           }
-        } catch (err) {
-          toast.error(err.message);
+        } else {
+          if (response.data.logout) {
+            errorLogout(response.data.errorMessage);
+          } else if (response.data.tokenInvalid) {
+            toast.error(response.data.errorMessage);
+          } else {
+            toast.error(response.data.errorMessage);
+          }
         }
-      } else {
-        toast.error("Please login first");
+      } catch (err) {
+        toast.error(err.message);
       }
     },
     // delay in ms

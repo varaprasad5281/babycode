@@ -19,7 +19,11 @@ import ReactPlayer from "react-player/lazy";
 import { toast } from "react-hot-toast";
 import { ImSpinner9 } from "react-icons/im";
 import { createJwt, formatDate } from "../../../utils/helpers";
-import { getListeningComments } from "../../../api/apiCall";
+import {
+  dislikeUserComment,
+  getListeningComments,
+  likeUserComment,
+} from "../../../api/apiCall";
 import { UserAuth } from "../../../context/AuthContext";
 
 const ListeningModal = () => {
@@ -50,7 +54,6 @@ const ListeningModal = () => {
 
   const getComments = async () => {
     const userData = JSON.parse(localStorage.getItem("userData"));
-    console.log(listeningVideoDetails);
     try {
       const data = {
         uid: userData.uid,
@@ -66,7 +69,6 @@ const ListeningModal = () => {
 
       const response = await getListeningComments(formData);
       if (!response.data.failure) {
-        console.log(response.data.data.commentList);
         setComments(response.data.data.commentList);
       } else {
         dispatch(changeListeningModalStatus(false));
@@ -80,7 +82,6 @@ const ListeningModal = () => {
         }
       }
     } catch (err) {
-      console.log(err);
       toast.error(err.message);
     } finally {
       setIsLoading(false);
@@ -117,7 +118,6 @@ const ListeningModal = () => {
             <ReactPlayer
               onStart={handleRestart}
               ref={playerRef}
-              // url={`https://youtu.be/RzVvThhjAKw?feature=shared`}
               url={`https://www.youtube.com/watch?v=${listeningVideoDetails?.testFile}`}
               height="35vh"
               width="100%"
@@ -131,7 +131,9 @@ const ListeningModal = () => {
               <h3 className="font-medium text-lg">
                 Listening Practice Test | Ep: {listeningVideoDetails?.id}
               </h3>
-              <button className="bg-primary-500 text-white hover:bg-primary-100 transition-colors duration-300 py-2 px-3 rounded-full text-sm">Check Band</button>
+              <button className="bg-primary-500 text-white hover:bg-primary-100 transition-colors duration-300 py-2 px-3 rounded-full text-sm">
+                Check Band
+              </button>
             </div>
             <h4 className="font-medium">
               Comments {comments.length > 0 && `(${comments.length})`}
@@ -144,7 +146,14 @@ const ListeningModal = () => {
               <div>
                 {comments.length > 0 &&
                   comments.map((comment, idx) => (
-                    <Comment comment={comment} key={comment.id} />
+                    <Comment
+                      comment={comment}
+                      key={comment.id}
+                      test={listeningVideoDetails}
+                      dispatch={dispatch}
+                      errorLogout={errorLogout}
+                      setComments={setComments}
+                    />
                   ))}
               </div>
               <div className="sticky shadow-top z-20 pb-4 px-3 -bottom-0 left-0 w-full bg-white flex gap-4 items-center justify-between pt-3">
@@ -172,7 +181,7 @@ const ListeningModal = () => {
 
 export default ListeningModal;
 
-const Comment = ({ comment }) => {
+const Comment = ({ comment, test, dispatch, errorLogout, setComments }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [isLiked, setIsLiked] = useState(
     comment.whoLikeTheComment?.includes(userData.uid)
@@ -180,6 +189,72 @@ const Comment = ({ comment }) => {
   const [isDisliked, setIsDisliked] = useState(
     comment.whoDislikeTheComment?.includes(userData.uid)
   );
+
+  const changeLikeStatus = async () => {
+    try {
+      const data = {
+        uid: userData.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueTestNumber: test.uniqueTestNumber,
+        commentId: comment.uniqueCommentId,
+      };
+
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+
+      const response = await likeUserComment(formData);
+      if (!response.data.failure) {
+        setIsLiked(!isLiked);
+        setIsDisliked(false);
+        setComments(response.data.data.commentList);
+      } else {
+        if (response.data.logout) {
+          errorLogout(response.data.errorMessage);
+        } else if (response.data.tokenInvalid) {
+          toast.error(response.data.errorMessage);
+        } else {
+          toast.error(response.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const dislikeTheComment = async () => {
+    try {
+      const data = {
+        uid: userData.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueTestNumber: test.uniqueTestNumber,
+        commentId: comment.uniqueCommentId,
+      };
+
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+
+      const response = await dislikeUserComment(formData);
+      if (!response.data.failure) {
+        setIsDisliked(!isDisliked);
+        setIsLiked(false);
+        setComments(response.data.data.commentList);
+      } else {
+        if (response.data.logout) {
+          errorLogout(response.data.errorMessage);
+        } else if (response.data.tokenInvalid) {
+          toast.error(response.data.errorMessage);
+        } else {
+          toast.error(response.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
   return (
     <div className="flex flex-col p-2 border-b border-black/20 text-sm">
       <div className="flex gap-2 items-center">
@@ -197,22 +272,22 @@ const Comment = ({ comment }) => {
         <div className="flex gap-4 my-4">
           <div className="flex gap-1">
             {isLiked ? (
-              <button>
+              <button onClick={changeLikeStatus}>
                 <MdThumbUp className="text-xl" />
               </button>
             ) : (
-              <button>
+              <button onClick={changeLikeStatus}>
                 <MdOutlineThumbUp className="text-xl" />
               </button>
             )}
             {comment.commentLike > 0 && <span>{comment.commentLike}</span>}
           </div>
           {isDisliked ? (
-            <button>
+            <button onClick={dislikeTheComment}>
               <MdThumbDown className="text-xl" />
             </button>
           ) : (
-            <button>
+            <button onClick={dislikeTheComment}>
               <MdOutlineThumbDown className="text-xl" />
             </button>
           )}

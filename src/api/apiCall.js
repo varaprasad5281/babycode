@@ -39,3 +39,13 @@ export const getVocabularyCategoryData = (data) => {
 export const vocabularySearch = (data) => {
   return api.post(Apis.searchVocabulary, data);
 };
+
+// like user comment
+export const likeUserComment = (data) => {
+  return api.post(Apis.likeUserComment, data);
+};
+
+// dislike user comment
+export const dislikeUserComment = (data) => {
+  return api.post(Apis.dislikeUserComment, data);
+};
