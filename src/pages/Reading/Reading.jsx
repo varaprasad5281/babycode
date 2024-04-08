@@ -1,7 +1,5 @@
 import React, { useState } from "react";
-import UnderDevelopment from "../../components/UnderDevelopment";
 import profilePic from "../../assets/images/profile-icon.png";
-import reading from "../../assets/images/reading-image.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PiCaretRightBold, PiCaretLeftBold } from "react-icons/pi";
 import "./index.css";
@@ -14,8 +12,6 @@ const Reading = () => {
 
   const location = useLocation();
   const navigate = useNavigate();
-  // console.log("navigate", navigate);
-  // console.log("location", location);
 
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">

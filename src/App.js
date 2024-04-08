@@ -9,6 +9,9 @@ import { toast } from "react-hot-toast";
 import { PrivateRoute } from "./components/ProtectRoutes";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner";
+import { createJwt } from "./utils/helpers";
+
+import Question from "./pages/Writing/Pages/components/page/questionRoute";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -21,6 +24,7 @@ const Speaking = lazy(() => import("./pages/Speaking/Speaking"));
 const Listening = lazy(() => import("./pages/Listening/Listening"));
 const Reading = lazy(() => import("./pages/Reading/Reading"));
 const Writing = lazy(() => import("./pages/Writing/Writing"));
+const WritingQBank = lazy(() => import("./pages/Writing/Pages"));
 const Vocabulary = lazy(() => import("./pages/Vocabulary/Vocabulary"));
 const Classes = lazy(() => import("./pages/Classes/Classes"));
 const StudentNews = lazy(() => import("./pages/StudentNews/StudentNews"));
@@ -147,7 +151,6 @@ function App() {
                   </PrivateRoute>
                 }
               />
-
               <Route
                 path="/reading"
                 element={
@@ -164,6 +167,28 @@ function App() {
                   <PrivateRoute>
                     {/* <Header /> */}
                     <Writing />
+                    {/* <BottomTabs /> */}
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/writing/:category"
+                element={
+                  <PrivateRoute>
+                    {/* <Header /> */}
+                    <WritingQBank />
+                    {/* <BottomTabs /> */}
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/writing/:category/:question"
+                element={
+                  <PrivateRoute>
+                    {/* <Header /> */}
+                    <Question />
                     {/* <BottomTabs /> */}
                   </PrivateRoute>
                 }
