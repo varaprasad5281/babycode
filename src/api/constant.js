@@ -18,4 +18,5 @@ export const Apis = {
   startListeningTest: "/startListeningTest/",
   listeningComments: "/fetchListeningTestComment/",
   vocabularyData: "/IeltsResource/",
+  searchVocabulary: "/IeltsResourceSearch/",
 };

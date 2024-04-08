@@ -31,6 +31,11 @@ export const getVocabularyData = (data) => {
 };
 
 // get vocabulary category data
-export const getVocabularyCategoryData = (data)=>{
+export const getVocabularyCategoryData = (data) => {
   return api.post(Apis.vocabularyData, data);
-}
+};
+
+// search vocabulary
+export const vocabularySearch = (data) => {
+  return api.post(Apis.searchVocabulary, data);
+};

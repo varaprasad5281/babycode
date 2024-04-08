@@ -9,14 +9,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { IoIosSearch } from "react-icons/io";
 import OffcanvasData from "./components/OffcanvasData";
 import { checkAuth, createJwt } from "../../utils/helpers";
-import { setLoading } from "../../utils/redux/otherSlice";
+import {
+  setLoading,
+  setVocabularyOffcanvasContent,
+} from "../../utils/redux/otherSlice";
 import { useDispatch } from "react-redux";
-import { getVocabularyData } from "../../api/apiCall";
+import { getVocabularyData, vocabularySearch } from "../../api/apiCall";
 import { UserAuth } from "../../context/AuthContext";
 import { toast } from "react-hot-toast";
 import VocabularyListItem from "./components/VocabularyListItem";
 import OtherContentListItem from "./components/OtherContentListItem";
 import VocabularyCategoryData from "./components/VocabularyCategoryData";
+import { useDebouncedCallback } from "use-debounce";
 
 const optionsList = [
   { id: 0, label: "Vocabulary" },
@@ -76,7 +80,6 @@ const Vocabulary = () => {
           }
         }
       } catch (err) {
-        console.log(err);
         toast.error(err.message);
       } finally {
         dispatch(setLoading(false));
@@ -93,6 +96,57 @@ const Vocabulary = () => {
     }
   }, [selectedOption]);
 
+  // search vocabularies
+  const searchVocabulary = useDebouncedCallback(
+    // function
+    async (e) => {
+      if (checkAuth()) {
+        try {
+          const data = {
+            uid: user.uid,
+            platform: "web",
+            uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
+            resourceName: e.target.value,
+          };
+
+          const encryptedData = createJwt(data);
+          const formData = new FormData();
+          formData.append("encrptData", encryptedData);
+          const response = await vocabularySearch(formData);
+          console.log(response);
+          if (!response.data.failure) {
+            if (response.data.data.dataFromDb) {
+              setVocabularies([]);
+              setOtherResources(response.data.data.resourceList);
+              setShowOffcanvas(false);
+            } else {
+              dispatch(
+                setVocabularyOffcanvasContent({
+                  resourceName: e.target.value,
+                  resourceMeaning: response.data.data.resourceMeaning,
+                })
+              );
+              setShowOffcanvas(true);
+            }
+          } else {
+            if (response.data.logout) {
+              errorLogout(response.data.errorMessage);
+            } else if (response.data.tokenInvalid) {
+              toast.error(response.data.errorMessage);
+            } else {
+              toast.error(response.data.errorMessage);
+            }
+          }
+        } catch (err) {
+          toast.error(err.message);
+        }
+      } else {
+        toast.error("Please login first");
+      }
+    },
+    // delay in ms
+    1000
+  );
   return (
     <div className="w-full lg:max-h-screen bg-background overflow-scroll pb-5 relative">
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-end items-center py-[0.4rem] w-full bg-white">
@@ -187,6 +241,7 @@ const Vocabulary = () => {
                   type="text"
                   className="outline-none border-none w-full"
                   placeholder="Search words"
+                  onChange={searchVocabulary}
                 />
               </div>
             </div>

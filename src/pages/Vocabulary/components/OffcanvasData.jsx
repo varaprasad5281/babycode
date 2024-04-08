@@ -7,24 +7,23 @@ import { HiSpeakerWave } from "react-icons/hi2";
 import { toast } from "react-hot-toast";
 import { useSelector } from "react-redux";
 
-const OffcanvasData = ({
-  showOffcanvas,
-  setShowOffcanvas,
-}) => {
+const OffcanvasData = ({ showOffcanvas, setShowOffcanvas }) => {
   const { vocabularyOffcanvasContent } = useSelector((state) => state.other);
   const selectedContent = vocabularyOffcanvasContent;
-  const [saved, setSaved] = useState(selectedContent.savedStatus);
+  const [saved, setSaved] = useState(selectedContent?.savedStatus);
   const usageArray =
-    selectedContent.resourceUsage?.split("\n").filter(Boolean) || [];
+    selectedContent?.resourceUsage?.split("\n").filter(Boolean) || [];
 
   useEffect(() => {
-    setSaved(selectedContent.savedStatus);
+    setSaved(selectedContent?.savedStatus);
   }, [selectedContent]);
 
   // function to handle speak
   const handleSpeak = () => {
     if ("speechSynthesis" in window) {
-      const speech = new SpeechSynthesisUtterance(selectedContent.resourceName);
+      const speech = new SpeechSynthesisUtterance(
+        selectedContent.resourceName || selectedContent.resourceMeaning
+      );
       window.speechSynthesis.speak(speech);
     } else {
       toast("Speech synthesis is not supported in your browser.");
@@ -33,21 +32,19 @@ const OffcanvasData = ({
 
   // save vocabulary
   const handleSaveClick = () => {
-    console.log("handleSaveClick");
     const savedData =
       JSON.parse(localStorage.getItem("savedVocabularies")) || [];
-    savedData.push(selectedContent.resourceUniqueId);
+    savedData.push(selectedContent?.resourceUniqueId);
     localStorage.setItem("savedVocabularies", JSON.stringify(savedData));
     setSaved(true);
   };
 
   // unsave vocabulary
   const handleUnsaveClick = () => {
-    console.log("handleUnsaveClick");
     const savedData =
       JSON.parse(localStorage.getItem("savedVocabularies")) || [];
     const filteredData = savedData.filter(
-      (data) => data !== selectedContent.resourceUniqueId
+      (data) => data !== selectedContent?.resourceUniqueId
     );
     localStorage.setItem("savedVocabularies", JSON.stringify(filteredData));
     setSaved(false);
@@ -97,48 +94,61 @@ const OffcanvasData = ({
               {selectedContent.resourceHindiDefination}
             </span>
           </div>
-          <div className="flex items-center gap-3">
-            {saved ? (
+          {!selectedContent?.resourceMeaning && (
+            <div className="flex items-center gap-3">
+              {saved ? (
+                <button
+                  onClick={handleUnsaveClick}
+                  className="p-2 text-2xl w-10 h-10 flex justify-center items-center bg-white text-primary-500 shadow-lg rounded-full"
+                >
+                  <GoBookmarkFill />
+                </button>
+              ) : (
+                <button
+                  onClick={handleSaveClick}
+                  className="p-2 text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"
+                >
+                  <CiBookmark />
+                </button>
+              )}
               <button
-                onClick={handleUnsaveClick}
-                className="p-2 text-2xl w-10 h-10 flex justify-center items-center bg-white text-primary-500 shadow-lg rounded-full"
+                className="text-3xl text-primary-500"
+                onClick={handleSpeak}
               >
-                <GoBookmarkFill />
+                <HiSpeakerWave />
               </button>
-            ) : (
-              <button
-                onClick={handleSaveClick}
-                className="p-2 text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"
-              >
-                <CiBookmark />
-              </button>
-            )}
-            <button className="text-3xl text-primary-500" onClick={handleSpeak}>
-              <HiSpeakerWave />
-            </button>
-          </div>
+            </div>
+          )}
         </div>
-        {selectedContent.resourceDefination && (
+        {selectedContent?.resourceDefination ||
+        selectedContent?.resourceMeaning ? (
           <div className="px-6 my-6 flex flex-col gap-3">
             <div className="bg-[#FABB141C] p-1 w-fit">
               <h5 className="text-[#F48E3F]">Definition</h5>
             </div>
-            <p>{selectedContent.resourceDefination}</p>
+            <p>
+              {selectedContent.resourceDefination ||
+                selectedContent?.resourceMeaning}
+            </p>
+          </div>
+        ) : (
+          ""
+        )}
+        {!selectedContent?.resourceMeaning && (
+          <div className="px-6 mt-8 flex flex-col gap-3 min-h-[30vh]">
+            <div className="bg-[#1BCA991C] p-1 w-fit">
+              <h5 className="text-[#1BCA99]">Examples</h5>
+            </div>
+            <ul className="flex flex-col gap-1">
+              {usageArray?.length > 0 &&
+                usageArray.map((item, idx) => (
+                  <li className="flex gap-2" key={idx}>
+                    <p>{item}</p>
+                  </li>
+                ))}
+            </ul>
           </div>
         )}
-        <div className="px-6 mt-8 flex flex-col gap-3 min-h-[30vh]">
-          <div className="bg-[#1BCA991C] p-1 w-fit">
-            <h5 className="text-[#1BCA99]">Examples</h5>
-          </div>
-          <ul className="flex flex-col gap-1">
-            {usageArray?.length > 0 &&
-              usageArray.map((item, idx) => (
-                <li className="flex gap-2" key={idx}>
-                  <p>{item}</p>
-                </li>
-              ))}
-          </ul>
-        </div>
       </motion.div>
     </motion.div>
   );

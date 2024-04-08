@@ -7,6 +7,7 @@ import { GoBookmarkFill } from "react-icons/go";
 const VocabularyCategoryItem = ({ vocabulary, setShowOffcanvas }) => {
   const savedList = JSON.parse(localStorage.getItem("savedVocabularies")) || [];
   const dispatch = useDispatch();
+  
   const handleOffcanvasShow = () => {
     const data = {
       ...vocabulary,
