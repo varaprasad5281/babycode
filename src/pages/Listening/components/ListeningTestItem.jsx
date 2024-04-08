@@ -12,13 +12,17 @@ import { UserAuth } from "../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
 
-const ListeningTestItem = ({ test, attendedTests, lastAttendedTest }) => {
+const ListeningTestItem = ({
+  test,
+  attendedTests,
+  lastAttendedTest,
+  getData,
+}) => {
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
   const [testStatus, setTestStatus] = useState("");
 
-  const isOldTest = lastAttendedTest.id > test.id;
-  //   let attended = attendedTests.includes(test.uniqueTestNumber);
+  const isOldTest = Boolean(lastAttendedTest?.id > test.id);
   const [attended, setAttended] = useState(
     attendedTests.includes(test.uniqueTestNumber)
   );
@@ -53,6 +57,7 @@ const ListeningTestItem = ({ test, attendedTests, lastAttendedTest }) => {
       const response = await startListeningTest(formData);
       console.log(response.data);
       if (!response.data.failure) {
+        getData()
         setTestStatus("Completed");
         setAttended(true);
         dispatch(setListeningVideoDetails(test));

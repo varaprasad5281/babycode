@@ -1,19 +1,25 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { GoBookmarkFill } from "react-icons/go";
 import { CiBookmark } from "react-icons/ci";
 import { PiCaretLeftBold } from "react-icons/pi";
 import { HiSpeakerWave } from "react-icons/hi2";
 import { toast } from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const OffcanvasData = ({
   showOffcanvas,
   setShowOffcanvas,
-  selectedContent,
 }) => {
-  const [saved, setSaved] = useState(false);
+  const { vocabularyOffcanvasContent } = useSelector((state) => state.other);
+  const selectedContent = vocabularyOffcanvasContent;
+  const [saved, setSaved] = useState(selectedContent.savedStatus);
   const usageArray =
     selectedContent.resourceUsage?.split("\n").filter(Boolean) || [];
+
+  useEffect(() => {
+    setSaved(selectedContent.savedStatus);
+  }, [selectedContent]);
 
   // function to handle speak
   const handleSpeak = () => {
@@ -23,6 +29,28 @@ const OffcanvasData = ({
     } else {
       toast("Speech synthesis is not supported in your browser.");
     }
+  };
+
+  // save vocabulary
+  const handleSaveClick = () => {
+    console.log("handleSaveClick");
+    const savedData =
+      JSON.parse(localStorage.getItem("savedVocabularies")) || [];
+    savedData.push(selectedContent.resourceUniqueId);
+    localStorage.setItem("savedVocabularies", JSON.stringify(savedData));
+    setSaved(true);
+  };
+
+  // unsave vocabulary
+  const handleUnsaveClick = () => {
+    console.log("handleUnsaveClick");
+    const savedData =
+      JSON.parse(localStorage.getItem("savedVocabularies")) || [];
+    const filteredData = savedData.filter(
+      (data) => data !== selectedContent.resourceUniqueId
+    );
+    localStorage.setItem("savedVocabularies", JSON.stringify(filteredData));
+    setSaved(false);
   };
 
   return (
@@ -72,14 +100,14 @@ const OffcanvasData = ({
           <div className="flex items-center gap-3">
             {saved ? (
               <button
-                onClick={() => setSaved(false)}
+                onClick={handleUnsaveClick}
                 className="p-2 text-2xl w-10 h-10 flex justify-center items-center bg-white text-primary-500 shadow-lg rounded-full"
               >
                 <GoBookmarkFill />
               </button>
             ) : (
               <button
-                onClick={() => setSaved(true)}
+                onClick={handleSaveClick}
                 className="p-2 text-2xl w-10 h-10 flex justify-center items-center rounded-full bg-white shadow-lg"
               >
                 <CiBookmark />

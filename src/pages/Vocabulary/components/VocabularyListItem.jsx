@@ -1,4 +1,5 @@
 import React from "react";
+import { GoBookmarkFill } from "react-icons/go";
 import { PiCaretRightBold } from "react-icons/pi";
 
 const VocabularyListItem = ({

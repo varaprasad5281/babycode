@@ -9,7 +9,7 @@ import { getListeningPractiseData } from "../../api/apiCall";
 import { checkAuth, createJwt } from "../../utils/helpers";
 import { toast } from "react-hot-toast";
 import { setLoading } from "../../utils/redux/otherSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { UserAuth } from "../../context/AuthContext";
 
 const components = [
@@ -61,7 +61,6 @@ const Listening = () => {
           }
         }
       } catch (err) {
-        // console.log(err)
         toast.error(err.message);
       } finally {
         dispatch(setLoading(false));
@@ -128,7 +127,7 @@ const Listening = () => {
           </div>
           <div className="mt-3 w-full">
             {componentToShow === 0 ? (
-              <ListeningTests tests={testList} attendedTests={attendedTests} />
+              <ListeningTests tests={testList} attendedTests={attendedTests} getData={getData}/>
             ) : (
               <ImproveListening materials={materials} />
             )}

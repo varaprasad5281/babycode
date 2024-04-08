@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ProfileIcon from "../../assets/images/profile-icon.png";
 import {
   PiCaretDownBold,
@@ -23,7 +23,6 @@ const optionsList = [
   { id: 1, label: "Idioms" },
   { id: 2, label: "Phrasal Verbs" },
   { id: 3, label: "Irregular Verbs" },
-  // { id: 4, label: "Common Slangs" },
 ];
 
 const Vocabulary = () => {
@@ -35,7 +34,6 @@ const Vocabulary = () => {
   const dispatch = useDispatch();
   const effectRan = useRef(true);
   const uniqueDeviceId = localStorage.getItem("uniqueDeviceId");
-  const [selectedContent, setSelectedContent] = useState({});
   const [vocabularies, setVocabularies] = useState([]);
   const [otherResources, setOtherResources] = useState([]);
   const [showVocabularyCategoryData, setShowVocabularyCategoryData] =
@@ -135,7 +133,6 @@ const Vocabulary = () => {
           setShowVocabularyCategoryData={setShowVocabularyCategoryData}
           selectedVocabularyCategory={selectedVocabularyCategory}
           setShowOffcanvas={setShowOffcanvas}
-          setSelectedContent={setSelectedContent}
         />
       ) : (
         <div className="w-full lg:py-[2.2rem] overflow-scroll">
@@ -215,9 +212,6 @@ const Vocabulary = () => {
                       key={content.id}
                       content={content}
                       setShowOffcanvas={setShowOffcanvas}
-                      showOffcanvas={showOffcanvas}
-                      selectedContent={selectedContent}
-                      setSelectedContent={setSelectedContent}
                     />
                   ))}
             </div>
@@ -227,7 +221,6 @@ const Vocabulary = () => {
       <OffcanvasData
         showOffcanvas={showOffcanvas}
         setShowOffcanvas={setShowOffcanvas}
-        selectedContent={selectedContent}
       />
     </div>
   );

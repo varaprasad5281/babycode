@@ -1,15 +1,18 @@
 import { PiCaretRightBold } from "react-icons/pi";
+import { setVocabularyOffcanvasContent } from "../../../utils/redux/otherSlice";
+import { useDispatch } from "react-redux";
+import { GoBookmarkFill } from "react-icons/go";
 
-const OtherContentListItem = ({
-  content,
-  showOffcanvas,
-  setShowOffcanvas,
-  selectedContent,
-  setSelectedContent,
-  idx,
-}) => {
+const OtherContentListItem = ({ content, setShowOffcanvas, idx }) => {
+  const dispatch = useDispatch();
+  let savedList = JSON.parse(localStorage.getItem("savedVocabularies")) || [];
+
   const handleOffcanvasShow = () => {
-    setSelectedContent(content);
+    const data = {
+      ...content,
+      savedStatus: savedList.includes(content.resourceUniqueId),
+    };
+    dispatch(setVocabularyOffcanvasContent(data));
     setShowOffcanvas(true);
   };
   return (
@@ -25,9 +28,14 @@ const OtherContentListItem = ({
           {content.resourceDefination}
         </span>
       </div>
-      <button className="">
-        <PiCaretRightBold />
-      </button>
+      <div className="flex items-center gap-2">
+        {savedList.includes(content.resourceUniqueId) && (
+          <GoBookmarkFill className="text-primary-500" />
+        )}
+        <button className="">
+          <PiCaretRightBold />
+        </button>
+      </div>
     </div>
   );
 };

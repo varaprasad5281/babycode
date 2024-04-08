@@ -5,6 +5,7 @@ const initialState = {
   showListeningModal: false,
   listeningVideoDetails: {},
   isLoading: false,
+  vocabularyOffcanvasContent: {},
 };
 
 const otherSlice = createSlice({
@@ -23,6 +24,9 @@ const otherSlice = createSlice({
     setLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setVocabularyOffcanvasContent: (state, action) => {
+      state.vocabularyOffcanvasContent = action.payload;
+    },
     resetOtherState: (state) => {
       state = initialState;
     },
@@ -35,5 +39,6 @@ export const {
   changeListeningModalStatus,
   resetOtherState,
   setListeningVideoDetails,
+  setVocabularyOffcanvasContent,
 } = otherSlice.actions;
 export default otherSlice.reducer;
