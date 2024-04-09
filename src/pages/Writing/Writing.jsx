@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import profilePic from "../../assets/images/profile-icon.png";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PiCaretRightBold, PiCaretLeftBold } from "react-icons/pi";
@@ -6,13 +6,68 @@ import pi from "../../assets/images/a.png";
 import "./index.css";
 import Taskone from "./components/taskone";
 import Tasktwo from "./components/tasktwo";
+import { toast } from "react-hot-toast";
+import { createJwt } from "../../utils/helpers";
+import { getWritingCategorySubCategory } from "../../api/apiCall";
+import { UserAuth } from "../../context/AuthContext";
 
 const Writing = () => {
   const [activeCategory, setCategory] = useState(0);
   const [activeType, setType] = useState(0);
-
   const location = useLocation();
   const navigate = useNavigate();
+  const effectRan = useRef(true);
+  const { errorLogout } = UserAuth();
+  const [writingCategoryData, setWritingCategoryData] = useState([]);
+  const [
+    writingCategoryTask1AcademicData,
+    setWritingCategoryTask1AcademicData,
+  ] = useState([]);
+  const [writingCategoryTask1GeneralData, setWritingCategoryTask1GeneralData] =
+    useState([]);
+  const [userAllGivenTest, setUserAllGivenTest] = useState([]);
+
+  // get writing task data
+  const getData = async () => {
+    const user = JSON.parse(localStorage.getItem("userData"));
+    try {
+      const data = {
+        uid: user.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
+      };
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+      const res = await getWritingCategorySubCategory(formData);
+      if (!res.data.failure) {
+        const data = res.data.data;
+        setWritingCategoryData(data.WritingCategoryData);
+        setWritingCategoryTask1AcademicData(
+          data.WritingCategoryTask1AcademicData
+        );
+        setWritingCategoryTask1GeneralData(data.WritingCategoryTask1GenralData);
+        setUserAllGivenTest(data.userAllGivenTest);
+      } else {
+        if (res.data.logout) {
+          errorLogout(res.data.errorMessage);
+        } else if (res.data.tokenInvalid) {
+          toast.error(res.data.errorMessage);
+        } else {
+          toast.error(res.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  useEffect(() => {
+    if (effectRan.current) {
+      getData();
+      effectRan.current = false;
+    }
+  }, []);
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
@@ -77,7 +132,20 @@ const Writing = () => {
             )}
           </div>
           <h2></h2>
-          <div>{activeCategory === 0 ? <Taskone /> : <Tasktwo />}</div>
+          <div>
+            {activeCategory === 0 ? (
+              <Taskone
+                writingCategoryTask1AcademicData={
+                  writingCategoryTask1AcademicData
+                }
+                writingCategoryTask1GeneralData={
+                  writingCategoryTask1GeneralData
+                }
+              />
+            ) : (
+              <Tasktwo writingCategoryData={writingCategoryData} />
+            )}
+          </div>
         </div>
       </main>
     </div>

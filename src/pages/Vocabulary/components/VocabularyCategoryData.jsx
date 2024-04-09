@@ -37,7 +37,7 @@ const VocabularyCategoryData = ({
         const data = {
           uid: user.uid,
           platform: "web",
-          uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+          uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
           category: "4",
           resourceCategory: selectedVocabularyCategory.vocabularyCategoryName,
         };
@@ -74,53 +74,60 @@ const VocabularyCategoryData = ({
     }
   }, []);
 
+  // search with input
+  const searchWithInput = async (e) => {
+    try {
+      const data = {
+        uid: user.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
+        resourceName: e.target.value,
+      };
+
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+      const response = await vocabularySearch(formData);
+      console.log(response);
+      if (!response.data.failure) {
+        if (response.data.data.dataFromDb) {
+          setVocabularyData(response.data.data.resourceList);
+          setShowOffcanvas(false);
+        } else {
+          dispatch(
+            setVocabularyOffcanvasContent({
+              resourceName: e.target.value,
+              resourceMeaning: response.data.data.resourceMeaning,
+            })
+          );
+          setShowOffcanvas(true);
+        }
+      } else {
+        if (response.data.logout) {
+          errorLogout(response.data.errorMessage);
+        } else if (response.data.tokenInvalid) {
+          toast.error(response.data.errorMessage);
+        } else {
+          toast.error(response.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
   // search vocabularies
   const searchVocabulary = useDebouncedCallback(
     // function
-    async (e) => {
-      try {
-        const data = {
-          uid: user.uid,
-          platform: "web",
-          uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
-          resourceName: e.target.value,
-        };
-
-        const encryptedData = createJwt(data);
-        const formData = new FormData();
-        formData.append("encrptData", encryptedData);
-        const response = await vocabularySearch(formData);
-        console.log(response);
-        if (!response.data.failure) {
-          if (response.data.data.dataFromDb) {
-            setVocabularyData(response.data.data.resourceList);
-            setShowOffcanvas(false);
-          } else {
-            dispatch(
-              setVocabularyOffcanvasContent({
-                resourceName: e.target.value,
-                resourceMeaning: response.data.data.resourceMeaning,
-              })
-            );
-            setShowOffcanvas(true);
-          }
-        } else {
-          if (response.data.logout) {
-            errorLogout(response.data.errorMessage);
-          } else if (response.data.tokenInvalid) {
-            toast.error(response.data.errorMessage);
-          } else {
-            toast.error(response.data.errorMessage);
-          }
-        }
-      } catch (err) {
-        toast.error(err.message);
-      }
-    },
+    (e) => searchWithInput(e),
     // delay in ms
     1000
   );
 
+  // handle enter key click on search
+  const handleClickEnterOnSearch = (e) => {
+    searchWithInput(e);
+  };
   return (
     <div className="w-full overflow-scroll pt-[4rem] lg:pt-0">
       <div className="w-full lg:py-[2.2rem] overflow-scroll flex flex-col gap-4">
@@ -146,6 +153,11 @@ const VocabularyCategoryData = ({
             className="outline-none border-none w-full"
             placeholder="Search words"
             onChange={searchVocabulary}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                handleClickEnterOnSearch(e);
+              }
+            }}
           />
         </div>
 

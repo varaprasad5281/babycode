@@ -31,6 +31,8 @@ import {
 } from "../../../api/apiCall";
 import { UserAuth } from "../../../context/AuthContext";
 import { TiArrowBack } from "react-icons/ti";
+import Notiflix from "notiflix";
+import CheckBandPopupForm from "./CheckBandPopupForm";
 
 const ListeningModal = () => {
   const dispatch = useDispatch();
@@ -50,7 +52,11 @@ const ListeningModal = () => {
   const [comment, setComment] = useState("");
   const [commentReply, setCommentReply] = useState("");
   const [commentReplies, setCommentReplies] = useState([]);
+  const scrollToTopRef = useRef(null);
+  const [showCheckBandModal, setShowCheckBandModal] = useState(false);
 
+  console.log(listeningVideoDetails);
+  
   const closeModal = () => {
     dispatch(changeListeningModalStatus(false));
     dispatch(setListeningVideoDetails({}));
@@ -70,7 +76,7 @@ const ListeningModal = () => {
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: listeningVideoDetails.uniqueTestNumber,
         testFile: listeningVideoDetails.testFile,
       };
@@ -115,7 +121,7 @@ const ListeningModal = () => {
       const data = {
         uid: user.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: listeningVideoDetails.uniqueTestNumber,
         testFile: listeningVideoDetails.testFile,
         userName: user.fullName,
@@ -151,7 +157,7 @@ const ListeningModal = () => {
       const data = {
         uid: user.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: listeningVideoDetails.uniqueTestNumber,
         testFile: listeningVideoDetails.testFile,
         userName: user.fullName,
@@ -164,7 +170,6 @@ const ListeningModal = () => {
       formData.append("encrptData", encryptedData);
       const response = await addCommentReplyInListeningTest(formData);
       if (!response.data.failure) {
-        console.log(response.data);
         setCommentReply("");
         setCommentReplies(response.data.data.commentRepliesList);
       } else {
@@ -181,6 +186,20 @@ const ListeningModal = () => {
     }
   };
 
+  useEffect(() => {
+    // Scroll to the top of the target div
+    if (scrollToTopRef.current) {
+      scrollToTopRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  }, [showCommentReplies]);
+
+  // handle check band button click
+  const handleCheckBandClick = () => {
+    setShowCheckBandModal(true);
+  };
   return (
     <motion.div
       initial={{ opacity: 0, y: 200 }}
@@ -189,7 +208,7 @@ const ListeningModal = () => {
       className="relative bg-white rounded-lg flex flex-col z-20 w-[100%] md:w-[45vw] max-h-[90vh] overflow-scroll mx-auto items-center"
     >
       {showCommentReplies ? (
-        <div className="flex z-10 sticky top-0 pt-4 md:pt-8 px-4 md:px-8 bg-white w-full items-center justify-start border-b border-black/20 pb-2">
+        <div className="flex z-10 fixed w-[93%] md:w-[45vw] rounded-t-xl left-1/2 -translate-x-1/2 -top-[2.5rem] pt-4 md:pt-8 px-4 md:px-8 bg-white items-center justify-start border-b border-black/20 pb-2">
           <button
             onClick={() => {
               setShowCommentReplies(false);
@@ -217,39 +236,41 @@ const ListeningModal = () => {
       ) : (
         <>
           {showCommentReplies ? (
-            <div className="min-h-[90vh] max-h-[90vh] w-full my-3 px-4 md:px-8 relative bg-white">
-              <CommentReplies
-                commentIdToFetchReplies={commentIdToFetchReplies}
-                testNumberToFetchReplies={testNumberToFetchReplies}
-                errorLogout={errorLogout}
-                commentReplies={commentReplies}
-                setCommentReplies={setCommentReplies}
-              />
-              <div className="fixed w-[95%] md:w-[45vw] h-fit shadow-top z-20 pb-4 px-3 -bottom-[2.5rem] rounded-b-lg left-1/2 -translate-x-1/2 bg-white flex gap-4 items-center justify-between pt-3">
-                <img
-                  src={Avatar}
-                  className="w-8 h-8 object-contain rounded-full"
-                  alt=""
+            <div ref={scrollToTopRef} className="relative w-full pt-[4rem]">
+              <div className="min-h-[90vh] max-h-[90vh] w-full py-3 px-4 md:px-8 bg-white">
+                <CommentReplies
+                  commentIdToFetchReplies={commentIdToFetchReplies}
+                  testNumberToFetchReplies={testNumberToFetchReplies}
+                  errorLogout={errorLogout}
+                  commentReplies={commentReplies}
+                  setCommentReplies={setCommentReplies}
                 />
-                <input
-                  type="text"
-                  placeholder="Add a comment"
-                  value={commentReply}
-                  onChange={(e) => setCommentReply(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleAddCommentReplyClick();
-                    }
-                  }}
-                  className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
-                />
-                <button
-                  className="text-2xl text-primary-500"
-                  onClick={handleAddCommentReplyClick}
-                  disabled={!commentReply}
-                >
-                  <FiSend />
-                </button>
+                <div className="fixed w-[93%] md:w-[45vw] h-fit shadow-top z-20 pb-4 px-3 -bottom-[2.5rem] rounded-b-lg left-1/2 -translate-x-1/2 bg-white flex gap-4 items-center justify-between pt-3">
+                  <img
+                    src={Avatar}
+                    className="w-8 h-8 object-contain rounded-full"
+                    alt=""
+                  />
+                  <input
+                    type="text"
+                    placeholder="Add a comment"
+                    value={commentReply}
+                    onChange={(e) => setCommentReply(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        handleAddCommentReplyClick();
+                      }
+                    }}
+                    className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
+                  />
+                  <button
+                    className="text-2xl text-primary-500"
+                    onClick={handleAddCommentReplyClick}
+                    disabled={!commentReply}
+                  >
+                    <FiSend />
+                  </button>
+                </div>
               </div>
             </div>
           ) : (
@@ -271,9 +292,14 @@ const ListeningModal = () => {
                   <h3 className="font-medium text-lg">
                     Listening Practice Test | Ep: {listeningVideoDetails?.id}
                   </h3>
-                  <button className="bg-primary-500 text-white hover:bg-primary-100 transition-colors duration-300 py-2 px-3 rounded-full text-sm">
-                    Check Band
-                  </button>
+                  {!listeningVideoDetails.isImproveListeningData && (
+                    <button
+                      onClick={handleCheckBandClick}
+                      className="bg-primary-500 text-white hover:bg-primary-100 transition-colors duration-300 py-2 px-3 rounded-full text-sm"
+                    >
+                      Check Band
+                    </button>
+                  )}
                 </div>
                 <h4 className="font-medium">
                   Comments {comments.length > 0 && `(${comments.length})`}
@@ -333,6 +359,13 @@ const ListeningModal = () => {
               </div>
             </>
           )}
+          {showCheckBandModal && (
+            <CheckBandPopupForm
+              changeModalStatus={setShowCheckBandModal}
+              selectedTest={listeningVideoDetails}
+              setComments={setComments}
+            />
+          )}
         </>
       )}
     </motion.div>
@@ -365,7 +398,7 @@ const Comment = ({
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: test.uniqueTestNumber,
         commentId: comment.uniqueCommentId,
       };
@@ -399,7 +432,7 @@ const Comment = ({
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: test.uniqueTestNumber,
         commentId: comment.uniqueCommentId,
       };
@@ -502,7 +535,7 @@ const CommentReplies = ({
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: testNumberToFetchReplies,
         commentId: commentIdToFetchReplies,
       };
@@ -535,7 +568,7 @@ const CommentReplies = ({
     }
   }, []);
   return (
-    <div className="flex flex-col mt-3 pb-[4.5rem]">
+    <div className="flex flex-col pt-3 pb-[4.5rem]">
       {commentReplies.map((comment, idx) => (
         <ReplyComment
           comment={comment}
@@ -572,7 +605,7 @@ const ReplyComment = ({
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: testNumberToFetchReplies,
         commentId:
           idx === 0 ? comment.uniqueCommentId : comment.replyToThisCommentId,
@@ -608,7 +641,7 @@ const ReplyComment = ({
       const data = {
         uid: userData.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: testNumberToFetchReplies,
         commentId:
           idx === 0 ? comment.uniqueCommentId : comment.replyToThisCommentId,

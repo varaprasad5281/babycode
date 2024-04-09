@@ -26,4 +26,7 @@ export const Apis = {
   dislikeCommentReplyInListeningTest: "/dislikeCommentReplyInListeningTest/",
   addCommentInListeningTest: "/addCommentInListeningTest/",
   addCommentReplyInListeningTest: "/addCommentReplyInListeningTest/",
+  checkListeningTestBandScore: "/checkListeningTestBandScore/",
+  getWritingCategorySubCategory: "/getWritingCategorySubCategory/",
+  fetchWritingQuestionAnswer: "/fetchWritingQuestionAnswer/",
 };

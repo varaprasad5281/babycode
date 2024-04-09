@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import ToastModalWrapper from "../../../components/Toast/ToastModalWrapper";
 import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
@@ -18,7 +17,7 @@ const RetakeTestAlert = ({ test }) => {
     setTimeout(() => {
       dispatch(setListeningVideoDetails(test));
       dispatch(changeListeningModalStatus(true));
-    }, 900);
+    }, 300);
   };
 
   const onDismiss = useCallback(() => {
@@ -87,7 +86,9 @@ const RetakeTestAlert = ({ test }) => {
 };
 
 const showRetakeTestAlert = (test) => {
-  toast.custom(<RetakeTestAlert test={test} />, { duration: Infinity });
+  toast.custom(<RetakeTestAlert test={test} />, {
+    duration: Infinity,
+  });
 };
 
 export default showRetakeTestAlert;

@@ -1,6 +1,5 @@
 import { TbExternalLink } from "react-icons/tb";
 import { createJwt, formatDate } from "../../../utils/helpers";
-import showRetakeTestAlert from "./RetakeTestAlertToast";
 import {
   changeListeningModalStatus,
   setListeningVideoDetails,
@@ -11,6 +10,7 @@ import { useEffect, useState } from "react";
 import { UserAuth } from "../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
+import showRetakeTestAlert from "./RetakeTestAlertToast";
 
 const ListeningTestItem = ({
   test,
@@ -21,7 +21,6 @@ const ListeningTestItem = ({
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
   const [testStatus, setTestStatus] = useState("");
-
   const isOldTest = Boolean(lastAttendedTest?.id > test.id);
   const [attended, setAttended] = useState(
     attendedTests.includes(test.uniqueTestNumber)
@@ -46,7 +45,7 @@ const ListeningTestItem = ({
       const data = {
         uid: user.uid,
         platform: "web",
-        uniqueDeviceId: localStorage.getItem("uniqueDeviceId"),
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: test.uniqueTestNumber,
         testFile: test.testFile,
         testNumber: test.id,
@@ -57,7 +56,7 @@ const ListeningTestItem = ({
       const response = await startListeningTest(formData);
       console.log(response.data);
       if (!response.data.failure) {
-        getData()
+        getData();
         setTestStatus("Completed");
         setAttended(true);
         dispatch(setListeningVideoDetails(test));
@@ -80,11 +79,11 @@ const ListeningTestItem = ({
 
   const handleStartClick = () => {
     if (attended) {
-      showRetakeTestAlert(test);
-      return;
+      return showRetakeTestAlert(test);
     }
     startTest();
   };
+
   return (
     <div className="w-full shadow-sm cursor-pointer" onClick={handleStartClick}>
       <div className="relative bg-white px-5 gap-2 py-3 flex items-center justify-between">

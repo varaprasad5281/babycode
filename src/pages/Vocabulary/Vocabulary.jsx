@@ -37,7 +37,7 @@ const Vocabulary = () => {
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
   const effectRan = useRef(true);
-  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId");
+  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId")||'';
   const [vocabularies, setVocabularies] = useState([]);
   const [otherResources, setOtherResources] = useState([]);
   const [showVocabularyCategoryData, setShowVocabularyCategoryData] =
@@ -97,52 +97,58 @@ const Vocabulary = () => {
   }, [selectedOption]);
 
   // search vocabularies
-  const searchVocabulary = useDebouncedCallback(
-    // function
-    async (e) => {
-      try {
-        const data = {
-          uid: user.uid,
-          platform: "web",
-          uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
-          resourceName: e.target.value,
-        };
+  const searchWithInput = async (e) => {
+    try {
+      const data = {
+        uid: user.uid,
+        platform: "web",
+        uniqueDeviceId: localStorage.getItem("uniqueDeviceId") || "",
+        resourceName: e.target.value,
+      };
 
-        const encryptedData = createJwt(data);
-        const formData = new FormData();
-        formData.append("encrptData", encryptedData);
-        const response = await vocabularySearch(formData);
-        console.log(response);
-        if (!response.data.failure) {
-          if (response.data.data.dataFromDb) {
-            setVocabularies([]);
-            setOtherResources(response.data.data.resourceList);
-            setShowOffcanvas(false);
-          } else {
-            dispatch(
-              setVocabularyOffcanvasContent({
-                resourceName: e.target.value,
-                resourceMeaning: response.data.data.resourceMeaning,
-              })
-            );
-            setShowOffcanvas(true);
-          }
+      const encryptedData = createJwt(data);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+      const response = await vocabularySearch(formData);
+      console.log(response);
+      if (!response.data.failure) {
+        if (response.data.data.dataFromDb) {
+          setVocabularies([]);
+          setOtherResources(response.data.data.resourceList);
+          setShowOffcanvas(false);
         } else {
-          if (response.data.logout) {
-            errorLogout(response.data.errorMessage);
-          } else if (response.data.tokenInvalid) {
-            toast.error(response.data.errorMessage);
-          } else {
-            toast.error(response.data.errorMessage);
-          }
+          dispatch(
+            setVocabularyOffcanvasContent({
+              resourceName: e.target.value,
+              resourceMeaning: response.data.data.resourceMeaning,
+            })
+          );
+          setShowOffcanvas(true);
         }
-      } catch (err) {
-        toast.error(err.message);
+      } else {
+        if (response.data.logout) {
+          errorLogout(response.data.errorMessage);
+        } else if (response.data.tokenInvalid) {
+          toast.error(response.data.errorMessage);
+        } else {
+          toast.error(response.data.errorMessage);
+        }
       }
-    },
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
+
+  const searchVocabulary = useDebouncedCallback(
+    (e) => searchWithInput(e),
     // delay in ms
     1000
   );
+
+  // handle enter key click on search
+  const handleClickEnterOnSearch = (e) => {
+    searchWithInput(e);
+  };
   return (
     <div className="w-full lg:max-h-screen bg-background overflow-scroll pb-5 relative">
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-end items-center py-[0.4rem] w-full bg-white">
@@ -238,6 +244,11 @@ const Vocabulary = () => {
                   className="outline-none border-none w-full"
                   placeholder="Search words"
                   onChange={searchVocabulary}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleClickEnterOnSearch(e)
+                    }
+                  }}
                 />
               </div>
             </div>

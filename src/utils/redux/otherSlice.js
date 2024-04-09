@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   showLoginModal: false,
   showListeningModal: false,
+  showListeningTestRetakeAlert: false,
   listeningVideoDetails: {},
   isLoading: false,
   vocabularyOffcanvasContent: {},
@@ -17,6 +18,9 @@ const otherSlice = createSlice({
     },
     changeListeningModalStatus: (state, action) => {
       state.showListeningModal = action.payload;
+    },
+    changeShowListeningTestRetakeAlertStatus: (state, action) => {
+      state.showListeningTestRetakeAlert = action.payload;
     },
     setListeningVideoDetails: (state, action) => {
       state.listeningVideoDetails = action.payload;
@@ -40,5 +44,6 @@ export const {
   resetOtherState,
   setListeningVideoDetails,
   setVocabularyOffcanvasContent,
+  changeShowListeningTestRetakeAlertStatus
 } = otherSlice.actions;
 export default otherSlice.reducer;

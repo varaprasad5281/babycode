@@ -68,9 +68,24 @@ export const dislikeCommentReplyInListeningTest = (data) => {
 // add comment in listening test
 export const addCommentInListeningTest = (data) => {
   return api.post(Apis.addCommentInListeningTest, data);
-}
+};
 
 // add comment reply in listening test
 export const addCommentReplyInListeningTest = (data) => {
   return api.post(Apis.addCommentReplyInListeningTest, data);
-}
+};
+
+// check listening test band score
+export const checkListeningTestBandScore = (data) => {
+  return api.post(Apis.checkListeningTestBandScore, data);
+};
+
+// get writing category sub category
+export const getWritingCategorySubCategory = (data) => {
+  return api.post(Apis.getWritingCategorySubCategory, data);
+};
+
+// fetch writing questions
+export const fetchWritingQuestionAnswer = (data) => {
+  return api.post(Apis.fetchWritingQuestionAnswer, data);
+};

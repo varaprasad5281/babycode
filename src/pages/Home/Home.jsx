@@ -13,7 +13,6 @@ import IGIcon from "../../assets/images/instagram-icon.png";
 import ListImg from "../../assets/images/list-image.png";
 import ArrowIcon from "../../assets/svg/rounded-arrow-dark.svg";
 import WAIcon from "../../assets/images/whatsapp-icon.png";
-import { RxCaretDown } from "react-icons/rx";
 import { useSelector, useDispatch } from "react-redux";
 import {
   changeLoginModalStatus,
@@ -184,13 +183,13 @@ const Home = () => {
             className="w-8 h-8 object-contain cursor-pointer"
           />
           {/* <div className="p-[.2rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"> */}
-            <img
-              onClick={handleClick}
-              src={ProfileIcon}
-              alt=""
-              className="w-8 h-8 object-contain rounded-full"
-            />
-            {/* <RxCaretDown />
+          <img
+            onClick={handleClick}
+            src={ProfileIcon}
+            alt=""
+            className="w-8 h-8 object-contain rounded-full"
+          />
+          {/* <RxCaretDown />
           </div> */}
         </div>
       </div>

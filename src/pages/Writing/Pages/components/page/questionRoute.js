@@ -11,8 +11,9 @@ const Question = () => {
   const [activeCategory, setCategory] = useState(0);
   const [activeType, setType] = useState(0);
   const { category } = useParams();
-  //   const location = useLocation();
   const navigate = useNavigate();
+  const questionData = JSON.parse(sessionStorage.getItem("writingQuestion"));
+  console.log(questionData);
 
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
@@ -35,22 +36,13 @@ const Question = () => {
             <Link to={`/writing/${category}`}>{category}</Link>{" "}
             <PiCaretRightBold /> <p className="text-primary-500">Question</p>
           </div>
-          <button className="bg-[#1d46c9] text-white p-2 px-3 rounded-full">
-            Submit & Check Band Score
-          </button>
         </div>
         <div className="pt-8">
           <div className="bg-white p-3 md:p-4 flex flex-col gap-3">
             <p className="w-fit p-1 text-[12px] bg-gradient-to-r from-[#3dc8ca] to-[#04a4e9] text-white rounded-md mb-2 ">
               Question
             </p>
-            <p className="text-[13px]">
-              (2023) The pie graphs below show the result of a survey of
-              children's activities. The first graph shows the cultural and
-              leisure activities that boys participate in, whereas the second
-              graphs shows the activities in which the girls participate. Write
-              a report describing the information shown in the two pie graphs.
-            </p>
+            <p className="text-[13px]">{questionData?.Question}</p>
             <div className="flex gap-6 ">
               <button className="flex gap-1 md:gap-2 items-center text-[11px] md:text-[12px] bg-[#FCF300] border-[#FCF300]  p-2 border rounded-full">
                 <FaRegLightbulb /> View Best Answer
@@ -60,10 +52,13 @@ const Question = () => {
               </button>
             </div>
             <textarea
-              rows="20"
+              rows="10"
               placeholder="Start typing..."
               className="bg-[#F1F5F9] rounded-lg  max-w-[100%] p-3"
             ></textarea>
+            <button className="bg-[#1d46c9] w-fit text-white p-2 px-3 rounded-full">
+              Submit & Check Band Score
+            </button>
           </div>
         </div>
       </main>

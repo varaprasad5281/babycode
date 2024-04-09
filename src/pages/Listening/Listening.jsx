@@ -21,7 +21,7 @@ const Listening = () => {
   const { errorLogout } = UserAuth();
   const [componentToShow, setComponentToShow] = useState(0);
   const user = JSON.parse(localStorage.getItem("userData"));
-  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId");
+  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId") || "";
   const dispatch = useDispatch();
   const [testList, setTestList] = useState([]);
   const [materials, setMaterials] = useState([]);
@@ -127,7 +127,11 @@ const Listening = () => {
           </div>
           <div className="mt-3 w-full">
             {componentToShow === 0 ? (
-              <ListeningTests tests={testList} attendedTests={attendedTests} getData={getData}/>
+              <ListeningTests
+                tests={testList}
+                attendedTests={attendedTests}
+                getData={getData}
+              />
             ) : (
               <ImproveListening materials={materials} />
             )}

@@ -9,8 +9,6 @@ import { toast } from "react-hot-toast";
 import { PrivateRoute } from "./components/ProtectRoutes";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner";
-import { createJwt } from "./utils/helpers";
-
 import Question from "./pages/Writing/Pages/components/page/questionRoute";
 
 const Header = lazy(() => import("./components/Header"));
@@ -115,9 +113,7 @@ function App() {
                 path="/stories"
                 element={
                   <PrivateRoute>
-                    {/* <Header /> */}
                     <Stories />
-                    {/* <BottomTabs /> */}
                   </PrivateRoute>
                 }
               />
@@ -165,9 +161,7 @@ function App() {
                 path="/writing"
                 element={
                   <PrivateRoute>
-                    {/* <Header /> */}
                     <Writing />
-                    {/* <BottomTabs /> */}
                   </PrivateRoute>
                 }
               />
@@ -176,9 +170,7 @@ function App() {
                 path="/writing/:category"
                 element={
                   <PrivateRoute>
-                    {/* <Header /> */}
                     <WritingQBank />
-                    {/* <BottomTabs /> */}
                   </PrivateRoute>
                 }
               />
@@ -187,9 +179,7 @@ function App() {
                 path="/writing/:category/:question"
                 element={
                   <PrivateRoute>
-                    {/* <Header /> */}
                     <Question />
-                    {/* <BottomTabs /> */}
                   </PrivateRoute>
                 }
               />
