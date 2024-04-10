@@ -89,3 +89,8 @@ export const getWritingCategorySubCategory = (data) => {
 export const fetchWritingQuestionAnswer = (data) => {
   return api.post(Apis.fetchWritingQuestionAnswer, data);
 };
+
+// submit writing test answer
+export const submitWritingTestAnswer = (data) => {
+  return api.post(Apis.submitWritingTestAnswer, data);
+};

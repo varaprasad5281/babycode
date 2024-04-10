@@ -108,6 +108,7 @@ export const AuthContextProvider = ({ children }) => {
       await signOut(auth);
       localStorage.removeItem("userData");
       localStorage.removeItem("paymentInformation");
+      sessionStorage.clear();
       toast.success("Signout successful");
       dispatch(setUserLoggedIn(false));
       dispatch(setUserDetails({}));
@@ -123,11 +124,12 @@ export const AuthContextProvider = ({ children }) => {
       await signOut(auth);
       if (!errMsg) {
         toast.error("Signed out");
-      }else{
+      } else {
         toast.error(errMsg);
       }
       localStorage.removeItem("userData");
       localStorage.removeItem("paymentInformation");
+      sessionStorage.clear();
       dispatch(setUserLoggedIn(false));
       dispatch(setUserDetails({}));
       navigate("/");

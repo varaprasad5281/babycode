@@ -29,4 +29,5 @@ export const Apis = {
   checkListeningTestBandScore: "/checkListeningTestBandScore/",
   getWritingCategorySubCategory: "/getWritingCategorySubCategory/",
   fetchWritingQuestionAnswer: "/fetchWritingQuestionAnswer/",
+  submitWritingTestAnswer: "/CheckWriting/",
 };

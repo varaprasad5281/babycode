@@ -231,7 +231,7 @@ const Home = () => {
             <div className="w-full grid grid-cols-3 sm:grid-cols-4 gap-[0.3rem]">
               {gridItems.map(({ icon, title, url }) => (
                 <button
-                  className={`flex flex-col justify-self-start items-center pr-[1rem]
+                  className={`flex flex-col justify-self-start items-center pr-[1rem] hover:-translate-y-1 transition-all duration-200
                   ${title === "Book IELTS Exam" && "order-last md:order-2"}
                   `}
                   onClick={() => handleLinkClick(url)}

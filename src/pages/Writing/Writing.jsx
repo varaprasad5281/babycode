@@ -10,6 +10,8 @@ import { toast } from "react-hot-toast";
 import { createJwt } from "../../utils/helpers";
 import { getWritingCategorySubCategory } from "../../api/apiCall";
 import { UserAuth } from "../../context/AuthContext";
+import { useDispatch } from "react-redux";
+import { setLoading } from "../../utils/redux/otherSlice";
 
 const Writing = () => {
   const [activeCategory, setCategory] = useState(0);
@@ -26,11 +28,13 @@ const Writing = () => {
   const [writingCategoryTask1GeneralData, setWritingCategoryTask1GeneralData] =
     useState([]);
   const [userAllGivenTest, setUserAllGivenTest] = useState([]);
+  const dispatch = useDispatch();
 
   // get writing task data
   const getData = async () => {
     const user = JSON.parse(localStorage.getItem("userData"));
     try {
+      dispatch(setLoading(true));
       const data = {
         uid: user.uid,
         platform: "web",
@@ -59,6 +63,8 @@ const Writing = () => {
       }
     } catch (err) {
       toast.error(err.message);
+    } finally {
+      dispatch(setLoading(false));
     }
   };
 
@@ -69,20 +75,23 @@ const Writing = () => {
     }
   }, []);
   return (
-    <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
+    <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
       <div className="bg-white">
-        <div className="flex gap-2 items-center p-2 lg:hidden">
-          <button onClick={() => navigate(-1)}>
+        <div className="flex lg:hidden fixed z-10 w-full px-6 py-3 border-b border-black/10 bg-white">
+          <div
+            className="flex text-xl items-center gap-2 w-fit cursor-pointer"
+            onClick={() => navigate("/")}
+          >
             <PiCaretLeftBold />
-          </button>{" "}
-          Writing
+            <h5 className="">Writing</h5>
+          </div>
         </div>
       </div>
-      <main className="p-4 px-8">
-        <div className="flex items-center gap-2">
+      <main className="px-8 pt-11 lg:py-[2.2rem]">
+        <div className="hidden lg:flex items-center gap-2">
           <Link to="/">Home</Link> <PiCaretRightBold />{" "}
           <p className="text-primary-500">Writing</p>
         </div>
@@ -131,7 +140,6 @@ const Writing = () => {
               </p>
             )}
           </div>
-          <h2></h2>
           <div>
             {activeCategory === 0 ? (
               <Taskone
@@ -141,6 +149,7 @@ const Writing = () => {
                 writingCategoryTask1GeneralData={
                   writingCategoryTask1GeneralData
                 }
+                activeSection={activeType}
               />
             ) : (
               <Tasktwo writingCategoryData={writingCategoryData} />

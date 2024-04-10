@@ -9,7 +9,6 @@ import { toast } from "react-hot-toast";
 import { PrivateRoute } from "./components/ProtectRoutes";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner";
-import Question from "./pages/Writing/Pages/components/page/questionRoute";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -22,7 +21,7 @@ const Speaking = lazy(() => import("./pages/Speaking/Speaking"));
 const Listening = lazy(() => import("./pages/Listening/Listening"));
 const Reading = lazy(() => import("./pages/Reading/Reading"));
 const Writing = lazy(() => import("./pages/Writing/Writing"));
-const WritingQBank = lazy(() => import("./pages/Writing/Pages"));
+const WritingQBank = lazy(() => import("./pages/Writing/Pages/WritingQBank"));
 const Vocabulary = lazy(() => import("./pages/Vocabulary/Vocabulary"));
 const Classes = lazy(() => import("./pages/Classes/Classes"));
 const StudentNews = lazy(() => import("./pages/StudentNews/StudentNews"));
@@ -30,6 +29,16 @@ const BookIeltsExam = lazy(() => import("./pages/BookIeltsExam/BookIeltsExam"));
 const PracticeMockTest = lazy(() =>
   import("./pages/PracticeMockTest/PracticeMockTest")
 );
+const TaskTwoSubCategoryList = lazy(() =>
+  import("./pages/Writing/Pages/TaskTwoSubCategoryList")
+);
+const TaskTwoWritingQBank = lazy(() =>
+  import("./pages/Writing/Pages/TaskTwoWritingQBank")
+);
+const Question = lazy(() =>
+  import("./pages/Writing/Pages/components/page/questionRoute")
+);
+const PrevWritingAnswers = lazy(() => import("./pages/Writing/Pages/components/page/PrevWritingAnswer"));
 
 export const ScrollToTop = () => {
   const { pathname } = useLocation();
@@ -176,10 +185,37 @@ function App() {
               />
               <Route
                 exact
-                path="/writing/:category/:question"
+                path="/writing/:category/:subcategory?"
+                element={
+                  <PrivateRoute>
+                    <TaskTwoWritingQBank />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/writing/:category/:subcategory?/Question"
                 element={
                   <PrivateRoute>
                     <Question />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/writing/:category/subcategories"
+                element={
+                  <PrivateRoute>
+                    <TaskTwoSubCategoryList />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                exact
+                path="/writing/:category/:subcategory?/previous-answers"
+                element={
+                  <PrivateRoute>
+                    <PrevWritingAnswers />
                   </PrivateRoute>
                 }
               />

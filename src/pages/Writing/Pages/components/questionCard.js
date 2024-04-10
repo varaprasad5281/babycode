@@ -1,13 +1,14 @@
 import { PiCaretRightBold } from "react-icons/pi";
 import { Link } from "react-router-dom";
 
-const QuestionCard = ({ item, category }) => {
+const QuestionCard = ({ item, category, subcategory }) => {
   const setQuestion = () => {
     sessionStorage.setItem("writingQuestion", JSON.stringify(item));
   };
+  const subCategory = subcategory !== undefined ? subcategory : "";
   return (
     <Link
-      to={`/writing/${category}/Question`}
+      to={`/writing/${category}${subCategory && "/" + subCategory}/Question`}
       onClick={setQuestion}
       className="odd:bg-white p-3 gap-3 px-2 md:px-5 flex justify-between items-center"
     >

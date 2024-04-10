@@ -54,8 +54,6 @@ const ListeningModal = () => {
   const [commentReplies, setCommentReplies] = useState([]);
   const scrollToTopRef = useRef(null);
   const [showCheckBandModal, setShowCheckBandModal] = useState(false);
-
-  console.log(listeningVideoDetails);
   
   const closeModal = () => {
     dispatch(changeListeningModalStatus(false));
@@ -264,7 +262,7 @@ const ListeningModal = () => {
                     className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
                   />
                   <button
-                    className="text-2xl text-primary-500"
+                    className="text-2xl text-primary-500 cursor-pointer"
                     onClick={handleAddCommentReplyClick}
                     disabled={!commentReply}
                   >
@@ -348,7 +346,7 @@ const ListeningModal = () => {
                       className="rounded-lg text-sm outline-none border border-black/30 p-2 w-full"
                     />
                     <button
-                      className="text-2xl text-primary-500"
+                      className="text-2xl text-primary-500 cursor-pointer"
                       onClick={handleAddCommentClick}
                       disabled={!comment}
                     >
