@@ -89,3 +89,11 @@ export const getWritingCategorySubCategory = (data) => {
 export const fetchWritingQuestionAnswer = (data) => {
   return api.post(Apis.fetchWritingQuestionAnswer, data);
 };
+// get reading category data
+
+export const getReadingData = (data) => {
+  return api.post(Apis.readingData, data);
+};
+export const startReadingTest = (data) => {
+  return api.post(Apis.startReadingTest, data);
+};

@@ -18,6 +18,7 @@ export const Apis = {
   startListeningTest: "/startListeningTest/",
   listeningComments: "/fetchListeningTestComment/",
   vocabularyData: "/IeltsResource/",
+
   searchVocabulary: "/IeltsResourceSearch/",
   likeListeningUserComment: "/likeCommentInListeningTest/",
   dislikeListeningUserComment: "/dislikeCommentInListeningTest/",
@@ -29,4 +30,6 @@ export const Apis = {
   checkListeningTestBandScore: "/checkListeningTestBandScore/",
   getWritingCategorySubCategory: "/getWritingCategorySubCategory/",
   fetchWritingQuestionAnswer: "/fetchWritingQuestionAnswer/",
+  readingData: "/getReadingPractiseData/",
+  startReadingTest: "/startReadingTest/",
 };
