@@ -9,6 +9,9 @@ import { toast } from "react-hot-toast";
 import { PrivateRoute } from "./components/ProtectRoutes";
 import { useSelector } from "react-redux";
 import LoadingSpinner from "./components/LoadingSpinner";
+import Question from "./pages/Writing/Pages/components/page/questionRoute";
+import ReadingPractice from "./pages/Reading/components/readingPractice";
+import ReadingMaterial from "./pages/Reading/components/readingMaterial";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -34,9 +37,6 @@ const TaskTwoSubCategoryList = lazy(() =>
 );
 const TaskTwoWritingQBank = lazy(() =>
   import("./pages/Writing/Pages/TaskTwoWritingQBank")
-);
-const Question = lazy(() =>
-  import("./pages/Writing/Pages/components/page/questionRoute")
 );
 const PrevWritingAnswers = lazy(() => import("./pages/Writing/Pages/components/page/PrevWritingAnswer"));
 
@@ -103,13 +103,29 @@ function App() {
                 }
               />{" "}
               <Route
-                path="/reading"
+                path="/reading/:category"
                 element={
                   <PrivateRoute>
                     <Reading />
                   </PrivateRoute>
                 }
               />
+              <Route
+                path="/reading/:category/:material"
+                element={
+                  <PrivateRoute>
+                    <ReadingMaterial />
+                  </PrivateRoute>
+                }
+              />
+              {/* <Route
+                path="/reading/improve_reading/"
+                element={
+                  <PrivateRoute>
+                    <Reading />
+                  </PrivateRoute>
+                }
+              /> */}
               <Route
                 path="/vocabulary"
                 element={
@@ -210,7 +226,7 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              <Route
+              {/* <Route
                 exact
                 path="/writing/:category/:subcategory?/previous-answers"
                 element={
@@ -218,7 +234,7 @@ function App() {
                     <PrevWritingAnswers />
                   </PrivateRoute>
                 }
-              />
+              /> */}
               <Route
                 path="/classes"
                 element={

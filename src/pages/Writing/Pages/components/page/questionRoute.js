@@ -196,6 +196,14 @@ const Question = () => {
                 >
                   <RiEdit2Line /> Write Your Answer
                 </button>
+                {/* <Link
+                  to={`/writing/${category}${
+                    category !== undefined ? "/" + subcategory : ""
+                  }/previous-answers`}
+                  className="flex gap-1 md:gap-2 items-center text-[11px] md:text-[12px]  border rounded-full border-pink-300 text-pink-600 p-2"
+                >
+                  Previous Answer
+                </Link> */}
               </div>
             )}
             {showAnswerInput && (

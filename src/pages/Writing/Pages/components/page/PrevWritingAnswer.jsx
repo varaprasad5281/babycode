@@ -8,7 +8,7 @@ const PrevWritingAnswers = () => {
   const { category, subcategory } = useParams();
   const answerData = JSON.parse(sessionStorage.getItem("prevWritingAnswer"));
 
-  const testResult = answerData.split("\n");
+  const testResult = answerData?.split("\n");
   return (
     <div className="w-full lg:max-h-screen bg-background overflow-scroll pb-5">
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-end items-center py-[0.4rem] w-full bg-white">
@@ -35,7 +35,7 @@ const PrevWritingAnswers = () => {
       </div>
 
       <div className="w-full lg:py-[2.2rem] overflow-scroll">
-        <div className="hidden lg:flex items-center gap-1 px-6 lg:px-[3rem]">
+        <div className="hidden lg:flex items-center gap-2 px-6 lg:px-[3rem]">
           <Link to="/">Home</Link>
           <PiCaretRightBold />
           <Link to="/writing">Writing</Link>
@@ -50,7 +50,11 @@ const PrevWritingAnswers = () => {
               <PiCaretRightBold />
             </>
           )}
-          <Link to={`/writing/${category}/${subcategory}/Question`}>
+          <Link
+            to={`/writing/${category}${
+              subcategory !== undefined ? "/" + subcategory : ""
+            }/Question`}
+          >
             Question
           </Link>
           <PiCaretRightBold />
@@ -63,9 +67,22 @@ const PrevWritingAnswers = () => {
               Result / Band
             </div>
             <div className="flex flex-col gap-1">
-              {testResult.map((text, i) => (
+              {/* {testResult.map((text, i) => (
                 <p key={i}>{text}</p>
-              ))}
+              ))} */}
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum
+              velit sit ut, eos maiores nobis ab quasi voluptate incidunt illo
+              ipsa ea. Inventore tempore minus quas veritatis quia voluptatum
+              aliquam. Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Ipsum velit sit ut, eos maiores nobis ab quasi voluptate incidunt
+              illo ipsa ea. Inventore tempore minus quas veritatis quia
+              voluptatum aliquam. Lorem ipsum dolor sit amet consectetur
+              adipisicing elit. Ipsum velit sit ut, eos maiores nobis ab quasi
+              voluptate incidunt illo ipsa ea. Inventore tempore minus quas
+              veritatis quia voluptatum aliquam. Lorem ipsum dolor sit amet
+              consectetur adipisicing elit. Ipsum velit sit ut, eos maiores
+              nobis ab quasi voluptate incidunt illo ipsa ea. Inventore tempore
+              minus quas veritatis quia voluptatum aliquam.
             </div>
           </div>
           <div className="flex flex-col gap-2 pb-5">
