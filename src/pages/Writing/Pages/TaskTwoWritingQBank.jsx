@@ -65,7 +65,7 @@ const TaskTwoWritingQBank = () => {
 
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
-      <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
+      <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
       <div className="bg-white">

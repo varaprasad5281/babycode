@@ -226,15 +226,15 @@ function App() {
                   </PrivateRoute>
                 }
               />
-              {/* <Route
+              <Route
                 exact
-                path="/writing/:category/:subcategory?/previous-answers"
+                path="/writing/:category/:subcategory?/:questionId"
                 element={
                   <PrivateRoute>
                     <PrevWritingAnswers />
                   </PrivateRoute>
                 }
-              /> */}
+              />
               <Route
                 path="/classes"
                 element={

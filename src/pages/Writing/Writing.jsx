@@ -46,12 +46,17 @@ const Writing = () => {
       const res = await getWritingCategorySubCategory(formData);
       if (!res.data.failure) {
         const data = res.data.data;
+        console.log(data);
         setWritingCategoryData(data.WritingCategoryData);
         setWritingCategoryTask1AcademicData(
           data.WritingCategoryTask1AcademicData
         );
         setWritingCategoryTask1GeneralData(data.WritingCategoryTask1GenralData);
         setUserAllGivenTest(data.userAllGivenTest);
+        sessionStorage.setItem(
+          "prevWritingAnswers",
+          JSON.stringify(data.userAllGivenTest)
+        );
       } else {
         if (res.data.logout) {
           errorLogout(res.data.errorMessage);
@@ -76,7 +81,7 @@ const Writing = () => {
   }, []);
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background">
-      <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
+      <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
       <div className="bg-white">

@@ -11,6 +11,7 @@ import { submitWritingTestAnswer } from "../../../../../api/apiCall";
 import { UserAuth } from "../../../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../../../../utils/redux/otherSlice";
+import BuyMembershipAlert from "../BuyMembershipAlert";
 
 const Question = () => {
   const { category, subcategory } = useParams();
@@ -27,9 +28,26 @@ const Question = () => {
   const [maxWordCount, setMaxWordCount] = useState(
     subcategory !== undefined ? 240 : 140
   );
+  const [showBuyMembershipAlert, setShowBuyMembershipAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
+  const prevAnswers = JSON.parse(sessionStorage.getItem("prevWritingAnswers"));
+  const currentQuestionPrevAnswerData = prevAnswers.find(
+    (question) => question.QuestionUniqueId === questionData.QuestionUniqueId
+  );
+  const prevAnswerPageUrl =
+    subcategory !== undefined
+      ? `/writing/${category}/${subcategory}/${questionData.QuestionUniqueId}`
+      : `/writing/${category}/${questionData.QuestionUniqueId}`;
 
+  let backPageUrl;
+
+  if (subcategory !== undefined) {
+    backPageUrl = `/writing/${category}/${subcategory}`;
+  } else {
+    backPageUrl = `/writing/${category}`;
+  }
   const handleAnswerChange = (e) => {
     const value = e.target.value;
     setAnswer(value);
@@ -94,27 +112,36 @@ const Question = () => {
           QuestionUniqueId: questionData.QuestionUniqueId,
           Answer: answer,
         };
-        console.log(data);
         const encryptedData = createJwt(data);
         const formData = new FormData();
         formData.append("encrptData", encryptedData);
         const res = await submitWritingTestAnswer(formData);
         if (!res.data.failure) {
-          // setAnswer("");
+          setAnswer("");
           const data = res.data.data;
-          console.log(data);
+          const newAnswer = {
+            Answer: answer,
+            QuestionUniqueId: questionData.QuestionUniqueId,
+            Result: data.TestResult,
+            uid: user.uid,
+          };
+          prevAnswers.unshift(newAnswer);
           sessionStorage.setItem(
-            "prevWritingAnswer",
-            JSON.stringify({ testResult: data.TestResult, answer })
+            "prevWritingAnswers",
+            JSON.stringify(prevAnswers)
           );
-          navigate(`/writing/${category}/${subcategory}/previous-answers`);
+          navigate(
+            `/writing/${category}/${subcategory}/${questionData.QuestionUniqueId}`
+          );
         } else {
           if (res.data.logout) {
             errorLogout(res.data.errorMessage);
           } else if (res.data.tokenInvalid) {
             toast.error(res.data.errorMessage);
           } else {
-            toast.error(res.data.errorMessage);
+            // toast.error(res.data.errorMessage);
+            setAlertMessage(res.data.errorMessage);
+            setShowBuyMembershipAlert(true);
           }
         }
       } catch (err) {
@@ -128,17 +155,13 @@ const Question = () => {
   };
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
-      <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
+      <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
       <div className="bg-white">
         <div
           className="flex gap-2 items-center text-xl px-6 py-3 lg:hidden cursor-pointer w-fit"
-          onClick={() =>
-            subcategory
-              ? navigate(`/writing/${category}/${subcategory}`)
-              : navigate(`/writing/${category}`)
-          }
+          onClick={() => navigate(backPageUrl)}
         >
           <button>
             <PiCaretLeftBold />
@@ -179,31 +202,31 @@ const Question = () => {
               />
             )}
             {!showAnswerInput && (
-              <div className="flex gap-6 ">
+              <div className="grid grid-cols-2 sm:flex gap-3 sm:gap-6">
                 <button
                   onClick={() => {
                     setShowAnswers(!showAnswers);
                     setShowAnswerInput(false);
                   }}
-                  className="flex gap-1 md:gap-2 items-center text-[11px] md:text-[12px] bg-[#FCF300] border-[#FCF300]  p-2 border rounded-full"
+                  className="flex gap-1 md:gap-2 justify-center items-center text-[11px] md:text-[12px] bg-[#FCF300] border-[#FCF300] p-2 border rounded-full"
                 >
                   <FaRegLightbulb /> {showAnswers ? "Hide" : "View"} Best
                   Answers
                 </button>
                 <button
                   onClick={handleWriteAnswerClick}
-                  className="flex gap-1 md:gap-2 items-center text-[11px] md:text-[12px]  border rounded-full border-[#1D46C9] text-[#1D46C9] p-2"
+                  className="flex gap-1 md:gap-2 justify-center items-center text-[11px] md:text-[12px]  border rounded-full border-[#1D46C9] text-[#1D46C9] p-2"
                 >
                   <RiEdit2Line /> Write Your Answer
                 </button>
-                {/* <Link
-                  to={`/writing/${category}${
-                    category !== undefined ? "/" + subcategory : ""
-                  }/previous-answers`}
-                  className="flex gap-1 md:gap-2 items-center text-[11px] md:text-[12px]  border rounded-full border-pink-300 text-pink-600 p-2"
-                >
-                  Previous Answer
-                </Link> */}
+                {currentQuestionPrevAnswerData && (
+                  <Link
+                    to={prevAnswerPageUrl}
+                    className="col-span-2 flex gap-1 md:gap-2 justify-center items-center text-[11px] md:text-[12px]  border rounded-full border-pink-300 text-pink-600 p-2"
+                  >
+                    Previous Answer
+                  </Link>
+                )}
               </div>
             )}
             {showAnswerInput && (
@@ -266,6 +289,12 @@ const Question = () => {
         <ImageFullScreenPopup
           image={questionData.image}
           closePopup={() => setShowImagePopup(false)}
+        />
+      )}
+      {showBuyMembershipAlert && (
+        <BuyMembershipAlert
+          message={alertMessage}
+          cancelPopup={() => setShowBuyMembershipAlert(false)}
         />
       )}
     </div>
