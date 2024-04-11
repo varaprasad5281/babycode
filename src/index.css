@@ -117,13 +117,6 @@
   }
 }
 
-.popup-content {
-  max-width: 750px !important;
-  width: 96% !important ;
-  /* box-shadow: rgba(0, 0, 0, 0.16) 0px 0px 3px; */
-  border-radius: 6px;
-  height: 600px !important;
-}
 /* width */
 ::-webkit-scrollbar {
   width: 10px;
