@@ -35,7 +35,7 @@ const RateModal = ({ e }) => (
         <p className="text-center text-[12px]">How was your experience?</p>
         <div className="cr flex gap-3 justify-center text-[20px]">
           <span>
-            <FaRegStar className="has-[.cr:hover]:hidden" />
+            <FaRegStar className="" />
           </span>
           <span>
             <FaRegStar />
