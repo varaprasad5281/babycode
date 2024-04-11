@@ -38,7 +38,9 @@ const TaskTwoSubCategoryList = lazy(() =>
 const TaskTwoWritingQBank = lazy(() =>
   import("./pages/Writing/Pages/TaskTwoWritingQBank")
 );
-const PrevWritingAnswers = lazy(() => import("./pages/Writing/Pages/components/page/PrevWritingAnswer"));
+const PrevWritingAnswers = lazy(() =>
+  import("./pages/Writing/Pages/components/page/PrevWritingAnswer")
+);
 
 export const ScrollToTop = () => {
   const { pathname } = useLocation();

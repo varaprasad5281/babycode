@@ -1,0 +1,6 @@
+.gr-text {
+  background: linear-gradient(90deg, #dd6031 0%, #000000 100%);
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
