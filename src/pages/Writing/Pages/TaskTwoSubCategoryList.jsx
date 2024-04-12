@@ -2,6 +2,7 @@ import React from "react";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import profilePic from "../../../assets/images/profile-icon.png";
+import NoData from "../../../components/NoData";
 
 const TaskTwoSubCategoryList = () => {
   const navigate = useNavigate();
@@ -9,6 +10,12 @@ const TaskTwoSubCategoryList = () => {
 
   const subcategories =
     JSON.parse(sessionStorage.getItem("writingSubcategories")) || [];
+  const prevAnswers =
+    JSON.parse(sessionStorage.getItem("prevWritingAnswers")) || [];
+
+  if (!subcategories.length || !prevAnswers.length) {
+    return <NoData prevUrl={"/writing"} urlLabel={"Writing"} />;
+  }
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end sticky top-0 ">
@@ -18,7 +25,7 @@ const TaskTwoSubCategoryList = () => {
         <div className="flex lg:hidden fixed z-10 w-full px-6 py-3 border-b border-black/10 bg-white">
           <div
             className="flex text-xl items-center gap-2 w-fit cursor-pointer"
-            onClick={() => navigate('/writing')}
+            onClick={() => navigate("/writing")}
           >
             <PiCaretLeftBold />
             <h5 className="">{category}</h5>

@@ -15,7 +15,9 @@ const ImproveListening = ({ materials }) => {
   const dispatch = useDispatch();
 
   const handleMaterialDataClick = (data) => {
-    dispatch(setListeningVideoDetails({...data,isImproveListeningData:true}));
+    dispatch(
+      setListeningVideoDetails({ ...data, isImproveListeningData: true })
+    );
     dispatch(changeListeningModalStatus(true));
   };
 
@@ -23,7 +25,7 @@ const ImproveListening = ({ materials }) => {
     <div className="w-full sm:px-6 lg:px-[3rem]">
       <div className="flex flex-col gap-3">
         <div
-          className="flex items-center gap-2 w-fit cursor-pointer"
+          className="ml-6 sm:ml-0 flex items-center gap-2 w-fit cursor-pointer"
           onClick={() => setMaterialData([])}
         >
           <TiArrowBack className="text-xl -mt-1" />
@@ -37,7 +39,7 @@ const ImproveListening = ({ materials }) => {
             >
               <div className="flex gap-2 items-center justify-between">
                 <span className="font-medium text-md">{data.Name}</span>
-                <PiCaretRightBold />
+                <PiCaretRightBold size={15} />
               </div>
             </div>
           ))}
@@ -66,7 +68,9 @@ const News = ({ data }) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(setListeningVideoDetails({...data.data,isImproveListeningData:true}));
+    dispatch(
+      setListeningVideoDetails({ ...data.data, isImproveListeningData: true })
+    );
     dispatch(changeListeningModalStatus(true));
   };
   return (
@@ -86,7 +90,7 @@ const News = ({ data }) => {
         <div className="flex justify-between gap-3 items-start">
           <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="">
-            <PiCaretRightBold />
+            <PiCaretRightBold size={15} />
           </button>
         </div>
       </div>
@@ -115,7 +119,7 @@ const Books = ({ data, setMaterialData }) => {
         <div className="flex justify-between gap-3 items-start">
           <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="">
-            <PiCaretRightBold />
+            <PiCaretRightBold size={15} />
           </button>
         </div>
       </div>
@@ -144,7 +148,7 @@ const Reel = ({ data, setMaterialData }) => {
         <div className="flex justify-between gap-3 items-start">
           <span className="text-[#AAAAAA] text-sm">{data.Description}</span>
           <button className="">
-            <PiCaretRightBold />
+            <PiCaretRightBold size={15} />
           </button>
         </div>
       </div>

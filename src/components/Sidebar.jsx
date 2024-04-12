@@ -6,7 +6,7 @@ import ShopIcon from "../assets/svg/storefront-icon.svg";
 import MsgIcon from "../assets/svg/message-icon.svg";
 import LogoutIcon from "../assets/svg/signout-icon.svg";
 import BuyNowSection from "../pages/Home/components/BuyNowSection";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { UserAuth } from "../context/AuthContext";
 import { useSelector, useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/otherSlice";
@@ -66,14 +66,14 @@ const Sidebar = () => {
       <div className="flex flex-1 md:max-h-screen">
         <div className="hidden w-[28%] max-w-[28%] bg-gradient-to-b from-primary-500 to-primary-700 lg:flex flex-col items-center justify-between pb-3">
           <div className="flex flex-col items-center w-full">
-            <div className={`flex gap-1 items-center`}>
+            <Link to='/' className={`flex gap-1 items-center`}>
               <img
                 src={Logo}
                 alt="logo"
                 className="h-12 w-12 object-contain my-1"
               />
               <span className="text-xl text-white">BabyCode</span>
-            </div>
+            </Link>
             <div className="flex w-full items-center flex-col gap-2 my-3 xl:my-6">
               {navOptions.map(({ label, icon, url }) => (
                 <div

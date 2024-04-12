@@ -81,7 +81,10 @@ function App() {
     <Suspense fallback={<LoadingSpinner />}>
       <AuthContextProvider>
         <ScrollToTop />
-        <Toaster position="top-center" />
+        <Toaster
+          position="top-center"
+          
+        />
         <ModalWrapper>
           {isLoading && <LoadingSpinner />}
           <Routes>
@@ -221,7 +224,7 @@ function App() {
               />
               <Route
                 exact
-                path="/writing/:category/subcategories"
+                path="/writing/:category/tasktwo-subcategories"
                 element={
                   <PrivateRoute>
                     <TaskTwoSubCategoryList />
@@ -230,7 +233,7 @@ function App() {
               />
               <Route
                 exact
-                path="/writing/:category/:subcategory?/:questionId"
+                path="/writing/:category/:subcategory?/:questionId/prev-answer"
                 element={
                   <PrivateRoute>
                     <PrevWritingAnswers />

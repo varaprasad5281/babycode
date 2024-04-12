@@ -1,17 +1,15 @@
-import React, { useState } from "react";
+import React from "react";
 import ProfileIcon from "../../../../../assets/images/profile-icon.png";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
+import NoData from "../../../../../components/NoData";
 
 const PrevWritingAnswers = () => {
-  const navigate = useNavigate();
   const { category, subcategory, questionId } = useParams();
-  const answersData = JSON.parse(sessionStorage.getItem("prevWritingAnswers"));
+  const answersData =
+    JSON.parse(sessionStorage.getItem("prevWritingAnswers")) || [];
   const prevAnswer = answersData.find(
-    (question) => question.QuestionUniqueId === questionId
-  );
-  const [testResult, setTestResult] = useState(
-    prevAnswer.Result.split("\n") || []
+    (question) => question?.QuestionUniqueId === questionId
   );
 
   let backPageUrl;
@@ -19,6 +17,10 @@ const PrevWritingAnswers = () => {
     backPageUrl = `/writing/${category}/${subcategory}/Question`;
   } else {
     backPageUrl = `/writing/${category}/Question`;
+  }
+
+  if (!answersData || !prevAnswer) {
+    return <NoData prevUrl={"/writing"} urlLabel={"Writing"} />;
   }
 
   return (
@@ -40,7 +42,7 @@ const PrevWritingAnswers = () => {
           className="flex text-xl items-center gap-2 w-fit cursor-pointer"
         >
           <PiCaretLeftBold />
-          <h5 className="">Previous Answers / Results</h5>
+          <h5 className="">Previous Answer / Result</h5>
         </Link>
       </div>
 
@@ -68,7 +70,7 @@ const PrevWritingAnswers = () => {
             Question
           </Link>
           <PiCaretRightBold />
-          <Link className="text-primary-500">Previous Answers / Results</Link>
+          <Link className="text-primary-500">Previous Answer / Result</Link>
         </div>
 
         <div className="px-6 lg:px-[2rem] mt-[4rem] lg:mt-6">
@@ -77,18 +79,13 @@ const PrevWritingAnswers = () => {
               <div className="bg-primary-50 p-2 rounded-md w-fit text-primary-500">
                 Result / Band
               </div>
-              <div className="flex flex-col gap-1">
-                {testResult.length > 0 &&
-                  testResult.map((text, i) => <p key={i}>{text}</p>)}
-              </div>
+              <p className="whitespace-pre-line">{prevAnswer?.Result}</p>
             </div>
             <div className="flex flex-col gap-2 pb-5">
               <div className="bg-primary-50 p-2 rounded-md w-fit text-primary-500">
                 Answer 1
               </div>
-              <p>
-                {prevAnswer.Answer}
-              </p>
+              <p>{prevAnswer?.Answer}</p>
             </div>
           </div>
         </div>

@@ -12,6 +12,7 @@ import { UserAuth } from "../../../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../../../../utils/redux/otherSlice";
 import BuyMembershipAlert from "../BuyMembershipAlert";
+import NoData from "../../../../../components/NoData";
 
 const Question = () => {
   const { category, subcategory } = useParams();
@@ -24,22 +25,22 @@ const Question = () => {
   const answersRef = useRef(null);
   const textareaRef = useRef(null);
   const [answer, setAnswer] = useState("");
-  const [answerErr, setAnswerErr] = useState("");
-  const [maxWordCount, setMaxWordCount] = useState(
+  const [minWordCount, setMinWordCount] = useState(
     subcategory !== undefined ? 240 : 140
   );
   const [showBuyMembershipAlert, setShowBuyMembershipAlert] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
-  const prevAnswers = JSON.parse(sessionStorage.getItem("prevWritingAnswers"));
+  const prevAnswers =
+    JSON.parse(sessionStorage.getItem("prevWritingAnswers")) || [];
   const currentQuestionPrevAnswerData = prevAnswers.find(
-    (question) => question.QuestionUniqueId === questionData.QuestionUniqueId
+    (question) => question?.QuestionUniqueId === questionData?.QuestionUniqueId
   );
   const prevAnswerPageUrl =
     subcategory !== undefined
-      ? `/writing/${category}/${subcategory}/${questionData.QuestionUniqueId}`
-      : `/writing/${category}/${questionData.QuestionUniqueId}`;
+      ? `/writing/${category}/${subcategory}/${questionData?.QuestionUniqueId}/prev-answer`
+      : `/writing/${category}/${questionData?.QuestionUniqueId}/prev-answer`;
 
   let backPageUrl;
 
@@ -57,14 +58,16 @@ const Question = () => {
     setWordsCount(count);
     autoResizeTextArea(e.target);
 
-    if (value.trim() === "") {
-      return setAnswerErr("Answer cannot be empty");
-    } else {
-      if (count > maxWordCount) {
-        return setAnswerErr(`Answer should be less than ${maxWordCount} words`);
-      }
-      setAnswerErr("");
-    }
+    // if (value.trim() === "") {
+    //   return setAnswerErr("Answer cannot be empty");
+    // } else {
+    //   if (count < minWordCount) {
+    //     return setAnswerErr(
+    //       `Answer should not be less than ${minWordCount} words`
+    //     );
+    //   }
+    //   setAnswerErr("");
+    // }
   };
 
   // increase the row height of the text area
@@ -101,7 +104,13 @@ const Question = () => {
 
   const submitAnswer = async (e) => {
     e.preventDefault();
-    if (!answerErr && answer.trim() !== "") {
+    if (answer.trim() !== "") {
+      if (wordsCount < minWordCount) {
+        toast(`Answer should not be less than ${minWordCount} words`, {
+          id: "validationToast",
+        });
+        return;
+      }
       try {
         dispatch(setLoading(true));
         const user = JSON.parse(localStorage.getItem("userData"));
@@ -130,9 +139,8 @@ const Question = () => {
             "prevWritingAnswers",
             JSON.stringify(prevAnswers)
           );
-          navigate(
-            `/writing/${category}/${subcategory}/${questionData.QuestionUniqueId}`
-          );
+          navigate(prevAnswerPageUrl);
+          toast.success("Answer submitted successfully");
         } else {
           if (res.data.logout) {
             errorLogout(res.data.errorMessage);
@@ -145,14 +153,21 @@ const Question = () => {
           }
         }
       } catch (err) {
-        toast.error(err.message);
+        toast(err.message);
       } finally {
         dispatch(setLoading(false));
       }
     } else {
-      setAnswerErr("Answer cannot be empty");
+      // setAnswerErr("Answer cannot be empty");
+      toast("Answer cannot empty", {
+        id: "validationToast",
+      });
     }
   };
+
+  if (!questionData) {
+    return <NoData prevUrl={"/writing"} urlLabel={"Writing"} />;
+  }
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
       <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
@@ -229,7 +244,7 @@ const Question = () => {
                 )}
               </div>
             )}
-            {showAnswerInput && (
+            {showAnswerInput && questionData && (
               <form
                 onSubmit={submitAnswer}
                 className="flex flex-col w-full gap-2 pb-3"
@@ -248,15 +263,11 @@ const Question = () => {
                       Word Count: {wordsCount}
                     </p>
                   )}
-                  {answerErr && (
+                  {/* {answerErr && (
                     <p className="text-red-600 w-fit text-sm">{answerErr}</p>
-                  )}
+                  )} */}
                 </div>
-                <button
-                  disabled={!answer.length}
-                  type="submit"
-                  className="primary-btn disabled:bg-primary-100 w-fit"
-                >
+                <button type="submit" className="primary-btn w-fit">
                   Submit & Check Band Score
                 </button>
               </form>

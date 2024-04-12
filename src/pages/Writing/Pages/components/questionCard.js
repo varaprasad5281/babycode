@@ -19,7 +19,7 @@ const QuestionCard = ({ item, category, subcategory }) => {
         <p className="line-clamp-2 sm:w-[95%]">{item.Question}</p>
       </div>
       <div>
-        <PiCaretRightBold />
+        <PiCaretRightBold size={15} />
       </div>
     </Link>
   );

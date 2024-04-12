@@ -10,10 +10,9 @@ import { fetchWritingQuestionAnswer } from "../../../api/apiCall";
 import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { setLoading } from "../../../utils/redux/otherSlice";
+import NoData from "../../../components/NoData";
 
 const TaskTwoWritingQBank = () => {
-  const [activeCategory, setCategory] = useState(0);
-  const [activeType, setType] = useState(0);
   const { category, subcategory } = useParams();
   const navigate = useNavigate();
   const effectRan = useRef(true);
@@ -63,6 +62,13 @@ const TaskTwoWritingQBank = () => {
     }
   }, []);
 
+  const prevAnswers =
+    JSON.parse(sessionStorage.getItem("prevWritingAnswers")) || [];
+
+  if (!prevAnswers.length) {
+    return <NoData prevUrl={"/writing"} urlLabel={"Writing"} />;
+  }
+
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
       <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
@@ -71,7 +77,7 @@ const TaskTwoWritingQBank = () => {
       <div className="bg-white">
         <div
           className="flex text-xl gap-2 items-center px-6 py-3 lg:hidden cursor-pointer w-fit"
-          onClick={() => navigate(`/writing/${category}/subcategories`)}
+          onClick={() => navigate(`/writing/${category}/tasktwo-subcategories`)}
         >
           <button>
             <PiCaretLeftBold />
@@ -83,7 +89,9 @@ const TaskTwoWritingQBank = () => {
         <div className="hidden lg:flex items-center gap-2">
           <Link to="/">Home</Link> <PiCaretRightBold />{" "}
           <Link to="/writing">Writing</Link> <PiCaretRightBold />{" "}
-          <Link to={`/writing/${category}/subcategories`}>{category}</Link>{" "}
+          <Link to={`/writing/${category}/tasktwo-subcategories`}>
+            {category}
+          </Link>{" "}
           <PiCaretRightBold />{" "}
           <Link
             className="text-primary-500"
