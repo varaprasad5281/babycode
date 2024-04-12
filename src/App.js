@@ -160,7 +160,7 @@ function App() {
                   <PrivateRoute>
                     {/* <Header /> */}
                     <Feedback />
-                    {/* <BottomTabs /> */}
+                    <BottomTabs />
                   </PrivateRoute>
                 }
               />

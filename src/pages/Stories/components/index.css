@@ -1,0 +1,9 @@
+.fr:hover .play {
+  @apply shadow !scale-110;
+}
+
+.popup-content {
+  @apply w-auto;
+
+  @apply !max-w-[350px] !w-full p-0 overflow-auto rounded-xl aspect-[1/1.6];
+}

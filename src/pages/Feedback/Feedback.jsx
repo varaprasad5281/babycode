@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import profilePic from "../../assets/images/profile-icon.png";
 import feedback from "../../assets/images/feedback.png";
-
 import UnderDevelopment from "../../components/UnderDevelopment";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import { Link, useNavigate } from "react-router-dom";
@@ -12,7 +11,7 @@ const Feedback = () => {
   const [feedvalue, setFeedvalue] = useState("");
 
   return (
-    <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
+    <div className="w-full lg:max-h-screen overflow-scroll pb-5 gr bg-background ">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end z-10 sticky top-0 ">
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
@@ -43,7 +42,7 @@ const Feedback = () => {
               onChange={(e) => setFeedvalue(e.target.value)}
               placeholder="Please report an issue or request a feature"
               rows={10}
-              className="border-[1px] outline-none border-[#D7D5D5] rounded-lg p-2 resize-none w-full"
+              className="border-[1px] outline-none border-[#D7D5D5] rounded-lg p-2  h-auto overflow-auto  w-full "
             ></textarea>
             <button
               type="submit"

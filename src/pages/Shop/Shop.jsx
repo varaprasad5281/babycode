@@ -6,6 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { PiCaretLeftBold, PiCaretRightBold } from "react-icons/pi";
 import "./index.css";
 import Buycard from "./components/Buycard";
+import Boughtcard from "./components/boughtCard";
 const Shop = () => {
   const [activeCategory, setActiveCategory] = useState(0);
   const [showSidebar, setSideBar] = useState(false);
@@ -25,7 +26,7 @@ const Shop = () => {
       </div>
       <main className="p-4 px-4 md:px-6 lg:px-8 ">
         <div className="flex items-center gap-2">
-          <Link to="/feedback">Shop</Link> <PiCaretRightBold />{" "}
+          <Link to="/shop">Shop</Link> <PiCaretRightBold />{" "}
           <p className="text-primary-500">
             {activeCategory === 0 ? "Your Books" : "Buy Books"}
           </p>
@@ -52,7 +53,7 @@ const Shop = () => {
             </button>
           </div>
 
-          <Buycard />
+          {activeCategory === 0 ? <Boughtcard /> : <Buycard />}
         </div>
       </main>
     </div>

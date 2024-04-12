@@ -2,7 +2,7 @@ import React from "react";
 import Popup from "reactjs-popup";
 import book from "../../../assets/images/book-image.png";
 import { RxCross2 } from "react-icons/rx";
-import { FaRegStar } from "react-icons/fa";
+import { FaRegStar, FaStar } from "react-icons/fa";
 const RateModal = ({ e }) => (
   <Popup
     modal
@@ -35,19 +35,24 @@ const RateModal = ({ e }) => (
         <p className="text-center text-[12px]">How was your experience?</p>
         <div className="cr flex gap-3 justify-center text-[20px]">
           <span>
-            <FaRegStar className="" />
+            <FaRegStar className="non-check-star" />
+            <FaStar className="check-star" />
           </span>
           <span>
-            <FaRegStar />
+            <FaRegStar className="non-check-star" />
+            <FaStar className="check-star" />
           </span>
           <span>
-            <FaRegStar />
+            <FaRegStar className="non-check-star" />
+            <FaStar className="check-star" />
           </span>
           <span>
-            <FaRegStar />
+            <FaRegStar className="non-check-star" />
+            <FaStar className="check-star" />
           </span>
           <span>
-            <FaRegStar />
+            <FaRegStar className="non-check-star" />
+            <FaStar className="check-star" />
           </span>
         </div>
         <textarea
