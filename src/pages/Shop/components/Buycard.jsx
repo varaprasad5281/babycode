@@ -5,7 +5,7 @@ import { FaLock } from "react-icons/fa";
 
 import Drawer from "react-modern-drawer";
 import "react-modern-drawer/dist/index.css";
-import { useState } from "react";
+import { Fragment, useState } from "react";
 import { PiCaretLeftBold } from "react-icons/pi";
 import { FaStar } from "react-icons/fa";
 import RateModal from "./RateModal";
@@ -42,8 +42,8 @@ const Buycard = () => {
   };
   return (
     <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] pt-5 gap-4 flex-wrap">
-      {data.map((e) => (
-        <>
+      {data.map((e, i) => (
+        <Fragment key={i}>
           <div
             onClick={toggleDrawer}
             className="p-3 shadow bg-gradient-to-t relative rounded-2xl overflow-hidden from-[#ffe4c8] to-[#fffcf1]"
@@ -143,7 +143,7 @@ const Buycard = () => {
               </div>
             </Drawer>{" "}
           </div>
-        </>
+        </Fragment>
       ))}
     </div>
   );

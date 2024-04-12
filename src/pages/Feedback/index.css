@@ -4,3 +4,14 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+@media (max-width: 678px) {
+  .gr {
+    background: radial-gradient(
+        circle at 70% 30%,
+        #cccccc3d 15%,
+        transparent 15%
+      ),
+      radial-gradient(circle at 30% 70%, #135ade0f 15%, #f7f7f790 15%);
+  }
+}
