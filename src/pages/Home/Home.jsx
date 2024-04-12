@@ -41,7 +41,7 @@ const gridItems = [
   {
     icon: Reading,
     title: "Reading",
-    url: "/reading",
+    url: "/reading/reading_tests",
   },
   {
     icon: Writing,

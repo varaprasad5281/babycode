@@ -81,10 +81,7 @@ function App() {
     <Suspense fallback={<LoadingSpinner />}>
       <AuthContextProvider>
         <ScrollToTop />
-        <Toaster
-          position="top-center"
-          
-        />
+        <Toaster position="top-center" />
         <ModalWrapper>
           {isLoading && <LoadingSpinner />}
           <Routes>

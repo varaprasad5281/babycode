@@ -1,5 +1,4 @@
 import "./index.css";
-import data from "./reading.json";
 import ReadingTestCard from "./readingTestCard";
 
 const ReadingTest = ({ tests, attendedTests, getData }) => {

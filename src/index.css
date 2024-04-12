@@ -21,6 +21,10 @@
   z-index: 999;
 }
 
+.react-pdf__Page__canvas{
+  margin-bottom: 1rem;
+}
+
 @layer utilities {
   .primary-btn {
     @apply bg-primary-500 hover:bg-primary-100 transition-colors duration-300 text-white py-2 px-4 rounded-full;

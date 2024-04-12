@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import { UserAuth } from "../../../context/AuthContext";
 import { useDispatch } from "react-redux";
 import { toast } from "react-hot-toast";
-import showRetakeTestAlert from "./RetakeTestAlertToast";
+import showRetakeListeningTestAlert from "./RetakeListeningTestAlertToast";
 
 const ListeningTestItem = ({
   test,
@@ -79,7 +79,7 @@ const ListeningTestItem = ({
 
   const handleStartClick = () => {
     if (attended) {
-      return showRetakeTestAlert(test);
+      return showRetakeListeningTestAlert(test);
     }
     startTest();
   };

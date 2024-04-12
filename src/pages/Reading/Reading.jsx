@@ -16,7 +16,6 @@ import { getReadingData } from "../../api/apiCall";
 const Reading = () => {
   const dispatch = useDispatch();
   const effectRan = useRef(true);
-  const location = useLocation();
   const navigate = useNavigate();
   const { category = "reading_tests" } = useParams();
   console.log(category);
@@ -86,8 +85,11 @@ const Reading = () => {
         <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
       </header>
       <div className="bg-white sticky top-0 z-10">
-        <div className="flex gap-2 items-center p-3 lg:hidden">
-          <button onClick={() => navigate(-1)}>
+        <div
+          onClick={() => navigate("/")}
+          className="w-fit cursor-pointer flex gap-2 items-center p-3 lg:hidden"
+        >
+          <button>
             <PiCaretLeftBold />
           </button>{" "}
           Reading Practice
@@ -159,7 +161,9 @@ const Reading = () => {
             ) : (
               <>
                 {readingPractiseMaterials && (
-                  <ImproveTest materials={readingPractiseMaterials} />
+                  <ImproveTest
+                    materials={readingPractiseMaterials}
+                  />
                 )}
               </>
             )}

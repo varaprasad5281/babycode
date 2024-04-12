@@ -1,10 +1,12 @@
 import { useLayoutEffect, useState } from "react";
-import reading from "../../../assets/images/reading-image.png";
 import { UserAuth } from "../../../context/AuthContext";
 import { createJwt, formatDate } from "../../../utils/helpers";
 import { useDispatch } from "react-redux";
 import { startReadingTest } from "../../../api/apiCall";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { toast } from "react-hot-toast";
+import { setLoading } from "../../../utils/redux/otherSlice";
+import showRetakeReadingTestAlert from "./RetakeReadingTestAlert";
 
 const ReadingTestCard = ({
   test,
@@ -14,6 +16,7 @@ const ReadingTestCard = ({
 }) => {
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [testStatus, setTestStatus] = useState("");
   const { category } = useParams();
   const isOldTest = Boolean(lastAttendedTest?.id > test.id);
@@ -22,6 +25,7 @@ const ReadingTestCard = ({
   );
   const user = JSON.parse(localStorage.getItem("userData"));
   const uniqueDeviceId = localStorage.getItem("uniqueDeviceId");
+
   // Check if the test is "Latest", "Pending", or "Completed"
   useLayoutEffect(() => {
     if (attended) {
@@ -33,31 +37,58 @@ const ReadingTestCard = ({
     }
   }, [attended, isOldTest]);
 
-  const handleSubmit = async () => {
-    setAttended(true);
-    // uid,platform,uniqueDeviceId,uniqueTestNumber,testFile,testNumber
-    const data = {
-      uid: user.uid,
-      platform: "web",
-      uniqueDeviceId,
-      uniqueTestNumber: test.uniqueTestNumber,
-      testFile: test.testFile,
-      testNumber: test.testNumber,
-    };
-    const encryptedData = createJwt(data);
-    console.log(encryptedData);
-    const formData = new FormData();
-    formData.append("encrptData", encryptedData);
+  const attendTest = async () => {
+    try {
+      dispatch(setLoading(true));
+      // uid,platform,uniqueDeviceId,uniqueTestNumber,testFile,testNumber
+      const data = {
+        uid: user.uid,
+        platform: "web",
+        uniqueDeviceId,
+        uniqueTestNumber: test.uniqueTestNumber,
+        testFile: test.testFile,
+        testNumber: test.testNumber,
+      };
+      const encryptedData = createJwt(data);
 
-    const res = await startReadingTest(formData);
-    console.log(res);
+      const formData = new FormData();
+      formData.append("encrptData", encryptedData);
+
+      const res = await startReadingTest(formData);
+      if (!res.data.failure) {
+        setAttended(true);
+        navigate(`/reading/${category}/material`, { state: { item: test } });
+      } else {
+        if (res.data.logout) {
+          errorLogout(res.data.errorMessage);
+        } else if (res.data.tokenInvalid) {
+          toast.error(res.data.errorMessage);
+        } else {
+          toast.error(res.data.errorMessage);
+        }
+      }
+    } catch (err) {
+      toast.error(err.message);
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+  const handleStartTestClick = () => {
+    if (!attended) {
+      attendTest();
+    } else {
+      showRetakeReadingTestAlert({test,category})
+    }
+    console.log(test,category)
   };
 
   return (
-    <Link
-      to={`/reading/${category}/material`}
-      state={{ item: test }}
-      className="test-card relative"
+    <div
+      // to={`/reading/${category}/material`}
+      // state={{ item: test }}
+      className="test-card relative cursor-pointer"
+      onClick={handleStartTestClick}
     >
       <div className="flex gap-2">
         <img
@@ -91,11 +122,14 @@ const ReadingTestCard = ({
         </p>
       </div>
       <div className=" hidden md:flex">
-        <button className="p-2 px-3 bg-[#eaf0fc] text-[12px] rounded-full font-[600] text-[#135ade]">
+        <button
+          onClick={attendTest}
+          className="p-2 px-3 bg-[#eaf0fc] text-[12px] rounded-full font-[600] text-[#135ade]"
+        >
           Start Test
         </button>
       </div>
-    </Link>
+    </div>
   );
 };
 

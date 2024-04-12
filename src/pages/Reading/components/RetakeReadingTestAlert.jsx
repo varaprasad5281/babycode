@@ -1,22 +1,18 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { toast } from "react-hot-toast";
 import { motion } from "framer-motion";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
-import {
-  changeListeningModalStatus,
-  setListeningVideoDetails,
-} from "../../../utils/redux/otherSlice";
+import { useNavigate } from "react-router-dom";
 
-const RetakeTestAlert = ({ test }) => {
+const RetakeTestAlert = ({ test, category }) => {
   const overlay = useRef(null);
   const wrapper = useRef(null);
-  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const onConfirm = async () => {
     toast.dismiss();
     setTimeout(() => {
-      dispatch(setListeningVideoDetails(test));
-      dispatch(changeListeningModalStatus(true));
+      navigate(`/reading/${category}/material`, { state: { item: test } });
     }, 300);
   };
 
@@ -85,10 +81,10 @@ const RetakeTestAlert = ({ test }) => {
   );
 };
 
-const showRetakeTestAlert = (test) => {
-  toast.custom(<RetakeTestAlert test={test} />, {
+const showRetakeReadingTestAlert = ({ test, category }) => {
+  toast.custom(<RetakeTestAlert test={test} category={category} />, {
     duration: Infinity,
   });
 };
 
-export default showRetakeTestAlert;
+export default showRetakeReadingTestAlert;
