@@ -82,7 +82,10 @@ const Writing = () => {
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background">
       <header className="hidden p-2 px-[3rem] w-[100%] bg-white lg:flex justify-end sticky top-0 ">
-        <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
+        <Link to="/profile">
+          {" "}
+          <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
+        </Link>
       </header>
       <div className="bg-white">
         <div className="flex lg:hidden fixed z-10 w-full px-6 py-3 border-b border-black/10 bg-white">

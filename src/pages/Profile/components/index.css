@@ -1,0 +1,5 @@
+.popup-content {
+  @apply w-auto;
+
+  @apply !max-w-[350px] !w-full p-0 overflow-auto rounded-xl p-4;
+}

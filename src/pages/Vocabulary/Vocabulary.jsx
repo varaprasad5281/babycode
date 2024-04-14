@@ -37,7 +37,7 @@ const Vocabulary = () => {
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
   const effectRan = useRef(true);
-  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId")||'';
+  const uniqueDeviceId = localStorage.getItem("uniqueDeviceId") || "";
   const [vocabularies, setVocabularies] = useState([]);
   const [otherResources, setOtherResources] = useState([]);
   const [showVocabularyCategoryData, setShowVocabularyCategoryData] =
@@ -154,11 +154,14 @@ const Vocabulary = () => {
       <div className="sticky z-10 left-0 top-0 hidden lg:flex justify-end items-center py-[0.4rem] w-full bg-white">
         <div className="items-center gap-6 px-[3rem]">
           <div className="p-[.2rem] rounded-full cursor-pointer">
-            <img
-              src={ProfileIcon}
-              alt=""
-              className="w-8 h-8 object-contain rounded-full"
-            />
+            <Link to="/profile">
+              {" "}
+              <img
+                src={ProfileIcon}
+                alt=""
+                className="w-8 h-8 object-contain rounded-full"
+              />{" "}
+            </Link>
           </div>
         </div>
       </div>
@@ -246,7 +249,7 @@ const Vocabulary = () => {
                   onChange={searchVocabulary}
                   onKeyDown={(e) => {
                     if (e.key === "Enter") {
-                      handleClickEnterOnSearch(e)
+                      handleClickEnterOnSearch(e);
                     }
                   }}
                 />

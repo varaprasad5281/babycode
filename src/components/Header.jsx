@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { changeLoginModalStatus } from "../utils/redux/otherSlice";
 import { checkAuth } from "../utils/helpers";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const options = ["IELTS", "PTE", "TOEFL"];
 
@@ -29,6 +29,7 @@ const Header = () => {
               alt=""
               onClick={handleClick}
             />
+
             <span className="text-white font-medium text-xl">Home</span>
             <img
               onClick={handleClick}

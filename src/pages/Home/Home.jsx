@@ -19,7 +19,7 @@ import {
   setLoading,
 } from "../../utils/redux/otherSlice";
 import { checkAuth, createJwt } from "../../utils/helpers";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getAppInformation } from "../../api/apiCall";
 import { toast } from "react-hot-toast";
 import { UserAuth } from "../../context/AuthContext";
@@ -183,12 +183,15 @@ const Home = () => {
             className="w-8 h-8 object-contain cursor-pointer"
           />
           {/* <div className="p-[.2rem] rounded-full flex gap-2 items-center text-2xl text-gray-400 border cursor-pointer border-gray-300"> */}
-          <img
-            onClick={handleClick}
-            src={ProfileIcon}
-            alt=""
-            className="w-8 h-8 object-contain rounded-full"
-          />
+          <Link to="/profile">
+            {" "}
+            <img
+              onClick={handleClick}
+              src={ProfileIcon}
+              alt=""
+              className="w-8 h-8 object-contain rounded-full"
+            />
+          </Link>
           {/* <RxCaretDown />
           </div> */}
         </div>

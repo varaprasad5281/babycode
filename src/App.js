@@ -12,6 +12,7 @@ import LoadingSpinner from "./components/LoadingSpinner";
 import Question from "./pages/Writing/Pages/components/page/questionRoute";
 import ReadingPractice from "./pages/Reading/components/readingPractice";
 import ReadingMaterial from "./pages/Reading/components/readingMaterial";
+import Profile from "./pages/Profile/Profile";
 
 const Header = lazy(() => import("./components/Header"));
 const Home = lazy(() => import("./pages/Home/Home"));
@@ -141,6 +142,14 @@ function App() {
                 element={
                   <PrivateRoute>
                     <Stories />
+                  </PrivateRoute>
+                }
+              />
+              <Route
+                path="/profile"
+                element={
+                  <PrivateRoute>
+                    <Profile />
                   </PrivateRoute>
                 }
               />
