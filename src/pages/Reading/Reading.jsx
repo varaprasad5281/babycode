@@ -18,7 +18,6 @@ const Reading = () => {
   const effectRan = useRef(true);
   const navigate = useNavigate();
   const { category = "reading_tests" } = useParams();
-  console.log(category);
   const [readingTestList, setReadingTestList] = useState([]);
   const [readingPractiseMaterials, setReadingPractiseMaterials] = useState([]);
   const [userAttendedTest, setUserAttendedTest] = useState([]);
@@ -42,21 +41,17 @@ const Reading = () => {
         };
 
         const encryptedData = createJwt(data);
-        // console.log(encryptedData);
         const formData = new FormData();
         formData.append("encrptData", encryptedData);
 
         const response = await getReadingData(formData); //fetching reading data
         if (!response.data.failure) {
-          console.log("2", response.data.data);
-          // response: {failure: boolean,...}
           setReadingTestList(response.data.data?.ReadingTestList);
           setReadingPractiseMaterials(
             response.data.data?.readingPracticeMaterial
           );
           setUserAttendedTest(response.data.data?.userAttendedTest);
         } else {
-          // console.log("1", response);
           if (response.data.logout) {
             errorLogout(response.data.errorMessage);
           } else if (response.data.tokenInvalid) {

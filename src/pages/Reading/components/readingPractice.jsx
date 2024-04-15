@@ -9,7 +9,6 @@ import "reactjs-popup/dist/index.css";
 import { Link, useParams } from "react-router-dom";
 
 const ReadingPractice = ({ item }) => {
-  console.log(item);
   const { category } = useParams();
   const [isOpen, setIsOpen] = useState(false); // State for popup visibility
 

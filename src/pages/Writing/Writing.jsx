@@ -46,7 +46,6 @@ const Writing = () => {
       const res = await getWritingCategorySubCategory(formData);
       if (!res.data.failure) {
         const data = res.data.data;
-        console.log(data);
         setWritingCategoryData(data.WritingCategoryData);
         setWritingCategoryTask1AcademicData(
           data.WritingCategoryTask1AcademicData

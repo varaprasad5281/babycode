@@ -54,7 +54,6 @@ const ListeningTestItem = ({
       const formData = new FormData();
       formData.append("encrptData", encryptedData);
       const response = await startListeningTest(formData);
-      console.log(response.data);
       if (!response.data.failure) {
         getData();
         setTestStatus("Completed");

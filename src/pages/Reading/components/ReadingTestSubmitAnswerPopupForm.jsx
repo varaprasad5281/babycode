@@ -29,16 +29,18 @@ const ReadingTestSubmitAnswerPopupForm = ({ closePopup, test }) => {
   // submit the answer
   const checkBandScore = async () => {
     try {
-      // “uid,platform,uniqueDeviceId,uniqueTestNumber,correctAnswerCount,userName
       const data = {
         uid: user.uid,
         platform: "web",
         uniqueDeviceId:
-          JSON.parse(localStorage.getItem("uniqueDeviceId")) || "",
+          localStorage.getItem("uniqueDeviceId") || "",
         uniqueTestNumber: test.uniqueTestNumber,
-        correctAnswerCount: "correctAnswerCount",
+        correctAnswerCount: answer,
         userName: user.fullName,
       };
+
+      console.log({user})
+      console.log({data})
     } catch (err) {
       toast.error(err.message);
     }
@@ -79,7 +81,7 @@ const ReadingTestSubmitAnswerPopupForm = ({ closePopup, test }) => {
             value={answer}
             onChange={handleCheckBandInputChange}
           />
-          <button onClick={closePopup} className="primary-btn w-fit mt-2">
+          <button onClick={checkBandScore} className="primary-btn w-fit mt-2">
             Submit
           </button>
         </div>

@@ -6,7 +6,7 @@ import { checkListeningTestBandScore } from "../../../api/apiCall";
 import { UserAuth } from "../../../context/AuthContext";
 import Notiflix from "notiflix";
 
-const CheckBandPopupForm = ({
+const ListeningCheckBandPopupForm = ({
   changeModalStatus,
   selectedTest,
   setComments,
@@ -36,7 +36,7 @@ const CheckBandPopupForm = ({
   const submitAnswer = async (e) => {
     e.preventDefault();
     const user = JSON.parse(localStorage.getItem("userData"));
-    if (input !== "") {
+    if (input.trim() !== "") {
       try {
         const data = {
           uid: user.uid,
@@ -136,4 +136,4 @@ const CheckBandPopupForm = ({
   );
 };
 
-export default CheckBandPopupForm;
+export default ListeningCheckBandPopupForm;

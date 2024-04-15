@@ -45,7 +45,6 @@ const Listening = () => {
 
         const response = await getListeningPractiseData(formData);
         if (!response.data.failure) {
-          console.log(response);
           const listeningTestList = response.data.data?.listeningTestList;
           const materialsList = response.data.data?.materials;
           const attendedList = response.data.data?.userAttendedTest;

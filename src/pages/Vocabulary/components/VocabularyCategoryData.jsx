@@ -88,7 +88,6 @@ const VocabularyCategoryData = ({
       const formData = new FormData();
       formData.append("encrptData", encryptedData);
       const response = await vocabularySearch(formData);
-      console.log(response);
       if (!response.data.failure) {
         if (response.data.data.dataFromDb) {
           setVocabularyData(response.data.data.resourceList);

@@ -1,8 +1,6 @@
 import { PiCaretRight } from "react-icons/pi";
-import reading from "../../../assets/images/reading-image.png";
 
 const ImproveTestCard = ({ item }) => {
-  console.log(item);
   return (
     <div className="test-card">
       <div className="flex gap-2">

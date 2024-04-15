@@ -81,7 +81,6 @@ const ReadingTestCard = ({
     } else {
       showRetakeReadingTestAlert({ test, category });
     }
-    console.log(test, category);
   };
 
   return (

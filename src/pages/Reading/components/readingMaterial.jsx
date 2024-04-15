@@ -24,8 +24,6 @@ const ReadingMaterial = () => {
   const { category } = useParams();
   const [showAnswerSubmitPopup, setShowAnswerSubmitPopup] = useState(false);
 
-  console.log(item?.testFile);
-
   useEffect(() => {
     if (!item) {
       navigate(`/reading/${category}`);

@@ -31,8 +31,7 @@ import {
 } from "../../../api/apiCall";
 import { UserAuth } from "../../../context/AuthContext";
 import { TiArrowBack } from "react-icons/ti";
-import Notiflix from "notiflix";
-import CheckBandPopupForm from "./CheckBandPopupForm";
+import ListeningCheckBandPopupForm from "./ListeningCheckBandPopupForm";
 
 const ListeningModal = () => {
   const dispatch = useDispatch();
@@ -358,7 +357,7 @@ const ListeningModal = () => {
             </>
           )}
           {showCheckBandModal && (
-            <CheckBandPopupForm
+            <ListeningCheckBandPopupForm
               changeModalStatus={setShowCheckBandModal}
               selectedTest={listeningVideoDetails}
               setComments={setComments}
@@ -542,7 +541,6 @@ const CommentReplies = ({
       formData.append("encrptData", encryptedData);
 
       const response = await getListeningUserCommentReplies(formData);
-      console.log(response);
       if (!response.data.failure) {
         setCommentReplies(response.data.data.commentRepliesList);
       } else {
