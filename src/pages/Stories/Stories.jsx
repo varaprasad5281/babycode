@@ -51,7 +51,10 @@ const Stories = () => {
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end z-10 sticky top-0 ">
-        <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
+        <Link to="/profile">
+          {" "}
+          <img src={profilePic} alt="." className="h-[30px] w-[30px]" />
+        </Link>
       </header>
       <div className="bg-white sticky top-0 z-10">
         <div className="flex gap-2 items-center p-3 lg:hidden">
