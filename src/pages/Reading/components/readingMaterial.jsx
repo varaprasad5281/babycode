@@ -49,17 +49,7 @@ const ReadingMaterial = () => {
 
   const calculatedWidth = Math.min(clientWidth / 1.3, 800);
 
-  const downloadPdf = async () => {
-    // window.open(item?.testFile, "_blank");
-    // try {
-    //   const res = await axios.get(item?.testFile, {
-    //     responseType: "arraybuffer",
-    //   });
-    //   console.log(res);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-  };
+  const downloadPdf = async () => {};
   return (
     <div className="w-full lg:max-h-screen overflow-scroll pb-5 bg-background ">
       <header className="hidden p-2 px-4 w-[100%] bg-white lg:flex justify-end z-10 sticky top-0 ">
@@ -86,24 +76,24 @@ const ReadingMaterial = () => {
             <PiCaretRightBold />{" "}
             <p className="text-primary-500">Reading Material</p>
           </div>
-          {/* {category !== "improve_tests" && ( */}
-          <div className="flex items-center gap-2 py-4 px-6 lg:px-0 lg:py-0">
-            <button
-              onClick={downloadPdf}
-              className="flex gap-2 p-2 px-4 text-[12px] text-[#134287] items-center justify-center rounded-full border-2 border-[#134287]"
-            >
-              <FiDownload /> Download File
-            </button>
-            {category === "reading_tests" && (
+          {category !== "improve_tests" && (
+            <div className="flex items-center gap-2 py-4 px-6 lg:px-0 lg:py-0">
               <button
-                onClick={() => setShowAnswerSubmitPopup(true)}
-                className="flex gap-2 p-2 px-4 text-[12px] text-white bg-[#134287] items-center justify-center rounded-full border-2 border-[#134287]"
+                onClick={downloadPdf}
+                className="flex gap-2 p-2 px-4 text-[12px] text-[#134287] items-center justify-center rounded-full border-2 border-[#134287]"
               >
-                Check Band
+                <FiDownload /> Download File
               </button>
-            )}
-          </div>
-          {/* )} */}
+              {category === "reading_tests" && (
+                <button
+                  onClick={() => setShowAnswerSubmitPopup(true)}
+                  className="flex gap-2 p-2 px-4 text-[12px] text-white bg-[#134287] items-center justify-center rounded-full border-2 border-[#134287]"
+                >
+                  Check Band
+                </button>
+              )}
+            </div>
+          )}
         </div>
         <div className="w-full flex justify-center my-4 h-fit overflow-hidden">
           {/* <p>{item?.testFile}</p> */}
@@ -118,7 +108,7 @@ const ReadingMaterial = () => {
             title="PDF Viewer"
             width={calculatedWidth + "%"}
             // className="-my-16 h-[calc(100%_+_54px)]"
-            className="h-[86vh] w-[100%]"
+            className="h-[83vh] w-[100%]"
             download=""
           ></iframe>
           {/* )} */}
@@ -127,6 +117,7 @@ const ReadingMaterial = () => {
       {showAnswerSubmitPopup && (
         <ReadingTestSubmitAnswerPopupForm
           closePopup={() => setShowAnswerSubmitPopup(false)}
+          test={item}
         />
       )}
     </div>

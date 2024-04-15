@@ -94,11 +94,18 @@ export const fetchWritingQuestionAnswer = (data) => {
 export const submitWritingTestAnswer = (data) => {
   return api.post(Apis.submitWritingTestAnswer, data);
 };
-// get reading category data
 
+// get reading category data
 export const getReadingData = (data) => {
   return api.post(Apis.readingData, data);
 };
+
+// start reading test
 export const startReadingTest = (data) => {
   return api.post(Apis.startReadingTest, data);
 };
+
+// check reading test band score
+export const checkReadingTestBandScore  = (data)=>{
+  return api.post(Apis.checkReadingTestBandScore,data)
+}

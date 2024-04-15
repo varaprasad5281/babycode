@@ -13,6 +13,7 @@ const ReadingTestCard = ({
   attendedTests,
   lastAttendedTest,
   getData,
+  number
 }) => {
   const { errorLogout } = UserAuth();
   const dispatch = useDispatch();
@@ -78,9 +79,9 @@ const ReadingTestCard = ({
     if (!attended) {
       attendTest();
     } else {
-      showRetakeReadingTestAlert({test,category})
+      showRetakeReadingTestAlert({ test, category });
     }
-    console.log(test,category)
+    console.log(test, category);
   };
 
   return (
@@ -98,14 +99,19 @@ const ReadingTestCard = ({
         />
         <div className="w-full flex flex-col justify-center overflow-hidden">
           <h2 className="font-[500]  text-[13px] lg:text-[14px]   ">
-            IELTS Reading practice test | Ep: {test.id}
+            IELTS Reading practice test | Ep: {number}
           </h2>
           <>
             {testStatus === "Pending" && (
               <p className={`status todo`}>You haven't taken test yet</p>
             )}
-            {testStatus === "Completed" && (
+            {/* {testStatus === "Completed" && (
               <p className={`status completed`}>Completed</p>
+            )} */}
+            {testStatus === "Completed" && (
+              <p className="absolute py-[.2rem] text-[10px] px-2 flex gap-1 items-center right-0 bottom-0 rounded-ss-2xl bg-[#008A64] text-white">
+                Completed{" "}
+              </p>
             )}
             {testStatus === "Latest" && (
               <p className="absolute py-[.2rem] text-[10px] px-2 flex gap-1 items-center left-0 top-0 rounded-ee-2xl bg-[#135ADE] text-white">

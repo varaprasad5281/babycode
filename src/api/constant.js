@@ -33,4 +33,5 @@ export const Apis = {
   submitWritingTestAnswer: "/CheckWriting/",
   readingData: "/getReadingPractiseData/",
   startReadingTest: "/startReadingTest/",
+  checkReadingTestBandScore: "/checkReadingTestBandScore/",
 };

@@ -1,9 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { MdClose } from "react-icons/md";
 import { BsInfoCircle } from "react-icons/bs";
+import { toast } from "react-hot-toast";
 
-const ReadingTestSubmitAnswerPopupForm = ({ closePopup }) => {
+const ReadingTestSubmitAnswerPopupForm = ({ closePopup, test }) => {
+  const user = JSON.parse(localStorage.getItem("userData"));
+  const [answer, setAnswer] = useState("");
+  const [answerErr, setAnswerErr] = useState("");
+
+  // handle check band input change
+  const handleCheckBandInputChange = (e) => {
+    const value = e.target.value;
+    setAnswer(value.trim());
+    if (e.target.value.trim() === "") {
+      return setAnswerErr("Number is required");
+    }
+    if (!/^[0-9]+$/.test(value)) {
+      return setAnswerErr("Please enter a number");
+    }
+    if (value > 0 && value < 41) {
+      setAnswerErr("");
+    } else {
+      setAnswerErr("Please enter a number between 1-40");
+    }
+  };
+
+  // submit the answer
+  const checkBandScore = async () => {
+    try {
+      // “uid,platform,uniqueDeviceId,uniqueTestNumber,correctAnswerCount,userName
+      const data = {
+        uid: user.uid,
+        platform: "web",
+        uniqueDeviceId:
+          JSON.parse(localStorage.getItem("uniqueDeviceId")) || "",
+        uniqueTestNumber: test.uniqueTestNumber,
+        correctAnswerCount: "correctAnswerCount",
+        userName: user.fullName,
+      };
+    } catch (err) {
+      toast.error(err.message);
+    }
+  };
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -37,8 +76,12 @@ const ReadingTestSubmitAnswerPopupForm = ({ closePopup }) => {
             type="text"
             className="outline-none py-2 px-4 border w-full rounded-full"
             placeholder="Correct answer between 1-40"
+            value={answer}
+            onChange={handleCheckBandInputChange}
           />
-          <button className="primary-btn w-fit mt-2">Submit</button>
+          <button onClick={closePopup} className="primary-btn w-fit mt-2">
+            Submit
+          </button>
         </div>
       </motion.div>
     </motion.div>

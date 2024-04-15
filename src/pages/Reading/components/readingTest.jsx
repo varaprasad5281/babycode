@@ -16,6 +16,7 @@ const ReadingTest = ({ tests, attendedTests, getData }) => {
           <ReadingTestCard
             key={test.id}
             test={test}
+            number={tests.length - i}
             attendedTests={attendedTests}
             lastAttendedTest={lastAttendedTest}
             getData={getData}
