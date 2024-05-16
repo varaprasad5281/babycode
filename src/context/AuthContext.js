@@ -134,7 +134,6 @@ export const AuthContextProvider = ({ children }) => {
       dispatch(setUserDetails({}));
       navigate("/");
     } catch (err) {
-      // console.log("ERROR LOGOUT ::\n", err);
     }
   };
 
